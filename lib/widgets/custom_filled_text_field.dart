@@ -11,8 +11,10 @@ class CustomFilledTextField extends StatefulWidget {
   final Widget? suffixIcon;
   final TextCapitalization textCapitalization;
   final TextInputType? keyboardType;
+  final void Function(String)? onChanged;
   const CustomFilledTextField(
       {super.key,
+      this.onChanged,
       this.controller,
       this.style,
       this.isReadOnly = false,
@@ -41,6 +43,9 @@ class _CustomFilledTextFieldState extends State<CustomFilledTextField> {
       child: Transform.scale(
         scale: 1.01,
         child: TextFormField(
+          onChanged: (value) {
+            return widget.onChanged?.call(value);
+          },
           obscureText: widget.obscureText ?? false,
           controller: widget.controller,
           enabled: widget.enabled,

@@ -12,6 +12,26 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
 
+  Widget getScaffold(){
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Welcome Aboard"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 40,
+              width: 40,
+              color: Colors.pink,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -19,14 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
    return asyncHomeState.when(
       data: (data) {
-        return Scaffold(
-          body: Container(
-            width: 50,
-            height: 50,
-            color: Colors.red,
-            
-          ),
-        );
+        return getScaffold();
       }, 
       error: (error, stackTrace) => const Scaffold(
         body: CircularProgressIndicator(),

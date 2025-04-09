@@ -44,7 +44,8 @@ dependencies:
   json_serializable: ^6.9.0
   riverpod_generator: ^2.6.3
   riverpod_lint: ^2.6.3
-
+  shimmer_animation: ^2.2.2
+  file_picker: ^10.0.0
 
 
 

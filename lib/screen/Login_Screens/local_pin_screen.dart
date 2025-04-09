@@ -72,7 +72,7 @@ class _LocalPinScreenState extends ConsumerState<LocalPinScreen> {
             content: const Text(
               "Entered Wrong PIN",
               style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
             backgroundColor: Colors.red.shade900,
             duration: const Duration(seconds: 3),
@@ -133,17 +133,19 @@ class _LocalPinScreenState extends ConsumerState<LocalPinScreen> {
   Widget getScaffold(AuthenticationState state){
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber,
+        backgroundColor: Colors.black,
         centerTitle:true,
-        title:  Text("Enter PIN"),
+        title:  Text("Enter PIN", style: TextStyle(color: Theme.of(context).secondaryHeaderColor ),),
+        automaticallyImplyLeading: false,
       ),
+      backgroundColor: Colors.black,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             _pin.padRight(4, '-'),
             style: const TextStyle(
-                fontSize: 38, fontWeight: FontWeight.bold, color: Colors.white),
+                fontSize: 38, fontWeight: FontWeight.bold, color: Colors.white), //color: Colors.black
           ),
           const SizedBox(height: 20),
           Padding(
@@ -193,9 +195,9 @@ class _LocalPinScreenState extends ConsumerState<LocalPinScreen> {
         
       }, 
       
-      error: (error, stackTrace) => const Scaffold(
-        body: CircularProgressIndicator(),
-      ), 
+      error: (error, stackTrace) {
+        return getScaffold(AuthenticationState());
+      },
       
       loading: () => CircularProgressIndicator(),);
   }
