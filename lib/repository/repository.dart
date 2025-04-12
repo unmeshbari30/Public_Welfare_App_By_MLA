@@ -16,7 +16,6 @@ final Dio dio;
 
 Repository({
   required this.dio,
-
 });
 
 }

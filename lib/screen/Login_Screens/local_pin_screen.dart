@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +17,7 @@ class LocalPinScreen extends ConsumerStatefulWidget {
 class _LocalPinScreenState extends ConsumerState<LocalPinScreen> {
   String _pin = "";
   bool isFirstLogin = true;
+  int exitCounter = 1;
 
   @override
   void initState() {
@@ -41,7 +44,7 @@ class _LocalPinScreenState extends ConsumerState<LocalPinScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: const Text("PIN Set Successfully"),
         backgroundColor: Colors.green.shade600,
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 2),
         behavior:SnackBarBehavior.fixed,
         )
       );
@@ -139,46 +142,67 @@ class _LocalPinScreenState extends ConsumerState<LocalPinScreen> {
         automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.black,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            _pin.padRight(4, '-'),
-            style: const TextStyle(
-                fontSize: 38, fontWeight: FontWeight.bold, color: Colors.white), //color: Colors.black
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(45, 20, 45, 20),
-            child: GridView.builder(
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 15,
-                crossAxisSpacing: 15,
-              ),
-              itemCount: 9,
-              itemBuilder: (context, index) {
-                return _buildNumberButton('${index + 1}');
-              },
+      body: PopScope(
+        canPop: false,
+        onPopInvokedWithResult:(didPop, result) {
+          if(exitCounter == 2){
+            exit(0);
+          }
+          exitCounter++;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Press back again to exit", style: TextStyle(color: Colors.black),),
+              duration: Duration(seconds: 2),
+              backgroundColor: Colors.amber,
+              
+              )
+
+
+          );
+          
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              _pin.padRight(4, '-'),
+              style: const TextStyle(
+                  fontSize: 38, fontWeight: FontWeight.bold, color: Colors.white), //color: Colors.black
             ),
-          ),
-          // const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(60, 0, 0, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildNumberButton('0'),
-                const SizedBox(width: 20),
-                IconButton(
-                  onPressed: _onDelete,
-                  icon: const Icon(Icons.backspace, size: 35),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(45, 20, 45, 20),
+              child: GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 15,
                 ),
-              ],
+                itemCount: 9,
+                itemBuilder: (context, index) {
+                  return _buildNumberButton('${index + 1}');
+                },
+              ),
             ),
-          ),
-        ],
+            // const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(60, 0, 0, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildNumberButton('0'),
+                  const SizedBox(width: 20),
+                  IconButton(
+                    onPressed: _onDelete,
+                    icon: const Icon(Icons.backspace, size: 35),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     
     );

@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,21 +12,142 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  int exitCounter = 1;
+  late TabController _tabController;
+  PageController? _pageController;
+  Timer? _timer;
+  int _currentPage = 0;
 
-  Widget getScaffold(){
+  final List<String> imagePaths = [
+    "lib/assets/Rajesh_Dada.jpg",
+    "lib/assets/rajeshDada1jpg.jpg",
+    "lib/assets/rajeshDada2jpg.jpg",
+    "lib/assets/rajeshDada3jpg.jpg",
+    "lib/assets/rajeshDada4jpg.jpg"
+  ];
+
+ @override
+void initState() {
+  super.initState();
+  _tabController = TabController(length: 3, vsync: this);
+  _pageController = PageController(initialPage: 0);
+
+  _timer = Timer.periodic(Duration(seconds: 2), (Timer timer) {
+    if (_pageController != null && _pageController!.hasClients) {
+      if (_currentPage < imagePaths.length - 1) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+
+      _pageController!.animateToPage(
+        _currentPage,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  });
+}
+
+
+ @override
+void dispose() {
+  _tabController.dispose();
+  _pageController?.dispose();
+  _timer?.cancel();
+  super.dispose();
+}
+
+
+  Widget getScaffold(HomeState state) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text("Welcome Aboard"),
+        automaticallyImplyLeading: false,
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+                onPressed: Scaffold.of(context).openDrawer,
+                icon: Icon(Icons.menu));
+          },
+        ),
+        bottom: TabBar(controller: _tabController, tabs: [
+          Tab(text: 'Home', icon: Icon(Icons.home)),
+          Tab(text: 'About', icon: Icon(Icons.info)),
+          Tab(text: 'Contact Us', icon: Icon(Icons.contacts)),
+        ]),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+
+      // drawer: Drawer(
+      //   backgroundColor: Colors.black ,
+      //   child: ListView(
+      //     children: [
+      //       ListTile(
+      //         leading: Icon(Icons.home),
+      //         tileColor: const Color.fromARGB(255, 51, 65, 75),
+      //       ),
+      //       ListTile(
+      //         leading: Icon(Icons.home),
+      //       ),
+      //       ListTile(
+      //         leading: Icon(Icons.home),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+
+      body: PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) {
+            if (exitCounter == 2) {
+              exit(0);
+            }
+            exitCounter++;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                "Press back again to exit",
+                style: TextStyle(color: Colors.black),
+              ),
+              duration: Duration(seconds: 2),
+              backgroundColor: Colors.amberAccent,
+            ));
+          },
+          child: TabBarView(controller: _tabController, children: [
+            tab1Screen(state),
+            tab2Screen(state),
+            tab3Screen(state),
+          ])),
+    );
+  }
+
+  Widget tab1Screen(HomeState state) {
+    return PageView.builder(
+      controller: _pageController,
+      itemCount: imagePaths.length,
+      itemBuilder: (context, index) {
+        return Image.asset(
+          imagePaths[index],
+          fit: BoxFit.cover,
+        );
+      },
+      onPageChanged: (index) {
+        _currentPage = index;
+      },
+    );
+  }
+
+  Widget tab2Screen(HomeState state) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+        child: Row(
           children: [
-            Container(
-              height: 40,
-              width: 40,
-              color: Colors.pink,
+            Center(
+              child: Text("Testing"),
             )
           ],
         ),
@@ -32,102 +155,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  Widget tab3Screen(HomeState state) {
+    return Center(child: Text('Content of Tab 3'));
+  }
+
   @override
   Widget build(BuildContext context) {
-
     var asyncHomeState = ref.watch(homeControllerProvider);
 
-   return asyncHomeState.when(
-      data: (data) {
-        return getScaffold();
-      }, 
-      error: (error, stackTrace) => const Scaffold(
-        body: CircularProgressIndicator(),
-      ), 
-      loading: () =>const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),);
-    //return Container();
+    return asyncHomeState.when(
+        data: (homeState) {
+          return getScaffold(homeState);
+        },
+        error: (error, stackTrace) => const Scaffold(
+              body: CircularProgressIndicator(),
+            ),
+        loading: () => const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ));
   }
 }
-
-// class MyHomePage extends ConsumerStatefulWidget {
-//   const MyHomePage({super.key, required this.title});
-
-//   final String title;
-
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-
-// class _MyHomePageState extends State<MyHomePage> {
-//   int _counter = 0;
-
-//   void _incrementCounter() {
-//     setState(() {
-//       // This call to setState tells the Flutter framework that something has
-//       // changed in this State, which causes it to rerun the build method below
-//       // so that the display can reflect the updated values. If we changed
-//       // _counter without calling setState(), then the build method would not be
-//       // called again, and so nothing would appear to happen.
-//       _counter++;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // This method is rerun every time setState is called, for instance as done
-//     // by the _incrementCounter method above.
-//     //
-//     // The Flutter framework has been optimized to make rerunning build methods
-//     // fast, so that you can just rebuild anything that needs updating rather
-//     // than having to individually change instances of widgets.
-//     return Scaffold(
-//       appBar: AppBar(
-//         // TRY THIS: Try changing the color here to a specific color (to
-//         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-//         // change color while the other colors stay the same.
-//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-//         // Here we take the value from the MyHomePage object that was created by
-//         // the App.build method, and use it to set our appbar title.
-//         title: Text(widget.title),
-//       ),
-//       body: Center(
-//         // Center is a layout widget. It takes a single child and positions it
-//         // in the middle of the parent.
-//         child: Column(
-//           // Column is also a layout widget. It takes a list of children and
-//           // arranges them vertically. By default, it sizes itself to fit its
-//           // children horizontally, and tries to be as tall as its parent.
-//           //
-//           // Column has various properties to control how it sizes itself and
-//           // how it positions its children. Here we use mainAxisAlignment to
-//           // center the children vertically; the main axis here is the vertical
-//           // axis because Columns are vertical (the cross axis would be
-//           // horizontal).
-//           //
-//           // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-//           // action in the IDE, or press "p" in the console), to see the
-//           // wireframe for each widget.
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             const Text(
-//               'You have pushed the button this many times:',
-//             ),
-//             Text(
-//               '$_counter',
-//               style: Theme.of(context).textTheme.headlineMedium,
-//             ),
-//           ],
-//         ),
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: _incrementCounter,
-//         tooltip: 'Increment',
-//         child: const Icon(Icons.add),
-//       ), // This trailing comma makes auto-formatting nicer for build methods.
-//     );
-//   }
-// }

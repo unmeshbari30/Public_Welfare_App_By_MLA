@@ -13,10 +13,6 @@ FutureOr<HomeState> build() async{
 
   HomeState newState = HomeState();
 
- await Future.delayed(
-   const Duration(seconds: 5)
-
-  );
   
 
   return newState;

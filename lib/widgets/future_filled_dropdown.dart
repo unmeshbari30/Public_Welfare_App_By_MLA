@@ -54,7 +54,7 @@ class _FutureFilledDropdownState<T> extends State<FutureFilledDropdown<T>> {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 2,
       margin: const EdgeInsets.all(0),
-      color: Colors.red.shade900,
+      color: Colors.grey.shade900,
       shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(25)),
       child: Transform.scale(
         scale: 1.01,

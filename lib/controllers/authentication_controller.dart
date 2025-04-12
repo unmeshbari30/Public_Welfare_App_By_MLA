@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:test_app/widgets/dropdown_value_controller.dart';
 
 part 'authentication_controller.g.dart';
 
@@ -32,7 +33,26 @@ class AuthenticationState{
   TextEditingController middleName = TextEditingController();
   TextEditingController lastName = TextEditingController();
 
-  //
+  //Sign Up Details
+  TextEditingController newUserName = TextEditingController();
+  DropdownValueController<String?> gendersController = DropdownValueController<String?>();
+  DropdownValueController<String?> tehsilController = DropdownValueController<String?>();
+
+
+
+
+  //Lists
+  Future<List<String>> gendersList = Future.value(["Male", "Female", "Unknown"]);
+  Future<List<String>> tehsilList = Future.value([
+  "Akkalkuwa",
+  "Dhadgaon",
+  "Nandurbar",
+  "Navapur",
+  "Shahada",
+  "Taloda",
+ 
+]);
+
 
 
 

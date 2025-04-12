@@ -5,7 +5,9 @@ enum PrefrencesKeyEnum{
   localPin("loginPin"), //string 
   isfirstLocalPin("firstLoginPin"), // bool
   acessToken("accessToken"),
-  rememberMe("rememberMe")  // bool
+  rememberMe("rememberMe"),  // bool
+  accessToken("accessToken"), //string
+  refreshToken("refreshToken")
   ;
 
   final String key;
