@@ -1,28 +1,116 @@
+import 'dart:io';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/widgets.dart';
+import 'package:network_info_plus/network_info_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:test_app/models/device_info_model.dart';
+import 'package:test_app/models/login_payload_model.dart';
+import 'package:test_app/repository/repository.dart';
 import 'package:test_app/widgets/dropdown_value_controller.dart';
 
 part 'authentication_controller.g.dart';
 
 @riverpod
-class AuthenticationController extends _$AuthenticationController{
-
+class AuthenticationController extends _$AuthenticationController {
   @override
-  FutureOr<AuthenticationState> build() async{
+  FutureOr<AuthenticationState> build() async {
     AuthenticationState newState = AuthenticationState();
 
     return newState;
   }
 
-  Future<bool> loginUser({String? userName, String? password}){
+  Future getDeviceAndNetworkInfo() async {
+    var currentState = state.value;
+    final deviceInfoPlugin = DeviceInfoPlugin();
+    final networkInfo = NetworkInfo();
+    final connectivityResult = await Connectivity().checkConnectivity();
+    final packageInfo = await PackageInfo.fromPlatform();
+    final androidInfo = await deviceInfoPlugin.androidInfo;
+    currentState?.appVersion =
+        '${packageInfo.version}+${packageInfo.buildNumber}';
 
-    return Future.value(true);
+    update(
+      (p0) async {
+        if (Platform.isAndroid) {
+          p0.platform = 'Android';
+          p0.version = androidInfo.version.release;
+          p0.deviceModel = androidInfo.model;
+          p0.manufacturer = androidInfo.manufacturer;
+          p0.deviceName = androidInfo.device;
+        } else if (Platform.isIOS) {
+          final iosInfo = await deviceInfoPlugin.iosInfo;
+          p0.platform = 'iOS';
+          p0.version = iosInfo.systemVersion;
+          p0.deviceModel = iosInfo.utsname.machine;
+          p0.manufacturer = 'Apple';
+          p0.deviceName = iosInfo.name;
+        }
 
+        if (connectivityResult == ConnectivityResult.wifi) {
+          p0.wifiName = await networkInfo.getWifiName() ?? 'Unavailable';
+          p0.wifiBSSID = await networkInfo.getWifiBSSID() ?? 'Unavailable';
+          p0.ipAddress = await networkInfo.getWifiIP() ?? 'Unavailable';
+        } else if (connectivityResult == ConnectivityResult.mobile) {
+          p0.ipAddress = await networkInfo.getWifiIP() ?? 'Unavailable';
+          p0.note = 'Connected via mobile data. WiFi info not available.';
+        } else {
+          p0.note = 'No active network connection.';
+        }
+
+        return p0;
+      },
+    );
   }
 
+  Future<LoginPayloadModel?> loginUser() async {
+    var currentState = state.value;
+    var repository = await ref.read(repositoryProvider.future);
+    await getDeviceAndNetworkInfo();
+    if (currentState != null) {
+      DeviceInfoModel deviceInfo = DeviceInfoModel(
+        appVersion: currentState.appVersion,
+        connectionType: currentState.connectionType,
+        deviceName: currentState.deviceName,
+        ipAddress: currentState.ipAddress,
+        manufacturer: currentState.manufacturer,
+        deviceModel: currentState.deviceModel,
+        note: currentState.note,
+        platform: currentState.platform,
+        version: currentState.version,
+        wifiBssid: currentState.wifiBSSID,
+        wifiName: currentState.wifiName,
+      );
+
+      LoginPayloadModel loginPayload = LoginPayloadModel(
+          deviceInfo: deviceInfo,
+          userName: currentState.userName.text ?? "nullUserName",
+          password: currentState.password.text);
+
+      var loginResult =await repository.loginUser(loginPayload: loginPayload);
+
+      return loginResult;
+    }
+
+    return null;
+  }
 }
 
-class AuthenticationState{
+class AuthenticationState {
+  //Device info
+  String? platform; // = 'Unknown';
+  String? version; // = 'Unknown';
+  String? deviceModel = 'Unknown';
+  String? manufacturer; // = 'Unknown';
+  String? deviceName; // = 'Unknown';
+  String? connectionType; // = connectivityResult.toString();
+  String? wifiName; // = 'N/A';
+  String? wifiBSSID; // = 'N/A';
+  String? ipAddress; // = 'N/A';
+  String? note; // = '';
+  String? appVersion;
 
   //Login Credentials
   TextEditingController userName = TextEditingController();
@@ -35,25 +123,20 @@ class AuthenticationState{
 
   //Sign Up Details
   TextEditingController newUserName = TextEditingController();
-  DropdownValueController<String?> gendersController = DropdownValueController<String?>();
-  DropdownValueController<String?> tehsilController = DropdownValueController<String?>();
-
-
-
+  DropdownValueController<String?> gendersController =
+      DropdownValueController<String?>();
+  DropdownValueController<String?> tehsilController =
+      DropdownValueController<String?>();
 
   //Lists
-  Future<List<String>> gendersList = Future.value(["Male", "Female", "Unknown"]);
+  Future<List<String>> gendersList =
+      Future.value(["Male", "Female", "Unknown"]);
   Future<List<String>> tehsilList = Future.value([
-  "Akkalkuwa",
-  "Dhadgaon",
-  "Nandurbar",
-  "Navapur",
-  "Shahada",
-  "Taloda",
- 
-]);
-
-
-
-
+    "Akkalkuwa",
+    "Dhadgaon",
+    "Nandurbar",
+    "Navapur",
+    "Shahada",
+    "Taloda",
+  ]);
 }

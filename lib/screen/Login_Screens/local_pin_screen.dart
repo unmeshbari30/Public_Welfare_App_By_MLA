@@ -28,8 +28,9 @@ class _LocalPinScreenState extends ConsumerState<LocalPinScreen> {
 
   Future<void> _checkFirstLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    isFirstLogin =
-        prefs.getBool(PrefrencesKeyEnum.isfirstLocalPin.key) ?? true;
+    setState(() {
+    isFirstLogin =prefs.getBool(PrefrencesKeyEnum.isfirstLocalPin.key) ?? true;
+    });
   }
 
   Future<void> _savePin() async {
@@ -126,11 +127,11 @@ class _LocalPinScreenState extends ConsumerState<LocalPinScreen> {
     );
   }
 
-  Widget loginMessage() {
-    return isFirstLogin
-        ? const Text("Enter New PIN", style: TextStyle(color: Colors.white))
-        : const Text("Enter PIN", style: TextStyle(color: Colors.white));
-  }
+  // Widget loginMessage() {
+  //   return isFirstLogin
+  //       ? const Text("Enter New PIN", style: TextStyle(color: Colors.white))
+  //       : const Text("Enter PIN", style: TextStyle(color: Colors.white));
+  // }
 
 
   Widget getScaffold(AuthenticationState state){
@@ -138,7 +139,11 @@ class _LocalPinScreenState extends ConsumerState<LocalPinScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         centerTitle:true,
-        title:  Text("Enter PIN", style: TextStyle(color: Theme.of(context).secondaryHeaderColor ),),
+        title: Text(
+        isFirstLogin ? "Enter New PIN" : "Enter PIN",
+        style: TextStyle(color: Theme.of(context).secondaryHeaderColor),
+          ),  
+
         automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.black,

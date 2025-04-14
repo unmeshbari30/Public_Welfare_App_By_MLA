@@ -1,7 +1,7 @@
 enum PrefrencesKeyEnum{
 
   userName("user_name"),  //string
-  isLogin("isLogin"),    // bool
+  isLoggedin("isLogin"),    // bool
   localPin("loginPin"), //string 
   isfirstLocalPin("firstLoginPin"), // bool
   acessToken("accessToken"),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/controllers/authentication_controller.dart';
 import 'package:test_app/helpers/enum.dart';
@@ -95,23 +96,41 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
+                      EasyLoading.show(status: 'Loading...');
                       var loginSuccessOrFailed = await ref
                           .read(authenticationControllerProvider.notifier)
-                          .loginUser(
-                              userName: state.userName.text,
-                              password: state.password.text);
+                          .loginUser();
 
-                      if (loginSuccessOrFailed) {
+                      if (loginSuccessOrFailed != null) {
+                      //  if (true) {
                         var prefs  =  await ref.watch(sharedPreferencesProvider.future);
                         prefs.setBool(PrefrencesKeyEnum.rememberMe.key, rememberMe);
-                        // prefs.setBool(PrefrencesKeyEnum.rememberMe.key, rememberMe);
+                        prefs.setBool(PrefrencesKeyEnum.isLoggedin.key, true);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            "Login Successfully",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.green.shade600,
+                        ));
                         
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => LocalPinScreen(),
                             ));
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            "Login Failed",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.red.shade600,
+                        ));
                       }
+                      EasyLoading.dismiss();
                     }
                   },
                   style: ElevatedButton.styleFrom(

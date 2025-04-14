@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/controllers/home_controller.dart';
+import 'package:test_app/providers/shared_preferences_provider.dart';
+import 'package:test_app/screen/Login_Screens/login_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -74,6 +76,40 @@ void dispose() {
                 icon: Icon(Icons.menu));
           },
         ),
+        actions: [
+          IconButton(
+  onPressed: () {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Confirm Logout'),
+        content: Text('Are you sure you want to log out?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // close the dialog
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // close the dialog\
+              ref.read(homeControllerProvider.notifier).loggedOut();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
+            },
+            child: Text('Logout'),
+          ),
+        ],
+      ),
+    );
+  },
+  icon: Icon(Icons.logout),
+)
+
+        ],
         bottom: TabBar(controller: _tabController, tabs: [
           Tab(text: 'Home', icon: Icon(Icons.home)),
           Tab(text: 'About', icon: Icon(Icons.info)),
@@ -81,23 +117,6 @@ void dispose() {
         ]),
       ),
 
-      // drawer: Drawer(
-      //   backgroundColor: Colors.black ,
-      //   child: ListView(
-      //     children: [
-      //       ListTile(
-      //         leading: Icon(Icons.home),
-      //         tileColor: const Color.fromARGB(255, 51, 65, 75),
-      //       ),
-      //       ListTile(
-      //         leading: Icon(Icons.home),
-      //       ),
-      //       ListTile(
-      //         leading: Icon(Icons.home),
-      //       ),
-      //     ],
-      //   ),
-      // ),
 
       body: PopScope(
           canPop: false,
@@ -124,34 +143,64 @@ void dispose() {
   }
 
   Widget tab1Screen(HomeState state) {
-    return PageView.builder(
-      controller: _pageController,
-      itemCount: imagePaths.length,
-      itemBuilder: (context, index) {
-        return Image.asset(
-          imagePaths[index],
-          fit: BoxFit.cover,
-        );
-      },
-      onPageChanged: (index) {
-        _currentPage = index;
-      },
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 10,),
+          SizedBox(
+                    height: 220,
+                    width: 220,
+                    child: ClipOval(
+                      child: Image.asset(
+                        "lib/assets/Rajesh_Dada.jpg",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+          Column( 
+            children: [
+              SizedBox(height: 10,),
+              Row(
+                children: [
+                  
+                ],
+              )
+
+               
+
+
+            ],
+            )
+            
+      
+         
+        ],
+      ),
     );
   }
 
   Widget tab2Screen(HomeState state) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-        child: Row(
-          children: [
-            Center(
-              child: Text("Testing"),
-            )
-          ],
+    return Column(
+      children: [
+        SizedBox(
+          height: 300,
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: imagePaths.length,
+            itemBuilder: (context, index) {
+              return Image.asset(
+                imagePaths[index],
+                fit: BoxFit.contain,
+                width: double.infinity,
+                height: double.infinity,
+              );
+            },
+            onPageChanged: (index) {
+              _currentPage = index;
+            },
+          ),
         ),
-      ),
+      ],
     );
   }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/controllers/authentication_controller.dart';
-import 'package:test_app/helpers/validators.dart';
 import 'package:test_app/widgets/custom_filled_text_field.dart';
 import 'package:test_app/widgets/future_filled_dropdown.dart';
 
