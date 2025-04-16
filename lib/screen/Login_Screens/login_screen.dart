@@ -97,9 +97,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
                       EasyLoading.show(status: 'Loading...');
-                      var loginSuccessOrFailed = await ref
-                          .read(authenticationControllerProvider.notifier)
-                          .loginUser();
+                      var loginSuccessOrFailed = true;
+                      // await ref
+                      //     .read(authenticationControllerProvider.notifier)
+                      //     .loginUser();
 
                       if (loginSuccessOrFailed != null) {
                       //  if (true) {

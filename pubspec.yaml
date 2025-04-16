@@ -81,6 +81,9 @@ flutter:
      - lib\assets\rajeshDada2jpg.jpg
      - lib\assets\rajeshDada3jpg.jpg
      - lib\assets\rajeshDada4jpg.jpg
+     - lib\assets\dada_landing_photo.jpeg
+     - lib\assets\bg_image.jpeg
+     - lib\assets\hm_img.jpeg
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
