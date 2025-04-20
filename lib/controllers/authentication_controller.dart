@@ -6,6 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_app/helpers/enum.dart';
 import 'package:test_app/models/device_info_model.dart';
 import 'package:test_app/models/login_payload_model.dart';
 import 'package:test_app/repository/repository.dart';
@@ -96,6 +98,36 @@ class AuthenticationController extends _$AuthenticationController {
 
     return null;
   }
+
+  Future<bool> checkIsLogin() async{
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  return pref.getBool(PrefrencesKeyEnum.isLoggedin.key) ?? false;
+}
+
+// Future<bool> setLoginStatus(bool data) async{
+//   SharedPreferences pref = await SharedPreferences.getInstance();
+//   return pref.setBool(PrefrencesKeyEnum.isLoggedin.key, data);
+// }
+
+Future<bool> loggedOut() async{
+    
+  SharedPreferences pref = await SharedPreferences.getInstance();
+   pref.remove(PrefrencesKeyEnum.isLoggedin.key);
+   pref.remove(PrefrencesKeyEnum.localPin.key);
+   pref.remove(PrefrencesKeyEnum.accessToken.key);
+   pref.remove(PrefrencesKeyEnum.refreshToken.key);
+   pref.remove(PrefrencesKeyEnum.isfirstLocalPin.key);
+
+  //  update((p0) {
+  //   p0.userName.text = "";
+  //   p0.password.text = "";
+  //   return p0;
+  // },);
+
+  return true;
+
+
+}
 }
 
 class AuthenticationState {

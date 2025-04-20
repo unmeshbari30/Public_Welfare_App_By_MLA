@@ -1,8 +1,8 @@
 abstract class Validators{
 
   static  validateEmptyField(String? value){
-    if(value == ""){
-      return "Can't be Empty";
+    if(value == "" || value == null){
+      return "Field Can't be Empty";
     }else{
       return null;
     }

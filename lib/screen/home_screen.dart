@@ -3,9 +3,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:test_app/controllers/authentication_controller.dart';
 import 'package:test_app/controllers/home_controller.dart';
 import 'package:test_app/providers/shared_preferences_provider.dart';
 import 'package:test_app/screen/Login_Screens/login_screen.dart';
+import 'package:test_app/screen/Pages/achievements_screen.dart';
+import 'package:test_app/screen/Pages/grievance_screen.dart';
+import 'package:test_app/screen/Pages/helpline_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -107,7 +111,7 @@ Widget getScaffold(HomeState state) {
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
-                          ref.read(homeControllerProvider.notifier).loggedOut();
+                          ref.read(authenticationControllerProvider.notifier).loggedOut();
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -208,37 +212,43 @@ Widget getScaffold(HomeState state) {
             ),
             const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              padding: const EdgeInsets.fromLTRB(15,10,15,0),
               child: Card(
                 elevation: 1.5,
                 color: Colors.white,
                 child: GridView.count(
-                  crossAxisCount: 3,
+                  crossAxisCount: 2,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 0.9,
+                  mainAxisSpacing: 0,
+                  crossAxisSpacing: 0,
+                  childAspectRatio: 1.4,
                   children: [
                     buildGridIcon("lib/assets/Rajesh_Dada.jpg", "Rajesh Dada",
                         () {
-                      print("Yanamala Divya");
+                          
                     }),
                     buildGridIcon("lib/assets/Rajesh_Dada.jpg", "Grievance", () {
-                      print("Grievance pressed");
-                    }),
-                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "Schedules", () {
-                      print("Schedules pressed");
+                      Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => GrievanceScreen(),)
+                          );
                     }),
                     buildGridIcon("lib/assets/Rajesh_Dada.jpg", "Achievements", () {
-                      print("Achievements pressed");
+                      Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => AchievementsScreen(),)
+                          );
                     }),
-                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "Gallery", () {
-                      print("Gallery pressed");
+                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "Helpline", () {
+                      Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => HelplineScreen(),)
+                          );
                     }),
-                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "Super Six", () {
-                      print("Super Six pressed");
-                    }),
+                    // buildGridIcon("lib/assets/Rajesh_Dada.jpg", "Gallery", () {
+                    //   print("Gallery pressed");
+                    // }),
+                    // buildGridIcon("lib/assets/Rajesh_Dada.jpg", "Super Six", () {
+                    //   print("Super Six pressed");
+                    // }),
                   ],
                 ),
               ),
@@ -264,7 +274,7 @@ Widget getScaffold(HomeState state) {
               ),
               padding: EdgeInsets.fromLTRB(2, 6, 2, 6),
               child: CircleAvatar(
-                radius: 30,
+                radius: 25,
                 backgroundColor: Colors.white,
                 backgroundImage: AssetImage(assetPath),
               ),

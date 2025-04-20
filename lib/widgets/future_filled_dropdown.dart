@@ -55,7 +55,7 @@ class _FutureFilledDropdownState<T> extends State<FutureFilledDropdown<T>> {
       elevation: 2,
       margin: const EdgeInsets.all(0),
       color: Colors.grey.shade900,
-      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(25)),
+      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: Transform.scale(
         scale: 1.01,
         child: DropdownButtonFormField<T>(

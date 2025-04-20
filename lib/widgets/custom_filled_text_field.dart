@@ -12,6 +12,8 @@ class CustomFilledTextField extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final TextInputType? keyboardType;
   final void Function(String)? onChanged;
+  final int? maxLines;
+  final String? hintText;
   const CustomFilledTextField(
       {super.key,
       this.onChanged,
@@ -24,7 +26,10 @@ class CustomFilledTextField extends StatefulWidget {
       this.obscureText = false,
       this.suffixIcon,
       this.textCapitalization = TextCapitalization.none,
-      this.keyboardType});
+      this.keyboardType,
+      this.maxLines,
+      this.hintText
+      });
 
   @override
   State<CustomFilledTextField> createState() => _CustomFilledTextFieldState();
@@ -38,8 +43,8 @@ class _CustomFilledTextFieldState extends State<CustomFilledTextField> {
     return Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       margin: const EdgeInsets.all(0),
-      color: Colors.red.shade900,
-      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(25)),
+      color: Colors.red,
+      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: Transform.scale(
         scale: 1.01,
         child: TextFormField(
@@ -49,11 +54,13 @@ class _CustomFilledTextFieldState extends State<CustomFilledTextField> {
           obscureText: widget.obscureText ?? false,
           controller: widget.controller,
           enabled: widget.enabled,
+          // maxLines: widget.maxLines,
           keyboardType: widget.keyboardType,
           textCapitalization: widget.textCapitalization,
           readOnly: widget.isReadOnly ?? false,
           decoration: InputDecoration(
             labelText: widget.labelText,
+            hintText: widget.hintText,
             suffixIcon: widget.suffixIcon,
             filled: true,
             border: InputBorder.none,
