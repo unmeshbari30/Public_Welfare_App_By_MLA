@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/controllers/home_controller.dart';
 import 'package:test_app/helpers/validators.dart';
-import 'package:test_app/widgets/custom_file_picker.dart';
 import 'package:test_app/widgets/custom_filled_text_field.dart';
 import 'package:test_app/widgets/custom_multi_file_picker.dart';
 import 'package:test_app/widgets/future_filled_dropdown.dart';
@@ -23,7 +22,7 @@ Widget getScaffold(HomeState state){
       backgroundColor: Color(0xFFFBA800),
       automaticallyImplyLeading: true,
       centerTitle: true,
-      title: Text("Raise Grievance"),
+      title: Text("तक्रार / विनंती"),
     ),
 
     body: SafeArea(child: 

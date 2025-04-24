@@ -15,7 +15,7 @@ class _HelplineScreenState extends ConsumerState<HelplineScreen> {
   Widget getScaffold(HomeState state) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Helpline Numbers"),
+        title: Text("हेल्पलाईन"),
         centerTitle: true,
         backgroundColor: Color(0xFFFBA800),
       ),

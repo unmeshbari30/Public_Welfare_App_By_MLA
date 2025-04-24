@@ -3,13 +3,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:test_app/controllers/authentication_controller.dart';
 import 'package:test_app/controllers/home_controller.dart';
-import 'package:test_app/providers/shared_preferences_provider.dart';
 import 'package:test_app/screen/Login_Screens/login_screen.dart';
 import 'package:test_app/screen/Pages/achievements_screen.dart';
+import 'package:test_app/screen/Pages/future_goals_screen.dart';
+import 'package:test_app/screen/Pages/gallery_screen.dart';
 import 'package:test_app/screen/Pages/grievance_screen.dart';
 import 'package:test_app/screen/Pages/helpline_screen.dart';
+import 'package:test_app/screen/Pages/rajesh_dada_info_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -27,12 +30,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Timer? _timer;
   int _currentPage = 0;
 
+  // final List<String> imagePaths = [
+  //   "lib/assets/Rajesh_Dada.jpg",
+  //   "lib/assets/rajeshDada1jpg.jpg",
+  //   "lib/assets/rajeshDada2jpg.jpg",
+  //   "lib/assets/rajeshDada3jpg.jpg",
+  //   "lib/assets/rajeshDada4jpg.jpg"
+  // ];
+
   final List<String> imagePaths = [
     "lib/assets/Rajesh_Dada.jpg",
-    "lib/assets/rajeshDada1jpg.jpg",
-    "lib/assets/rajeshDada2jpg.jpg",
-    "lib/assets/rajeshDada3jpg.jpg",
-    "lib/assets/rajeshDada4jpg.jpg"
+    // "lib/assets/rajesh_dada_301.jpeg"
+    "lib/assets/rajesh_dada_201.jpeg",
+    "lib/assets/rajesh_dada_202.jpeg",
+    "lib/assets/rajesh_dada_203.jpeg",
+    "lib/assets/rajesh_dada_204.jpeg",
+    "lib/assets/rajesh_dada_205.jpeg",
   ];
 
   @override
@@ -48,7 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
     _pageController = PageController(initialPage: 0);
 
-    _timer = Timer.periodic(Duration(seconds: 2), (Timer timer) {
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       if (_pageController != null && _pageController!.hasClients) {
         if (_currentPage < imagePaths.length - 1) {
           _currentPage++;
@@ -87,13 +100,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         //   ),
         // Main UI with transparent Scaffold
         Scaffold(
-          // backgroundColor: Colors.transparent, // make Scaffold transparent
           appBar: AppBar(
             centerTitle: true,
-            title: Text("Welcome"),
+            title: Text("🙏🏻आपला आमदार 🙏🏻"),
             automaticallyImplyLeading: false,
-            backgroundColor: Color(0xFFFBA800), // transparent AppBar
-            elevation: 0, // optional: remove AppBar shadow
+            backgroundColor: Color(0xFFFBA800),
+            elevation: 0,
             actions: [
               IconButton(
                 onPressed: () {
@@ -169,7 +181,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     indicatorSize: TabBarIndicatorSize.tab,
                   ),
                 ),
-                // SizedBox(height: 5),
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
@@ -207,16 +218,61 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 220,
-              // width: 220,
-              child: Image.asset(
-                // "lib/assets/dada_landing_photo.jpeg",
-                "lib/assets/hm_img.jpeg",
-                fit: BoxFit.cover,
+            // const SizedBox(height: 10),
+
+            //   SizedBox(
+            //     width: double.infinity,
+            //     child: Image.asset(
+            //       "lib/assets/rajesh_dada_101.jpeg",
+            //       // fit: BoxFit.fitWidth
+            //     ),
+            // ),
+
+            //     SizedBox(
+            //   // height: 300,
+            //    width: double.infinity,
+            //   child: PageView.builder(
+            //     controller: _pageController,
+            //     itemCount: imagePaths.length,
+            //     itemBuilder: (context, index) {
+            //       return Image.asset(
+            //         imagePaths[index],
+            //         fit: BoxFit.contain,
+            //         // width: double.infinity,
+            //         // height: double.infinity,
+            //       );
+            //     },
+            //     onPageChanged: (index) {
+            //       _currentPage = index;
+            //     },
+            //   ),
+            // ),
+
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 280,
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: imagePaths.length,
+                  itemBuilder: (context, index) {
+                    return Image.asset(
+                      imagePaths[index],
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    );
+                  },
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
+                ),
               ),
             ),
+
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
@@ -231,8 +287,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   crossAxisSpacing: 0,
                   childAspectRatio: 0.8,
                   children: [
-                    buildGridIcon(
-                        "lib/assets/Rajesh_Dada.jpg", "राजेश दादा", () {}),
+                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "राजेश दादा",
+                        () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RajeshDadaInfoScreen(),
+                          ));
+                    }),
                     buildGridIcon(
                         "lib/assets/Rajesh_Dada.jpg", "तक्रार / विनंती", () {
                       Navigator.push(
@@ -257,16 +319,62 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           ));
                     }),
                     buildGridIcon("lib/assets/Rajesh_Dada.jpg", "गॅलरी ", () {
-                      print("Gallery pressed");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GalleryScreen(),
+                          ));
                     }),
                     buildGridIcon("lib/assets/Rajesh_Dada.jpg", "आगामी उपक्रम",
                         () {
-                      print("Super Six pressed");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FutureGoalsScreen(),
+                          ));
                     }),
+                    
                   ],
                 ),
               ),
-            )
+            ),
+
+            Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const FaIcon(FontAwesomeIcons.facebook,
+                              color: Colors.blue),
+                          onPressed: () => launchURL("https://www.facebook.com/mlarajesh.padvi.3?mibextid=rS40aB7S9Ucbxw6v"),
+                          iconSize: 36,
+                        ),
+                        
+                        SizedBox(width: 10,),
+                        
+                        IconButton(
+                          icon: const FaIcon(FontAwesomeIcons.x,
+                              color: Colors.black),
+                          onPressed: () => launchURL(
+                              "https://x.com/MlaPadvi?t=sr656VMprkJ5qXyXIBpyvw&s=09"),
+                              iconSize: 36,
+                        ),
+
+                        SizedBox(width: 10,),
+
+                        IconButton(
+                          icon: const FaIcon(FontAwesomeIcons.instagram,
+                              color: Colors.purple),
+                          onPressed: () => launchURL(
+                              "https://www.instagram.com/rajeshpadvi001/"),
+                          iconSize: 36,
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 30,),
+
+
+            
           ],
         ),
       ),
@@ -308,24 +416,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget tab2Screen(HomeState state) {
     return Column(
       children: [
+        // SizedBox(
+        //   height: 300,
+        //   child: PageView.builder(
+        //     controller: _pageController,
+        //     itemCount: imagePaths.length,
+        //     itemBuilder: (context, index) {
+        //       return Image.asset(
+        //         imagePaths[index],
+        //         fit: BoxFit.contain,
+        //         width: double.infinity,
+        //         height: double.infinity,
+        //       );
+        //     },
+        //     onPageChanged: (index) {
+        //       _currentPage = index;
+        //     },
+        //   ),
+        // ),
+
         SizedBox(
-          height: 300,
-          child: PageView.builder(
-            controller: _pageController,
-            itemCount: imagePaths.length,
-            itemBuilder: (context, index) {
-              return Image.asset(
-                imagePaths[index],
-                fit: BoxFit.contain,
-                width: double.infinity,
-                height: double.infinity,
-              );
-            },
-            onPageChanged: (index) {
-              _currentPage = index;
-            },
-          ),
+          height: 40,
         ),
+        Center(
+          child: Text(
+            "To be updated soon...",
+            style: TextStyle(fontSize: 22),
+          ),
+        )
       ],
     );
   }
@@ -347,56 +465,82 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ),
           ),
           SizedBox(height: 10),
+
+          // SizedBox(
+          //   width: 180,
+          //   child: Text(
+          //     'Main Street, City, State\n+91 70xxxxxxx',
+          //     textAlign: TextAlign.center,
+          //     style: TextStyle(
+          //       fontSize: 13,
+          //     ),
+          //   ),
+          // ),
+
           SizedBox(
-            width: 180,
+            width: 280,
             child: Text(
-              'Main Street, City, State\n+91 70xxxxxxx',
+              'संपर्क\n\n'
+              'शहादा : आमदार कार्यालय दत्त कॉलनी शहादा.\n'
+              'तळोदा : आमदार कार्यालय बिरसा मुंडा चौक तळोदा\n\n'
+              'दीपक जयस्वाल  : 8380911028\n'
+              'किरण सूर्यवंशी  : 9132352222',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 16,
               ),
             ),
           ),
           Divider(thickness: 1.4),
 
           SizedBox(height: 10), // space after divider
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Text(
-              '''Designed & Developed By
-Exaltasoft Solutions
-          ''',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
+//           Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             child: Text(
+//               '''Designed & Developed By
+// Exaltasoft Solutions
+//           ''',
+//               textAlign: TextAlign.center,
+//               style: TextStyle(fontSize: 18),
+//             ),
+//           ),
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-            child: Text(
-              '''Exaltasoft Solutions,  #15A, 4th Floor,
-City Vista, Tower A, Fountain Road,
-Kharadi, Pune - 411014''',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15),
-            ),
-          ),
+//           Padding(
+//             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+//             child: Text(
+//               '''Exaltasoft Solutions,  #15A, 4th Floor,
+// City Vista, Tower A, Fountain Road,
+// Kharadi, Pune - 411014''',
+//               textAlign: TextAlign.center,
+//               style: TextStyle(fontSize: 15),
+//             ),
+//           ),
 
-          Padding(
-            padding: const EdgeInsets.all(0.0),
-            child: Text(
-              'contact@exaltasoft.in',
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.blue,
-                decoration: TextDecoration.underline,
-              ),
-            ),
-          ),
+//           Padding(
+//             padding: const EdgeInsets.all(0.0),
+//             child: Text(
+//               'contact@exaltasoft.in',
+//               style: TextStyle(
+//                 fontSize: 15,
+//                 color: Colors.blue,
+//                 decoration: TextDecoration.underline,
+//               ),
+//             ),
+//           ),
         ],
       ),
     );
   }
+
+  Future<void> launchURL(String url) async {
+  final uri = Uri.tryParse(url);
+  if (uri != null && await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else {
+    debugPrint('Could not launch $url');
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
