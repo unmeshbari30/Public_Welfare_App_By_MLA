@@ -20,7 +20,37 @@ class _AchievementsScreenState extends ConsumerState<AchievementsScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text("hey there testing")
+              // ListView.builder(
+              //   itemCount: 4,
+              //   itemBuilder: (context, index) {
+              //     return ListTile(
+                    
+              //     );
+              //   },)
+              ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: 4,
+              itemBuilder: (context, index) {
+                // final contact = emergencyContacts[index];
+                return Card(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  // child: ListTile(
+                  //   //  leading :Icon(getIconForType(contact['icon']), color: Colors.purple, size: 30,),
+                  //   title: Text("U" ?? ''),
+                  //   subtitle: Text(contact['number'] ?? ''),
+                  //   trailing: IconButton(
+                  //     icon: Icon(Icons.call, color: Colors.green),
+
+                  //     onPressed: () async {
+                        
+                  //     },
+                  //   ),
+                  // ),
+                );
+              },
+            )
           
             ],
           ),
