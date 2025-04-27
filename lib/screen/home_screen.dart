@@ -8,7 +8,7 @@ import 'package:test_app/controllers/authentication_controller.dart';
 import 'package:test_app/controllers/home_controller.dart';
 import 'package:test_app/screen/Login_Screens/login_screen.dart';
 import 'package:test_app/screen/Pages/achievements_screen.dart';
-import 'package:test_app/screen/Pages/future_goals_screen.dart';
+import 'package:test_app/screen/Pages/women_empowerment.dart';
 import 'package:test_app/screen/Pages/gallery_screen.dart';
 import 'package:test_app/screen/Pages/grievance_screen.dart';
 import 'package:test_app/screen/Pages/helpline_screen.dart';
@@ -40,12 +40,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   final List<String> imagePaths = [
     "lib/assets/Rajesh_Dada.jpg",
-    // "lib/assets/rajesh_dada_301.jpeg"
     "lib/assets/rajesh_dada_201.jpeg",
     "lib/assets/rajesh_dada_202.jpeg",
     "lib/assets/rajesh_dada_203.jpeg",
     "lib/assets/rajesh_dada_204.jpeg",
     "lib/assets/rajesh_dada_205.jpeg",
+    "lib/assets/Gallery/birsa_munda.jpeg"
   ];
 
   @override
@@ -102,7 +102,49 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text("🙏🏻आपला आमदार 🙏🏻"),
+            leading: SizedBox(
+              // height: 180,
+              // width: 180,
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 2.0,
+                    ),
+                  ),
+                  child: ClipOval(
+                  
+                  child: Image.asset(
+                    "lib/assets/Rajesh_Dada.jpg",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                            ),
+              ),
+          ),
+            title: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "आपले आमदार श्री. राजेश दादा",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18, // adjust size if needed
+                  ),
+                ),
+                Text(
+                  "जनसेवेचे नवे पाऊल",
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16, // slightly smaller
+                  ),
+                ),
+              ],
+            ),
+            //Text("🙏🏻आपला आमदार 🙏🏻"),
             automaticallyImplyLeading: false,
             backgroundColor: Color(0xFFFBA800),
             elevation: 0,
@@ -257,11 +299,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   controller: _pageController,
                   itemCount: imagePaths.length,
                   itemBuilder: (context, index) {
-                    return Image.asset(
-                      imagePaths[index],
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
+                    return Container(
+                      decoration: BoxDecoration(
+                        // border: Border.all(
+                        //   color: Colors.black,
+                        //   width: 2
+                        // ),
+                        // borderRadius: BorderRadius.circular(12)
+                      ),
+
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12), 
+                        child: Image.asset(
+                          imagePaths[index],
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
+                      ),
                     );
                   },
                   onPageChanged: (index) {
@@ -325,56 +380,54 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                             builder: (context) => GalleryScreen(),
                           ));
                     }),
-                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "आगामी उपक्रम",
+                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "महिला सशक्तीकरण",
                         () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => FutureGoalsScreen(),
+                            builder: (context) => WomenEmpowermentScreen(),
                           ));
                     }),
-                    
                   ],
                 ),
               ),
             ),
 
             Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: const FaIcon(FontAwesomeIcons.facebook,
-                              color: Colors.blue),
-                          onPressed: () => launchURL("https://www.facebook.com/mlarajesh.padvi.3?mibextid=rS40aB7S9Ucbxw6v"),
-                          iconSize: 36,
-                        ),
-                        
-                        SizedBox(width: 10,),
-                        
-                        IconButton(
-                          icon: const FaIcon(FontAwesomeIcons.x,
-                              color: Colors.black),
-                          onPressed: () => launchURL(
-                              "https://x.com/MlaPadvi?t=sr656VMprkJ5qXyXIBpyvw&s=09"),
-                              iconSize: 36,
-                        ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const FaIcon(FontAwesomeIcons.facebook,
+                      color: Colors.blue),
+                  onPressed: () => launchURL(
+                      "https://www.facebook.com/mlarajesh.padvi.3?mibextid=rS40aB7S9Ucbxw6v"),
+                  iconSize: 36,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                IconButton(
+                  icon: const FaIcon(FontAwesomeIcons.x, color: Colors.black),
+                  onPressed: () => launchURL(
+                      "https://x.com/MlaPadvi?t=sr656VMprkJ5qXyXIBpyvw&s=09"),
+                  iconSize: 36,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                IconButton(
+                  icon: const FaIcon(FontAwesomeIcons.instagram,
+                      color: Colors.purple),
+                  onPressed: () =>
+                      launchURL("https://www.instagram.com/rajeshpadvi001/"),
+                  iconSize: 36,
+                ),
+              ],
+            ),
 
-                        SizedBox(width: 10,),
-
-                        IconButton(
-                          icon: const FaIcon(FontAwesomeIcons.instagram,
-                              color: Colors.purple),
-                          onPressed: () => launchURL(
-                              "https://www.instagram.com/rajeshpadvi001/"),
-                          iconSize: 36,
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 30,),
-
-
-            
+            SizedBox(
+              height: 30,
+            ),
           ],
         ),
       ),
@@ -483,7 +536,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               'संपर्क\n\n'
               'शहादा : आमदार कार्यालय दत्त कॉलनी शहादा.\n'
               'तळोदा : आमदार कार्यालय बिरसा मुंडा चौक तळोदा\n\n'
-              'दीपक जयस्वाल  : 8380911028\n'
+              'अ‍ॅड. दीपक जयस्वाल  : 8380911028\n'
               'किरण सूर्यवंशी  : 9132352222',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -533,14 +586,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 
   Future<void> launchURL(String url) async {
-  final uri = Uri.tryParse(url);
-  if (uri != null && await canLaunchUrl(uri)) {
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  } else {
-    debugPrint('Could not launch $url');
+    final uri = Uri.tryParse(url);
+    if (uri != null && await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint('Could not launch $url');
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {

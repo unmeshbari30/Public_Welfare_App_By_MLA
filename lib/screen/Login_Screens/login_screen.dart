@@ -147,12 +147,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         EasyLoading.show(status: 'Loading...');
-                        var loginSuccessOrFailed = true;
-                        // await ref
-                        //     .read(authenticationControllerProvider.notifier)
-                        //     .loginUser();
+                        var loginSuccessOrFailed =
+                        await ref
+                            .read(authenticationControllerProvider.notifier)
+                            .loginUser();
         
-                        if (loginSuccessOrFailed != null) {
+                        try{
+                          if (loginSuccessOrFailed != null) {
                           //  if (true) {
                           var prefs =
                               await ref.watch(sharedPreferencesProvider.future);
@@ -183,6 +184,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             duration: Duration(seconds: 2),
                             backgroundColor: Colors.red.shade600,
                           ));
+                        }
+
+                        }catch(e){
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                              loginSuccessOrFailed?.message ?? "Login Failed",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            duration: Duration(seconds: 2),
+                            backgroundColor: Colors.red.shade600,
+                          ));
+
                         }
                         EasyLoading.dismiss();
                       }
@@ -215,7 +228,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ));
                       },
                       child: Text(
-                        "New User ? ",
+                        "New User ?",
                         style: TextStyle(
                             fontSize: 16,
                             color: Theme.of(context).primaryColor),

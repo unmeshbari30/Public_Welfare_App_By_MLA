@@ -28,11 +28,31 @@ class AuthenticationController extends _$AuthenticationController {
     var currentState = state.value;
     final deviceInfoPlugin = DeviceInfoPlugin();
     final networkInfo = NetworkInfo();
-    final connectivityResult = await Connectivity().checkConnectivity();
     final packageInfo = await PackageInfo.fromPlatform();
     final androidInfo = await deviceInfoPlugin.androidInfo;
-    currentState?.appVersion =
-        '${packageInfo.version}+${packageInfo.buildNumber}';
+    currentState?.appVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
+
+    final connectivityResults = await Connectivity().checkConnectivity();
+    var connectionType = 'None';
+
+    if (connectivityResults.contains(ConnectivityResult.wifi)) {
+      connectionType = 'WiFi';
+    } else if (connectivityResults.contains(ConnectivityResult.mobile)) {
+      connectionType = 'Mobile';
+    } else if (connectivityResults.contains(ConnectivityResult.ethernet)) {
+      connectionType = 'Ethernet';
+    } else if (connectivityResults.contains(ConnectivityResult.bluetooth)) {
+      connectionType = 'Bluetooth';
+    } else if (connectivityResults.contains(ConnectivityResult.vpn)) {
+      connectionType = 'VPN';
+    } else if (connectivityResults.contains(ConnectivityResult.other)) {
+      connectionType = 'Other';
+    } else if (connectivityResults.contains(ConnectivityResult.none)) {
+      connectionType = 'No Connection';
+    }
+
+    // Now you can use connectionType!
+    currentState?.connectionType = connectionType;
 
     update(
       (p0) async {
@@ -51,11 +71,11 @@ class AuthenticationController extends _$AuthenticationController {
           p0.deviceName = iosInfo.name;
         }
 
-        if (connectivityResult == ConnectivityResult.wifi) {
+        if (connectivityResults.contains(ConnectivityResult.wifi)) {
           p0.wifiName = await networkInfo.getWifiName() ?? 'Unavailable';
           p0.wifiBSSID = await networkInfo.getWifiBSSID() ?? 'Unavailable';
           p0.ipAddress = await networkInfo.getWifiIP() ?? 'Unavailable';
-        } else if (connectivityResult == ConnectivityResult.mobile) {
+        } else if (connectivityResults.contains(ConnectivityResult.mobile)) {
           p0.ipAddress = await networkInfo.getWifiIP() ?? 'Unavailable';
           p0.note = 'Connected via mobile data. WiFi info not available.';
         } else {
@@ -68,9 +88,9 @@ class AuthenticationController extends _$AuthenticationController {
   }
 
   Future<LoginPayloadModel?> loginUser() async {
-    var currentState = state.value;
     var repository = await ref.read(repositoryProvider.future);
     await getDeviceAndNetworkInfo();
+    var currentState = state.value;
     if (currentState != null) {
       DeviceInfoModel deviceInfo = DeviceInfoModel(
         appVersion: currentState.appVersion,
@@ -91,7 +111,7 @@ class AuthenticationController extends _$AuthenticationController {
           userName: currentState.userName.text ?? "nullUserName",
           password: currentState.password.text);
 
-      var loginResult =await repository.loginUser(loginPayload: loginPayload);
+      var loginResult = await repository.loginUser(loginPayload: loginPayload);
 
       return loginResult;
     }
@@ -99,35 +119,32 @@ class AuthenticationController extends _$AuthenticationController {
     return null;
   }
 
-  Future<bool> checkIsLogin() async{
-  SharedPreferences pref = await SharedPreferences.getInstance();
-  return pref.getBool(PrefrencesKeyEnum.isLoggedin.key) ?? false;
-}
+  Future<bool> checkIsLogin() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getBool(PrefrencesKeyEnum.isLoggedin.key) ?? false;
+  }
 
 // Future<bool> setLoginStatus(bool data) async{
 //   SharedPreferences pref = await SharedPreferences.getInstance();
 //   return pref.setBool(PrefrencesKeyEnum.isLoggedin.key, data);
 // }
 
-Future<bool> loggedOut() async{
-    
-  SharedPreferences pref = await SharedPreferences.getInstance();
-   pref.remove(PrefrencesKeyEnum.isLoggedin.key);
-   pref.remove(PrefrencesKeyEnum.localPin.key);
-   pref.remove(PrefrencesKeyEnum.accessToken.key);
-   pref.remove(PrefrencesKeyEnum.refreshToken.key);
-   pref.remove(PrefrencesKeyEnum.isfirstLocalPin.key);
+  Future<bool> loggedOut() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.remove(PrefrencesKeyEnum.isLoggedin.key);
+    pref.remove(PrefrencesKeyEnum.localPin.key);
+    pref.remove(PrefrencesKeyEnum.accessToken.key);
+    pref.remove(PrefrencesKeyEnum.refreshToken.key);
+    pref.remove(PrefrencesKeyEnum.isfirstLocalPin.key);
 
-  //  update((p0) {
-  //   p0.userName.text = "";
-  //   p0.password.text = "";
-  //   return p0;
-  // },);
+    //  update((p0) {
+    //   p0.userName.text = "";
+    //   p0.password.text = "";
+    //   return p0;
+    // },);
 
-  return true;
-
-
-}
+    return true;
+  }
 }
 
 class AuthenticationState {

@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:test_app/controllers/home_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:test_app/controllers/home_controller.dart';
 
-class GalleryScreen extends ConsumerStatefulWidget {
-  const GalleryScreen({super.key});
+class WomenEmpowermentScreen extends ConsumerStatefulWidget {
+  const WomenEmpowermentScreen({super.key});
 
   @override
-  ConsumerState<GalleryScreen> createState() => _GalleryScreenState();
+  ConsumerState<WomenEmpowermentScreen> createState() => _WomenEmpowermentScreenState();
 }
 
-class _GalleryScreenState extends ConsumerState<GalleryScreen> {
-
-
-
-  Widget getScaffold(HomeState state){
-
-     List<Map<String, String>> galleryItems = [
+class _WomenEmpowermentScreenState extends ConsumerState<WomenEmpowermentScreen> {
+  List<Map<String, String>> galleryItems = [
     {
       'imagePath': "lib/assets/Gallery/amoni_aasharam.jpeg",
       'description': "मा. महाराष्ट्र राज्याचे आदिवासी विकास मंत्री डॉ. अशोक उईके साहेब यांच्या संवाद चिमुकल्यांशी अभियानांतर्गत मा. आ. राजेशदादा पाडवी यांनी अमोनी आश्रम शाळेतील विद्यार्थ्यांशी संवाद साधला आणि त्यांचे प्रश्न, स्वप्ने व भविष्यासाठीच्या संधींवर मनमोकळा चर्चा केली."
@@ -29,28 +23,29 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
       "imagePath": "lib/assets/Gallery/raksha_bandhan.jpeg",
       "description": "तळोदा येथे सार्वजनिक रक्षाबंधन निमित्ताने महिला चे समस्या ऐकून घेतले"
     },
+    // Add more items here
   ];
 
+  Widget getScaffold(HomeState state) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber,
         centerTitle: true,
-        title: Text("गॅलरी"),
+        title: Text("महिला सशक्तीकरण"),
+        backgroundColor: Colors.amber,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                // Center(
-                //   child: Text("To be updated soon...", style:  TextStyle(fontSize: 22),),
-                // )
-            
-            
-            
-                 ListView.builder(
+          child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+          
+              // Center(
+              //     child: Text("To be updated soon...", style:  TextStyle(fontSize: 22),),
+              //   )
+
+              ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: galleryItems.length,
@@ -90,27 +85,23 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
                   },
                 ),
             
-            
-            
-              ],
-            ),
-          ),
-        )
-      ),
-    );
 
+            ],
+          ),
+        ),
+      )),
+    );
   }
 
-  
   @override
   Widget build(BuildContext context) {
     var homeStateAsync = ref.watch(homeControllerProvider);
     return homeStateAsync.when(
-      data: (state) => getScaffold(state), 
-      error:  (error, stackTrace) => const Scaffold(
+        data: (state) => getScaffold(state),
+        error: (error, stackTrace) => const Scaffold(
               body: Text("Something Went Wrong"),
-            ), 
-      loading:  () => const Scaffold(
+            ),
+        loading: () => const Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),
               ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/controllers/home_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -85,6 +84,8 @@ class _HelplineScreenState extends ConsumerState<HelplineScreen> {
       return Icons.fire_truck;
     case "ambulance":
       return Icons.local_hospital;
+    case "tehsil":
+      return Icons.local_post_office;
     default:
       return Icons.phone;
   }
@@ -92,11 +93,17 @@ class _HelplineScreenState extends ConsumerState<HelplineScreen> {
 
 
   final List<Map<String, String>> emergencyContacts = [
-    {"name": "Emeregency No", "number": "112", "icon": "emergency"},
-    {"name": "Police", "number": "100", "icon": "police" },
-    {"name": "Fire", "number": "101", "icon": "fire"},
-    {"name": "Ambulance", "number": "1091", "icon": "ambulance"},
-    // {"name": "Ambulance", "number": "102"},
+    {"name": "Taloda Ambulance", "number": "9372079397", "icon": "ambulance"},
+    {"name": "Shahada Ambulance", "number": "9096971535", "icon": "ambulance"},
+    {"name": "Taloda Police", "number": "9764287587", "icon": "police" },
+    {"name": "Shahada Police", "number": "8380911028", "icon": "police" },
+    {"name": "Taloda Tehsil Office", "number": "9764287587", "icon": "tehsil"},
+    {"name": "Shahada Tehsil (Hemraj Pawar)", "number": "9096971535", "icon": "tehsil"},
+    {"name": "PMAY घरकुल (Kiran Suryawanshi)", "number": "9764287587", "icon": "tehsil"},
+    {"name": "PHC Centre /SDH Hospital Taloda", "number": "8381056451", "icon": "tehsil"},
+    {"name": "Borad PHC (Ravin Bhau)", "number": "9834525343", "icon": "tehsil"},
+    {"name": "Masavad PHC (Sachin Pawara)", "number": " 8888133897", "icon": "tehsil"},
+    {"name": "Shahada Water Supply & Fire", "number": "9763342959", "icon": "fire"}, 
   ];
 
   @override

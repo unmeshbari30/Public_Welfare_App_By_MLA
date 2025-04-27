@@ -77,25 +77,61 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
+  # assets:
+  #    - lib\assets\Rajesh_Dada.jpg
+  #    - lib\assets\rajeshDada1jpg.jpg
+  #    - lib\assets\rajeshDada2jpg.jpg
+  #    - lib\assets\rajeshDada3jpg.jpg
+  #    - lib\assets\rajeshDada4jpg.jpg
+  #    - lib\assets\dada_landing_photo.jpeg
+  #    - lib\assets\bg_image.jpeg
+  #    - lib\assets\hm_img.jpeg
+  #    - lib\assets\Rajesh_dada_101.jpeg
+  #    - lib\assets\Rajesh_dada_103.jpeg
+  #    - lib\assets\Rajesh_dada_104.jpeg
+  #    - lib\assets\Rajesh_dada_106.jpeg
+  #    - lib\assets\rajesh_dada_201.jpeg
+  #    - lib\assets\rajesh_dada_202.jpeg
+  #    - lib\assets\rajesh_dada_203.jpeg
+  #    - lib\assets\rajesh_dada_204.jpeg
+  #    - lib\assets\rajesh_dada_205.jpeg
+  #    - lib\assets\rajesh_dada_301.jpeg
+  #    - lib\assets\Gallery\amoni_aasharam.jpeg
+  #    - lib\assets\Gallery\birsa_munda.jpeg
+  #    - lib\assets\Gallery\p_k_patil.jpeg
+  #    - lib\assets\Gallery\raksha_bandhan.jpeg
+  #    - lib\assets\Gallery\ranipur_info.jpeg
+
   assets:
-     - lib\assets\Rajesh_Dada.jpg
-     - lib\assets\rajeshDada1jpg.jpg
-     - lib\assets\rajeshDada2jpg.jpg
-     - lib\assets\rajeshDada3jpg.jpg
-     - lib\assets\rajeshDada4jpg.jpg
-     - lib\assets\dada_landing_photo.jpeg
-     - lib\assets\bg_image.jpeg
-     - lib\assets\hm_img.jpeg
-     - lib\assets\Rajesh_dada_101.jpeg
-     - lib\assets\Rajesh_dada_103.jpeg
-     - lib\assets\Rajesh_dada_104.jpeg
-     - lib\assets\Rajesh_dada_106.jpeg
-     - lib\assets\rajesh_dada_201.jpeg
-     - lib\assets\rajesh_dada_202.jpeg
-     - lib\assets\rajesh_dada_203.jpeg
-     - lib\assets\rajesh_dada_204.jpeg
-     - lib\assets\rajesh_dada_205.jpeg
-     - lib\assets\rajesh_dada_301.jpeg
+  - lib/assets/Rajesh_Dada.jpg
+  - lib/assets/rajeshDada1jpg.jpg
+  - lib/assets/rajeshDada2jpg.jpg
+  - lib/assets/rajeshDada3jpg.jpg
+  - lib/assets/rajeshDada4jpg.jpg
+  - lib/assets/dada_landing_photo.jpeg
+  - lib/assets/bg_image.jpeg
+  - lib/assets/hm_img.jpeg
+  - lib/assets/Rajesh_dada_101.jpeg
+  - lib/assets/Rajesh_dada_103.jpeg
+  - lib/assets/Rajesh_dada_104.jpeg
+  - lib/assets/Rajesh_dada_106.jpeg
+  - lib/assets/rajesh_dada_201.jpeg
+  - lib/assets/rajesh_dada_202.jpeg
+  - lib/assets/rajesh_dada_203.jpeg
+  - lib/assets/rajesh_dada_204.jpeg
+  - lib/assets/rajesh_dada_205.jpeg
+  - lib/assets/rajesh_dada_301.jpeg
+  - lib/assets/Gallery/amoni_aasharam.jpeg
+  - lib\assets\Gallery\birsa_munda.jpeg
+  - lib/assets/Gallery/p_k_patil.jpeg
+  - lib/assets/Gallery/raksha_bandhan.jpeg
+  - lib/assets/Gallery/ranipur_info.jpeg
+
+
+
+
+
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
