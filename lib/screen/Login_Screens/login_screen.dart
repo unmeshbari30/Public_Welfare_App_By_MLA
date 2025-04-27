@@ -38,20 +38,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ),
       body: PopScope(
         canPop: false,
-        onPopInvokedWithResult:(didPop, result) {
-          if(exitCounter == 2){
+        onPopInvokedWithResult: (didPop, result) {
+          if (exitCounter == 2) {
             exit(0);
           }
           exitCounter++;
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Press back again to exit", style: TextStyle(color: Colors.black),),
-              duration: Duration(seconds: 2),
-              backgroundColor: Colors.amber,
-              
-              )
-          );
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              "Press back again to exit",
+              style: TextStyle(color: Colors.black),
+            ),
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.amber,
+          ));
         },
         child: SafeArea(
           child: SingleChildScrollView(
@@ -65,7 +65,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Divider(
                       thickness: 1.5,
                       color: Colors.black,
-                    
                     ),
                   ),
                   SizedBox(
@@ -139,65 +138,74 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         },
                       ),
                       Text('Remember Me',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor)),
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor)),
                     ],
                   ),
                   ElevatedButton(
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
-                        EasyLoading.show(status: 'Loading...');
-                        var loginSuccessOrFailed =
-                        await ref
-                            .read(authenticationControllerProvider.notifier)
-                            .loginUser();
-        
-                        try{
-                          if (loginSuccessOrFailed != null) {
-                          //  if (true) {
-                          var prefs =
-                              await ref.watch(sharedPreferencesProvider.future);
-                          prefs.setBool(
-                              PrefrencesKeyEnum.rememberMe.key, rememberMe);
-                          prefs.setBool(PrefrencesKeyEnum.isLoggedin.key, true);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                              "Login Successfully",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            duration: Duration(seconds: 2),
-                            backgroundColor: Colors.green.shade600,
-                          ));
-        
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                // builder: (context) => LocalPinScreen(),
-                                builder: (context) => HomeScreen(),
-                              ));
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                              "Login Failed",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            duration: Duration(seconds: 2),
-                            backgroundColor: Colors.red.shade600,
-                          ));
-                        }
+                        EasyLoading.show();
 
-                        }catch(e){
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                              loginSuccessOrFailed?.message ?? "Login Failed",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            duration: Duration(seconds: 2),
-                            backgroundColor: Colors.red.shade600,
-                          ));
+                        WidgetsBinding.instance.addPostFrameCallback((_) async {
+                          var loginSuccessOrFailed = await ref
+                              .read(authenticationControllerProvider.notifier)
+                              .loginUser();
 
-                        }
-                        EasyLoading.dismiss();
+                          try {
+                            if (loginSuccessOrFailed != null) {
+                              var prefs = await ref
+                                  .watch(sharedPreferencesProvider.future);
+                              prefs.setBool(
+                                  PrefrencesKeyEnum.rememberMe.key, rememberMe);
+                              prefs.setBool(
+                                  PrefrencesKeyEnum.isLoggedin.key, true);
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Login Successfully",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                  backgroundColor: Colors.green.shade600,
+                                ),
+                              );
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomeScreen(),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Login Failed",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                  backgroundColor: Colors.red.shade600,
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  loginSuccessOrFailed?.message ??
+                                      "Login Failed",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                duration: Duration(seconds: 2),
+                                backgroundColor: Colors.red.shade600,
+                              ),
+                            );
+                          }
+
+                          EasyLoading.dismiss();
+                        });
                       }
                     },
                     style: ElevatedButton.styleFrom(

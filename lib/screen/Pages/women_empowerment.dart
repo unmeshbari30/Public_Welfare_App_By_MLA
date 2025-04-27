@@ -12,18 +12,44 @@ class WomenEmpowermentScreen extends ConsumerStatefulWidget {
 class _WomenEmpowermentScreenState extends ConsumerState<WomenEmpowermentScreen> {
   List<Map<String, String>> galleryItems = [
     {
-      'imagePath': "lib/assets/Gallery/amoni_aasharam.jpeg",
-      'description': "मा. महाराष्ट्र राज्याचे आदिवासी विकास मंत्री डॉ. अशोक उईके साहेब यांच्या संवाद चिमुकल्यांशी अभियानांतर्गत मा. आ. राजेशदादा पाडवी यांनी अमोनी आश्रम शाळेतील विद्यार्थ्यांशी संवाद साधला आणि त्यांचे प्रश्न, स्वप्ने व भविष्यासाठीच्या संधींवर मनमोकळा चर्चा केली."
+      'imagePath': "lib/assets/women_empowerment/savitribai_phule_jayanti.jpeg",
+      'description': "8 मार्च रोजी महिला दिनानिम्मत सावित्रीबाई फुले ज्येष्ठ नागरिक महिला मंडळ यांच्या कार्यक्रमात उपस्थित होते."
     },
     {
-      'imagePath': "lib/assets/Gallery/ranipur_info.jpeg",
-      'description': "राणीपूर येथील धरणावर जाऊन परिसरातील शेतकरी बांधवांना धरणातील गाळ त्यांच्या शेतात टाकण्याचे उपक्रमास सुरवात झाली. या उपक्रमामुळे शेतजमिनींची सुपीकता वाढेल आणि धरणातील पाणीसाठाही वाढण्यास मदत होईल. समृद्ध शेती आणि भरभराटीचा मार्ग याच उपक्रमातून नक्की खुलणार! शेतकरी राजा जिंदाबाद!",
+      'imagePath': "lib/assets/women_empowerment/women_day.jpeg",
+      'description': "बोरद येथे महिला दिनानिमित्त महिलांचे प्रश्न जाणून घेतले व त्यांना महिलांचे सरकार द्वारे मिळणाऱ्या  उपाययोजना समजून देण्यात आले.",
     },
     {
-      "imagePath": "lib/assets/Gallery/raksha_bandhan.jpeg",
-      "description": "तळोदा येथे सार्वजनिक रक्षाबंधन निमित्ताने महिला चे समस्या ऐकून घेतले"
+      "imagePath": "lib/assets/women_empowerment/bachatgat.jpeg",
+      "description": "तळवे या गावी अंगणवाडी व महिला बचत गटाची बैठक घेऊन त्यांना नवीन उद्योगधंद्याबद्दल माहिती दिली"
     },
     // Add more items here
+    {
+      "imagePath": "lib/assets/women_empowerment/mod_bachatgat_meeting.jpeg",
+      "description": "मोड या गावी महिला बचत गटाची मीटिंग ठेवून त्यांच्या समस्या जाणून घेतल्या व बचत गटाच्या नवीन उपाययोजना सांगण्यात आला."
+    },
+    {
+      "imagePath": "lib/assets/women_empowerment/morwad.jpeg",
+      "description": "मोरवड येथे तरुणींशी भेट घेऊन त्यांच्याजवळ चर्चा केली."
+    },
+    {
+      "imagePath": "lib/assets/women_empowerment/morwad_mahile_charcha.jpeg",
+      "description": "मोरवड या गावी महिलांशी चर्चा करून त्यांच्या समस्या ऐकून घेतल्या."
+    },
+
+    //
+    {
+      "imagePath": "lib/assets/women_empowerment/ranjanpur_prasad.jpeg",
+      "description": "तीर्थक्षेत्र रंजनपुर येथे दर्शन घेऊन  महाप्रसादाच्या लाभ घेतला."
+    },
+    {
+      "imagePath": "lib/assets/women_empowerment/bachatgat_meeting.jpeg",
+      "description": "आम्हाला बचत गट महिलांची मीटिंग घेऊन त्यांच्या समस्या ऐकून त्यावर निराकरण केले."
+    },
+    {
+      "imagePath": "lib/assets/women_empowerment/kalawati_foundation.jpeg",
+      "description": "आ. राजेशदादा पाडवी यांच्या मार्गदर्शनाखाली कै. कलावती पाडवी फाउंडेशन च्या माध्यमातून कु. नेहा राजेशदादा पाडवी यांच्या हस्ते जिल्हा परिषदेचा शाळेत वॉटर प्युरिफायरचे लोकार्पण करण्यात आले."
+    },
   ];
 
   Widget getScaffold(HomeState state) {

@@ -24,100 +24,201 @@ class AuthenticationController extends _$AuthenticationController {
     return newState;
   }
 
-  Future getDeviceAndNetworkInfo() async {
-    var currentState = state.value;
-    final deviceInfoPlugin = DeviceInfoPlugin();
-    final networkInfo = NetworkInfo();
-    final packageInfo = await PackageInfo.fromPlatform();
+//   Future getDeviceAndNetworkInfo() async {
+//   var currentState = state.value;
+//   final deviceInfoPlugin = DeviceInfoPlugin();
+//   final networkInfo = NetworkInfo();
+//   final packageInfo = await PackageInfo.fromPlatform();
+//   final connectivityResults = await Connectivity().checkConnectivity();
+//   var connectionType = 'None';
+//   if (connectivityResults.contains(ConnectivityResult.wifi)) {
+//     connectionType = 'WiFi';
+//   } else if (connectivityResults.contains(ConnectivityResult.mobile)) {
+//     connectionType = 'Mobile';
+//   } else if (connectivityResults.contains(ConnectivityResult.ethernet)) {
+//     connectionType = 'Ethernet';
+//   } else if (connectivityResults.contains(ConnectivityResult.bluetooth)) {
+//     connectionType = 'Bluetooth';
+//   } else if (connectivityResults.contains(ConnectivityResult.vpn)) {
+//     connectionType = 'VPN';
+//   } else if (connectivityResults.contains(ConnectivityResult.other)) {
+//     connectionType = 'Other';
+//   } else if (connectivityResults.contains(ConnectivityResult.none)) {
+//     connectionType = 'No Connection';
+//   }
+//   // Prepare fields outside update
+//   String? platform;
+//   String? version;
+//   String? deviceModel;
+//   String? manufacturer;
+//   String? deviceName;
+//   String? wifiName;
+//   String? wifiBSSID;
+//   String? ipAddress;
+//   String? note;
+//   if (Platform.isAndroid) {
+//     final androidInfo = await deviceInfoPlugin.androidInfo;
+//     platform = 'Android';
+//     version = androidInfo.version.release;
+//     deviceModel = androidInfo.model;
+//     manufacturer = androidInfo.manufacturer;
+//     deviceName = androidInfo.device;
+//   } else if (Platform.isIOS) {
+//     final iosInfo = await deviceInfoPlugin.iosInfo;
+//     platform = 'iOS';
+//     version = iosInfo.systemVersion;
+//     deviceModel = iosInfo.utsname.machine;
+//     manufacturer = 'Apple';
+//     deviceName = iosInfo.name;
+//   }
+//   if (connectivityResults.contains(ConnectivityResult.wifi)) {
+//     wifiName = await networkInfo.getWifiName() ?? 'Unavailable';
+//     wifiBSSID = await networkInfo.getWifiBSSID() ?? 'Unavailable';
+//     ipAddress = await networkInfo.getWifiIP() ?? 'Unavailable';
+//   } else if (connectivityResults.contains(ConnectivityResult.mobile)) {
+//     ipAddress = await networkInfo.getWifiIP() ?? 'Unavailable';
+//     note = 'Connected via mobile data. WiFi info not available.';
+//   } else {
+//     note = 'No active network connection.';
+//   }
+//   update((p0) {
+//     p0.appVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
+//     p0.connectionType = connectionType;
+//     p0.platform = platform;
+//     p0.version = version;
+//     p0.deviceModel = deviceModel;
+//     p0.manufacturer = manufacturer;
+//     p0.deviceName = deviceName;
+//     p0.wifiName = wifiName;
+//     p0.wifiBSSID = wifiBSSID;
+//     p0.ipAddress = ipAddress;
+//     p0.note = note;
+//     return p0;
+//   });
+// }
+
+  // Future<LoginPayloadModel?> loginUser() async {
+  //   var repository = await ref.read(repositoryProvider.future);
+  //   await getDeviceAndNetworkInfo();
+  //   var currentState = state.value;
+  //   if (currentState != null) {
+  //     DeviceInfoModel deviceInfo  = DeviceInfoModel(
+  //       appVersion: currentState.appVersion,
+  //       connectionType: currentState.connectionType,
+  //       deviceName: currentState.deviceName,
+  //       ipAddress: currentState.ipAddress,
+  //       manufacturer: currentState.manufacturer,
+  //       deviceModel: currentState.deviceModel,
+  //       note: currentState.note,
+  //       platform: currentState.platform,
+  //       version: currentState.version,
+  //       wifiBssid: currentState.wifiBSSID,
+  //       wifiName: currentState.wifiName,
+  //     );
+  //     LoginPayloadModel loginPayload = LoginPayloadModel(
+  //         deviceInfo: deviceInfo,
+  //         userName: currentState.userName.text ?? "nullUserName",
+  //         password: currentState.password.text);
+  //     var loginResult = await repository.loginUser(loginPayload: loginPayload);
+  //     return loginResult;
+  //   }
+  //   return null;
+  // }
+
+ Future<LoginPayloadModel?> loginUser() async {
+  var repository = await ref.read(repositoryProvider.future);
+
+  // Collect device and network info
+  final deviceInfoPlugin = DeviceInfoPlugin();
+  final networkInfo = NetworkInfo();
+  final packageInfo = await PackageInfo.fromPlatform();
+  final connectivityResults = await Connectivity().checkConnectivity();
+
+  String connectionType = 'None';
+  if (connectivityResults.contains(ConnectivityResult.wifi)) {
+    connectionType = 'WiFi';
+  } else if (connectivityResults.contains(ConnectivityResult.mobile)) {
+    connectionType = 'Mobile';
+  } else if (connectivityResults.contains(ConnectivityResult.ethernet)) {
+    connectionType = 'Ethernet';
+  } else if (connectivityResults.contains(ConnectivityResult.bluetooth)) {
+    connectionType = 'Bluetooth';
+  } else if (connectivityResults.contains(ConnectivityResult.vpn)) {
+    connectionType = 'VPN';
+  } else if (connectivityResults.contains(ConnectivityResult.other)) {
+    connectionType = 'Other';
+  } else {
+    connectionType = 'No Connection';
+  }
+
+  // Prepare fields
+  String? platform;
+  String? version;
+  String? deviceModel;
+  String? manufacturer;
+  String? deviceName;
+  String? wifiName;
+  String? wifiBSSID;
+  String? ipAddress;
+  String? note;
+
+  if (Platform.isAndroid) {
     final androidInfo = await deviceInfoPlugin.androidInfo;
-    currentState?.appVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
+    platform = 'Android';
+    version = androidInfo.version.release;
+    deviceModel = androidInfo.model;
+    manufacturer = androidInfo.manufacturer;
+    deviceName = androidInfo.device;
+  } else if (Platform.isIOS) {
+    final iosInfo = await deviceInfoPlugin.iosInfo;
+    platform = 'iOS';
+    version = iosInfo.systemVersion;
+    deviceModel = iosInfo.utsname.machine;
+    manufacturer = 'Apple';
+    deviceName = iosInfo.name;
+  }
 
-    final connectivityResults = await Connectivity().checkConnectivity();
-    var connectionType = 'None';
+  if (connectivityResults.contains(ConnectivityResult.wifi)) {
+    wifiName = await networkInfo.getWifiName() ?? 'Unavailable';
+    wifiBSSID = await networkInfo.getWifiBSSID() ?? 'Unavailable';
+    ipAddress = await networkInfo.getWifiIP() ?? 'Unavailable';
+  } else if (connectivityResults.contains(ConnectivityResult.mobile)) {
+    ipAddress = await networkInfo.getWifiIP() ?? 'Unavailable';
+    note = 'Connected via mobile data. WiFi info not available.';
+  } else {
+    note = 'No active network connection.';
+  }
 
-    if (connectivityResults.contains(ConnectivityResult.wifi)) {
-      connectionType = 'WiFi';
-    } else if (connectivityResults.contains(ConnectivityResult.mobile)) {
-      connectionType = 'Mobile';
-    } else if (connectivityResults.contains(ConnectivityResult.ethernet)) {
-      connectionType = 'Ethernet';
-    } else if (connectivityResults.contains(ConnectivityResult.bluetooth)) {
-      connectionType = 'Bluetooth';
-    } else if (connectivityResults.contains(ConnectivityResult.vpn)) {
-      connectionType = 'VPN';
-    } else if (connectivityResults.contains(ConnectivityResult.other)) {
-      connectionType = 'Other';
-    } else if (connectivityResults.contains(ConnectivityResult.none)) {
-      connectionType = 'No Connection';
-    }
-
-    // Now you can use connectionType!
-    currentState?.connectionType = connectionType;
-
-    update(
-      (p0) async {
-        if (Platform.isAndroid) {
-          p0.platform = 'Android';
-          p0.version = androidInfo.version.release;
-          p0.deviceModel = androidInfo.model;
-          p0.manufacturer = androidInfo.manufacturer;
-          p0.deviceName = androidInfo.device;
-        } else if (Platform.isIOS) {
-          final iosInfo = await deviceInfoPlugin.iosInfo;
-          p0.platform = 'iOS';
-          p0.version = iosInfo.systemVersion;
-          p0.deviceModel = iosInfo.utsname.machine;
-          p0.manufacturer = 'Apple';
-          p0.deviceName = iosInfo.name;
-        }
-
-        if (connectivityResults.contains(ConnectivityResult.wifi)) {
-          p0.wifiName = await networkInfo.getWifiName() ?? 'Unavailable';
-          p0.wifiBSSID = await networkInfo.getWifiBSSID() ?? 'Unavailable';
-          p0.ipAddress = await networkInfo.getWifiIP() ?? 'Unavailable';
-        } else if (connectivityResults.contains(ConnectivityResult.mobile)) {
-          p0.ipAddress = await networkInfo.getWifiIP() ?? 'Unavailable';
-          p0.note = 'Connected via mobile data. WiFi info not available.';
-        } else {
-          p0.note = 'No active network connection.';
-        }
-
-        return p0;
-      },
+  // Fetch current state
+  var currentState = state.value;
+  if (currentState != null) {
+    DeviceInfoModel deviceInfo = DeviceInfoModel(
+      appVersion: '${packageInfo.version}+${packageInfo.buildNumber}',
+      connectionType: connectionType,
+      platform: platform,
+      version: version,
+      deviceModel: deviceModel,
+      manufacturer: manufacturer,
+      deviceName: deviceName,
+      wifiName: wifiName,
+      wifiBssid: wifiBSSID,
+      ipAddress: ipAddress,
+      note: note,
     );
+
+    LoginPayloadModel loginPayload = LoginPayloadModel(
+      deviceInfo: deviceInfo,
+      userName: currentState.userName.text ?? "nullUserName",
+      password: currentState.password.text,
+    );
+
+    var loginResult = await repository.loginUser(loginPayload: loginPayload);
+    return loginResult;
   }
 
-  Future<LoginPayloadModel?> loginUser() async {
-    var repository = await ref.read(repositoryProvider.future);
-    await getDeviceAndNetworkInfo();
-    var currentState = state.value;
-    if (currentState != null) {
-      DeviceInfoModel deviceInfo = DeviceInfoModel(
-        appVersion: currentState.appVersion,
-        connectionType: currentState.connectionType,
-        deviceName: currentState.deviceName,
-        ipAddress: currentState.ipAddress,
-        manufacturer: currentState.manufacturer,
-        deviceModel: currentState.deviceModel,
-        note: currentState.note,
-        platform: currentState.platform,
-        version: currentState.version,
-        wifiBssid: currentState.wifiBSSID,
-        wifiName: currentState.wifiName,
-      );
+  return null;
+}
 
-      LoginPayloadModel loginPayload = LoginPayloadModel(
-          deviceInfo: deviceInfo,
-          userName: currentState.userName.text ?? "nullUserName",
-          password: currentState.password.text);
-
-      var loginResult = await repository.loginUser(loginPayload: loginPayload);
-
-      return loginResult;
-    }
-
-    return null;
-  }
 
   Future<bool> checkIsLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();

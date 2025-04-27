@@ -52,6 +52,7 @@ dependencies:
   network_info_plus: ^6.1.3
   url_launcher: ^6.3.1
   font_awesome_flutter: ^10.8.0
+  flutter_native_splash: ^2.4.6
 
 
 
@@ -61,6 +62,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.3
   flutter_lints: ^5.0.0
   jwt_decoder: ^2.0.1
+  
 
 
 flutter_icons:
@@ -75,32 +77,6 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #    - lib\assets\Rajesh_Dada.jpg
-  #    - lib\assets\rajeshDada1jpg.jpg
-  #    - lib\assets\rajeshDada2jpg.jpg
-  #    - lib\assets\rajeshDada3jpg.jpg
-  #    - lib\assets\rajeshDada4jpg.jpg
-  #    - lib\assets\dada_landing_photo.jpeg
-  #    - lib\assets\bg_image.jpeg
-  #    - lib\assets\hm_img.jpeg
-  #    - lib\assets\Rajesh_dada_101.jpeg
-  #    - lib\assets\Rajesh_dada_103.jpeg
-  #    - lib\assets\Rajesh_dada_104.jpeg
-  #    - lib\assets\Rajesh_dada_106.jpeg
-  #    - lib\assets\rajesh_dada_201.jpeg
-  #    - lib\assets\rajesh_dada_202.jpeg
-  #    - lib\assets\rajesh_dada_203.jpeg
-  #    - lib\assets\rajesh_dada_204.jpeg
-  #    - lib\assets\rajesh_dada_205.jpeg
-  #    - lib\assets\rajesh_dada_301.jpeg
-  #    - lib\assets\Gallery\amoni_aasharam.jpeg
-  #    - lib\assets\Gallery\birsa_munda.jpeg
-  #    - lib\assets\Gallery\p_k_patil.jpeg
-  #    - lib\assets\Gallery\raksha_bandhan.jpeg
-  #    - lib\assets\Gallery\ranipur_info.jpeg
 
   assets:
   - lib/assets/Rajesh_Dada.jpg
@@ -128,8 +104,27 @@ flutter:
   - lib/assets/Gallery/ranipur_info.jpeg
 
 
+  - lib\assets\women_empowerment\bachatgat_meeting.jpeg
+  - lib\assets\women_empowerment\bachatgat.jpeg
+  - lib\assets\women_empowerment\kalawati_foundation.jpeg
+  - lib\assets\women_empowerment\morwad_mahile_charcha.jpeg
+  - lib\assets\women_empowerment\morwad.jpeg
+  - lib\assets\women_empowerment\ranjanpur_prasad.jpeg
+  - lib\assets\women_empowerment\savitribai_phule_jayanti.jpeg
+  - lib\assets\women_empowerment\women_day.jpeg
+  - lib\assets\women_empowerment\mod_bachatgat_meeting.jpeg
+  - lib\assets\splash_img.jpeg
 
 
+
+
+
+flutter_native_splash:
+  color: "#ffffff"  
+  image: lib\assets\women_empowerment\women_day.jpeg
+  android: true  
+  ios: true
+  web: true   
 
 
   #   - images/a_dot_burr.jpeg
