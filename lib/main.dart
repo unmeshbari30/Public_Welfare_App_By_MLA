@@ -8,12 +8,8 @@ import 'package:test_app/screen/home_screen.dart';
 
 void main() async{
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  // await Future.delayed(Duration(seconds: 2)); 
-  // FlutterNativeSplash.remove();
   AuthenticationController mainController = AuthenticationController();
   bool isLoggedIn = await mainController.checkIsLogin();
-  // var temp = ref.read(homeControllerProvider.notifier).checkIsLogin();
   runApp( ProviderScope(child: MyApp(isLoggedIn: isLoggedIn)));
 }
 

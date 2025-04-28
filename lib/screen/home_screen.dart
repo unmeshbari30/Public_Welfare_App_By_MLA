@@ -39,13 +39,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   // ];
 
   final List<String> imagePaths = [
-    "lib/assets/Rajesh_Dada.jpg",
+    "lib/assets/Gallery/birsa_munda.jpeg",
+    // "lib/assets/Rajesh_Dada.jpg",
     "lib/assets/rajesh_dada_201.jpeg",
     "lib/assets/rajesh_dada_202.jpeg",
     "lib/assets/rajesh_dada_203.jpeg",
     "lib/assets/rajesh_dada_204.jpeg",
     "lib/assets/rajesh_dada_205.jpeg",
-    "lib/assets/Gallery/birsa_munda.jpeg"
   ];
 
   @override
@@ -106,7 +106,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               // height: 180,
               // width: 180,
               child: Padding(
-                padding: const EdgeInsets.all(2.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -260,35 +260,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       child: SingleChildScrollView(
         child: Column(
           children: [
-            // const SizedBox(height: 10),
-
-            //   SizedBox(
-            //     width: double.infinity,
-            //     child: Image.asset(
-            //       "lib/assets/rajesh_dada_101.jpeg",
-            //       // fit: BoxFit.fitWidth
-            //     ),
-            // ),
-
-            //     SizedBox(
-            //   // height: 300,
-            //    width: double.infinity,
-            //   child: PageView.builder(
-            //     controller: _pageController,
-            //     itemCount: imagePaths.length,
-            //     itemBuilder: (context, index) {
-            //       return Image.asset(
-            //         imagePaths[index],
-            //         fit: BoxFit.contain,
-            //         // width: double.infinity,
-            //         // height: double.infinity,
-            //       );
-            //     },
-            //     onPageChanged: (index) {
-            //       _currentPage = index;
-            //     },
-            //   ),
-            // ),
 
             Padding(
               padding: const EdgeInsets.all(12.0),
@@ -328,7 +299,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
               child: Card(
@@ -351,21 +322,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           ));
                     }),
                     buildGridIcon(
-                        "lib/assets/Rajesh_Dada.jpg", "तक्रार / विनंती", () {
+                        "lib/assets/Icons/grievance_icon.jpeg", "तक्रार / विनंती", () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => GrievanceScreen(),
                           ));
                     }),
-                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "कामगिरी", () {
+                    buildGridIcon("lib/assets/Icons/achievements_icon.jpeg", "कामगिरी", () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => AchievementsScreen(),
                           ));
                     }),
-                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "हेल्पलाईन",
+                    buildGridIcon("lib/assets/Icons/helpline_icon.jpeg", "हेल्पलाईन",
                         () {
                       Navigator.push(
                           context,
@@ -373,14 +344,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                             builder: (context) => HelplineScreen(),
                           ));
                     }),
-                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "गॅलरी ", () {
+                    buildGridIcon("lib/assets/Icons/gallery_icon.jpeg", "गॅलरी ", () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => GalleryScreen(),
                           ));
                     }),
-                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "महिला सशक्तीकरण",
+                    buildGridIcon("lib/assets/Icons/women_icon.jpeg", "महिला सशक्तीकरण",
                         () {
                       Navigator.push(
                           context,
@@ -489,14 +460,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         // ),
 
         SizedBox(
-          height: 40,
+          height: 20,
         ),
-        Center(
-          child: Text(
-            "To be updated soon...",
-            style: TextStyle(fontSize: 22),
+        // Center(
+        //   child: Text(
+        //     "To be updated soon...",
+        //     style: TextStyle(fontSize: 22),
+        //   ),
+        // )
+
+
+        SizedBox(
+            height: 180,
+            width: 180,
+            child: ClipOval(
+              child: Image.asset(
+                "lib/assets/Icons/dummy_profile_icon.png",
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        )
+          SizedBox(height: 5,),
+          Text("First Last", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+
+          
       ],
     );
   }

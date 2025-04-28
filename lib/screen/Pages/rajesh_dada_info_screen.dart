@@ -30,7 +30,8 @@ class _RajeshDadaInfoScreenState extends ConsumerState<RajeshDadaInfoScreen> {
                   elevation: 2,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.asset('lib/assets/Rajesh_Dada.jpg'))),
+                    // child: Image.asset('lib/assets/Rajesh_Dada.jpg'))),
+                    child: Image.asset("lib/assets/rajesh_dada_info_img.jpeg"))),
                ),
                const SizedBox(height: 16),
               Padding(

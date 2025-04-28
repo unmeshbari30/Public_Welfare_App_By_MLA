@@ -113,16 +113,24 @@ flutter:
   - lib\assets\women_empowerment\savitribai_phule_jayanti.jpeg
   - lib\assets\women_empowerment\women_day.jpeg
   - lib\assets\women_empowerment\mod_bachatgat_meeting.jpeg
-  - lib\assets\splash_img.jpeg
+
+  - lib\assets\Icons\dummy_profile_icon.png
+  - lib/assets/splash_screen_img.png
+  - lib\assets\Icons\achievements_icon.jpeg
+  - lib\assets\Icons\gallery_icon.jpeg
+  - lib\assets\Icons\grievance_icon.jpeg
+  - lib\assets\Icons\helpline_icon.jpeg
+  - lib\assets\rajesh_dada_info_img.jpeg
+
 
 
 
 
 
 flutter_native_splash:
-  color: "#ffffff"  
-  image: lib\assets\women_empowerment\women_day.jpeg
-  android: true  
+  color: "#ffffff"
+  image: lib/assets/splash_screen_img.png  
+  android: true
   ios: true
   web: true   
 
