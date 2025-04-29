@@ -23,8 +23,8 @@ Future<Dio> dio(Ref ref) async {
   final baseOptions = BaseOptions(
     // baseUrl: "http://192.168.31.202:3000",
     baseUrl: "https://mla-app-c9r6.onrender.com/",
-    connectTimeout: const Duration(seconds: 10),
-    receiveTimeout: const Duration(seconds: 10),
+    connectTimeout: const Duration(seconds: 20),
+    receiveTimeout: const Duration(seconds: 20),
     headers: {
       // 'Content-Type': 'application/json',
       // Add more headers if needed

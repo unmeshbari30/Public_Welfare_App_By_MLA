@@ -14,6 +14,7 @@ class CustomFilledTextField extends StatefulWidget {
   final void Function(String)? onChanged;
   final int? maxLines;
   final String? hintText;
+  final int? maxLength;
   const CustomFilledTextField(
       {super.key,
       this.onChanged,
@@ -28,7 +29,8 @@ class CustomFilledTextField extends StatefulWidget {
       this.textCapitalization = TextCapitalization.none,
       this.keyboardType,
       this.maxLines,
-      this.hintText
+      this.hintText,
+      this.maxLength
       });
 
   @override
@@ -51,6 +53,7 @@ class _CustomFilledTextFieldState extends State<CustomFilledTextField> {
           onChanged: (value) {
             return widget.onChanged?.call(value);
           },
+          maxLength: widget.maxLength,
           obscureText: widget.obscureText ?? false,
           controller: widget.controller,
           enabled: widget.enabled,

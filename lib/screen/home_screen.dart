@@ -41,6 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   final List<String> imagePaths = [
     "lib/assets/Gallery/birsa_munda.jpeg",
     // "lib/assets/Rajesh_Dada.jpg",
+    "lib/assets/bhausaheb.jpeg",
     "lib/assets/rajesh_dada_201.jpeg",
     "lib/assets/rajesh_dada_202.jpeg",
     "lib/assets/rajesh_dada_203.jpeg",
@@ -351,7 +352,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                             builder: (context) => GalleryScreen(),
                           ));
                     }),
-                    buildGridIcon("lib/assets/Icons/women_icon.jpeg", "महिला सशक्तीकरण",
+                    buildGridIcon("lib/assets/Icons/women_empowerment_icon.jpeg", "महिला सशक्तीकरण",
                         () {
                       Navigator.push(
                           context,
@@ -437,56 +438,126 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     );
   }
 
-  Widget tab2Screen(HomeState state) {
-    return Column(
-      children: [
-        // SizedBox(
-        //   height: 300,
-        //   child: PageView.builder(
-        //     controller: _pageController,
-        //     itemCount: imagePaths.length,
-        //     itemBuilder: (context, index) {
-        //       return Image.asset(
-        //         imagePaths[index],
-        //         fit: BoxFit.contain,
-        //         width: double.infinity,
-        //         height: double.infinity,
-        //       );
-        //     },
-        //     onPageChanged: (index) {
-        //       _currentPage = index;
-        //     },
-        //   ),
-        // ),
+  // Widget tab2Screen(HomeState state) {
+  //   return Column(
+  //     children: [
+  //       // SizedBox(
+  //       //   height: 300,
+  //       //   child: PageView.builder(
+  //       //     controller: _pageController,
+  //       //     itemCount: imagePaths.length,
+  //       //     itemBuilder: (context, index) {
+  //       //       return Image.asset(
+  //       //         imagePaths[index],
+  //       //         fit: BoxFit.contain,
+  //       //         width: double.infinity,
+  //       //         height: double.infinity,
+  //       //       );
+  //       //     },
+  //       //     onPageChanged: (index) {
+  //       //       _currentPage = index;
+  //       //     },
+  //       //   ),
+  //       // ),
+  //       SizedBox(
+  //         height: 20,
+  //       ),
+  //       // Center(
+  //       //   child: Text(
+  //       //     "To be updated soon...",
+  //       //     style: TextStyle(fontSize: 22),
+  //       //   ),
+  //       // )
+  //       SizedBox(
+  //           height: 180,
+  //           width: 180,
+  //           child: ClipOval(
+  //             child: Image.asset(
+  //               "lib/assets/Icons/dummy_profile_icon.png",
+  //               fit: BoxFit.cover,
+  //             ),
+  //           ),
+  //         ),
+  //         SizedBox(height: 5,),
+  //         Text("First Last", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+  //         SizedBox(height: 10,),
+  //         Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: Text("First Last", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+  //         ),       
+  //     ],
+  //   );
+  // }
 
-        SizedBox(
-          height: 20,
-        ),
-        // Center(
-        //   child: Text(
-        //     "To be updated soon...",
-        //     style: TextStyle(fontSize: 22),
-        //   ),
-        // )
-
-
-        SizedBox(
-            height: 180,
-            width: 180,
-            child: ClipOval(
-              child: Image.asset(
-                "lib/assets/Icons/dummy_profile_icon.png",
-                fit: BoxFit.cover,
-              ),
-            ),
+Widget tab2Screen(HomeState state) {
+  return Column(
+    children: [
+      SizedBox(height: 20,),
+      
+      SizedBox(
+        height: 170,
+        width: 180,
+        child: ClipOval(
+          child: Image.asset(
+            "lib/assets/Icons/dummy_profile_icon.png",
+            fit: BoxFit.cover,
           ),
-          SizedBox(height: 5,),
-          Text("First Last", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+        ),
+      ),
+      const SizedBox(height: 10),
 
-          
+      // Card Section
+      Card(
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              profileRow("Name", "John Mathew"),
+              const Divider(),
+              profileRow("Phone", "XXXXXXXXXX"),
+              const Divider(),
+              profileRow("Taluka", "Miami"),
+              const Divider(),
+              profileRow("Gender", "Male"),
+              const Divider(),
+              profileRow("Age", "26"),
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget profileRow(String title, String value) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 6),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ],
-    );
-  }
+    ),
+  );
+}
 
   Widget tab3Screen(HomeState state) {
     return SingleChildScrollView(

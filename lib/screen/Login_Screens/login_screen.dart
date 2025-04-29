@@ -33,7 +33,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         // title: Text("Enter Credential", style: TextStyle(color: Theme.of(context).secondaryHeaderColor ),),
         centerTitle: true,
         automaticallyImplyLeading: false,
-        title: Text("Welcome to Rajesh Dada's App"),
+        title: Text("Welcome"),
         // backgroundColor: Colors.black,
       ),
       body: PopScope(
@@ -87,7 +87,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: CustomFilledTextField(
                       controller: state.userName,
-                      labelText: "UserName",
+                      labelText: "Mob. No.",
+                      // keyboardType: TextInputType.number,
+                      // maxLength: 10,
                       validator: (value) {
                         return Validators.validateEmptyField(value);
                       },

@@ -37,7 +37,7 @@ Widget getScaffold(HomeState state){
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: CustomFilledTextField(
                 controller: state.fullNameController,
-                labelText: "Full Name *",
+                labelText: "पूर्ण नाव / Full Name *",
                 validator: (value) {
                   return Validators.validateEmptyField(value);
                 },
@@ -48,7 +48,7 @@ Widget getScaffold(HomeState state){
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: CustomFilledTextField(
               controller: state.mobileNumberController,
-              labelText: "Mobile Number *",
+              labelText: "मो. नंबर / Mobile Number *",
               validator: (value) {
                 return Validators.validateEmptyField(value);
               },
@@ -61,7 +61,7 @@ Widget getScaffold(HomeState state){
               items: state.TalukaList,
               controller: state.talukaController,
               titleBuilder: (item) => item,
-              labelText: "Taluka",
+              labelText: "तालुका / Tehsil",
               validator: (value) {
                 return Validators.validateEmptyField(value);
               },
@@ -73,7 +73,7 @@ Widget getScaffold(HomeState state){
               child: FutureFilledDropdown(
                   items: state.gendersList,
                   controller: state.gendersController,
-                  labelText: "Choose Gender",
+                  labelText: "लिंग / Gender",
                   titleBuilder: (item) => item),
             ),
 
@@ -97,8 +97,8 @@ Widget getScaffold(HomeState state){
                   controller: state.locationController ,   
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                    labelText: 'Address',
-                    hintText: 'Enter Full Address here...',
+                    labelText: "पत्ता / Address",
+                    hintText: "येथे पूर्ण पत्ता टाकावा...",
                     border: OutlineInputBorder(),
                     alignLabelWithHint: true,
                   ),
@@ -126,8 +126,8 @@ Widget getScaffold(HomeState state){
                   minLines: 5,   
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                    labelText: 'Your Message...',
-                    hintText: 'Type your grievance here...',
+                    labelText: 'तुमचा मेसेज / Your Message...',
+                    hintText: 'तक्रार नोंदवा...',
                     border: OutlineInputBorder(),
                     alignLabelWithHint: true,
                   ),
@@ -142,7 +142,7 @@ Widget getScaffold(HomeState state){
                   ref.read(homeControllerProvider.notifier).updateSelectedFile(value);
                   
                 },
-                labelText: "Choose File",
+                labelText: "फाईल निवडा / Choose File",
                 maxFiles: 2,
               ),
             ),

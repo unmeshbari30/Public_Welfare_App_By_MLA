@@ -68,7 +68,15 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "lib/assets/Rajesh_Dada.jpg"
+  image_path: "lib/assets/Icons/app_icon.jpeg"
+  adaptive_icon_background: "#ffffff"
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: lib/assets/splash_screen_img.png  
+  android: true
+  ios: true
+  web: true   
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -121,18 +129,11 @@ flutter:
   - lib\assets\Icons\grievance_icon.jpeg
   - lib\assets\Icons\helpline_icon.jpeg
   - lib\assets\rajesh_dada_info_img.jpeg
+  - lib\assets\Icons\women_empowerment_icon.jpeg
+  - lib\assets\bhausaheb.jpeg
+  - lib\assets\Icons\app_icon.jpeg
 
 
-
-
-
-
-flutter_native_splash:
-  color: "#ffffff"
-  image: lib/assets/splash_screen_img.png  
-  android: true
-  ios: true
-  web: true   
 
 
   #   - images/a_dot_burr.jpeg
