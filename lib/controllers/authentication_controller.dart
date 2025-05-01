@@ -10,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/helpers/enum.dart';
 import 'package:test_app/models/device_info_model.dart';
 import 'package:test_app/models/login_payload_model.dart';
+import 'package:test_app/models/registration_payload_model.dart';
+import 'package:test_app/models/registration_response_model.dart';
 import 'package:test_app/repository/repository.dart';
 import 'package:test_app/widgets/dropdown_value_controller.dart';
 
@@ -246,6 +248,35 @@ class AuthenticationController extends _$AuthenticationController {
 
     return true;
   }
+
+  Future<RegistrationResponseModel?> userRegistration() async {
+    try{
+      var repository = await ref.read(repositoryProvider.future);
+      var currentState = state.value;
+
+      RegistrationPayloadModel loginPayload = RegistrationPayloadModel(
+      age: int.tryParse(currentState?.ageController.text ?? "0") ?? 0,
+      bloodGroup: currentState?.bloodGroupController.selectedItem,
+      firstName: currentState?.firstNameController.text,
+      gender: currentState?.gendersController.selectedItem,
+      lastName: currentState?.lastNameController.text ,
+      mailId: currentState?.emailController.text,
+      mobileNumber: currentState?.mobileNumberController.text,
+      taluka: currentState?.tehsilController.selectedItem,
+      username: currentState?.mobileNumberController.text,
+      whatsappNumber: currentState?.whatsappNumberController.text,
+      password: currentState?.passwordController.text,
+    );
+
+      var temp = await repository.registerUser(loginPayload);
+
+      
+      return temp;
+
+    }catch(e){
+      return null;
+    }
+  }
 }
 
 class AuthenticationState {
@@ -262,14 +293,20 @@ class AuthenticationState {
   String? note; // = '';
   String? appVersion;
 
-  //Login Credentials
+  //Login Credentials  on SignIn Screen
   TextEditingController userName = TextEditingController();
   TextEditingController password = TextEditingController();
 
   //New Registration Details
-  TextEditingController firstName = TextEditingController();
-  TextEditingController middleName = TextEditingController();
-  TextEditingController lastName = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController middleNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController whatsappNumberController = TextEditingController();
+  TextEditingController mobileNumberController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+
 
   //Sign Up Details
   TextEditingController newUserName = TextEditingController();
@@ -277,16 +314,26 @@ class AuthenticationState {
       DropdownValueController<String?>();
   DropdownValueController<String?> tehsilController =
       DropdownValueController<String?>();
+  DropdownValueController<String?> bloodGroupController=
+      DropdownValueController<String?>();
 
   //Lists
   Future<List<String>> gendersList =
       Future.value(["Male", "Female", "Unknown"]);
   Future<List<String>> tehsilList = Future.value([
-    "Akkalkuwa",
-    "Dhadgaon",
-    "Nandurbar",
-    "Navapur",
     "Shahada",
     "Taloda",
   ]);
+
+  Future<List<String>> bloodGroup =
+      Future.value([
+       "A+",
+       "A-",
+       "B+",
+       "B-",
+       "AB+",
+       "AB-",
+       "O+",
+       "O-"
+       ]);
 }

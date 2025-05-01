@@ -104,6 +104,7 @@ class _HelplineScreenState extends ConsumerState<HelplineScreen> {
     {"name": "Borad PHC (Ravin Bhau)", "number": "9834525343", "icon": "tehsil"},
     {"name": "Masavad PHC (Sachin Pawara)", "number": " 8888133897", "icon": "tehsil"},
     {"name": "Shahada Water Supply & Fire", "number": "9763342959", "icon": "fire"}, 
+    {"name": "Taloda Fire Brigade", "number": "8484028386", "icon": "fire"}, 
   ];
 
   @override

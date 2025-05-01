@@ -13,6 +13,8 @@ import 'package:test_app/screen/Pages/gallery_screen.dart';
 import 'package:test_app/screen/Pages/grievance_screen.dart';
 import 'package:test_app/screen/Pages/helpline_screen.dart';
 import 'package:test_app/screen/Pages/rajesh_dada_info_screen.dart';
+import 'package:test_app/screen/certificate_screen/certificate_screen.dart';
+import 'package:test_app/screen/certificate_screen/temp_cert_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -400,6 +402,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             SizedBox(
               height: 30,
             ),
+
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, 
+                  // MaterialPageRoute(builder: (context) => CertificateScreen(),));
+                  MaterialPageRoute(builder: (context) => CertificateScreen(),));
+                },
+                child: Text('Click Me'),
+              )
+
+              ,
+              SizedBox(
+              height: 120,
+            ),
+
           ],
         ),
       ),

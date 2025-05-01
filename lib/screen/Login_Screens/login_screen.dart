@@ -91,8 +91,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       // keyboardType: TextInputType.number,
                       // maxLength: 10,
                       validator: (value) {
-                        return Validators.validateEmptyField(value);
+                        return Validators.validateMobileNumber(value);
                       },
+                      keyboardType: TextInputType.number,
                     ),
                   ),
                   SizedBox(

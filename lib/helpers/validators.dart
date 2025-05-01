@@ -9,6 +9,16 @@ abstract class Validators{
 
   }
 
+
+   static  validateMobileNumber(String? value){
+    if((value?.length ?? 0) > 10){
+      return "Incorrect Mobile Number...";
+    }else{
+      return null;
+    }
+
+  }
+
    static String? usernameOrEmailValidator(String? value) {
     if (value == null || value.isEmpty) {
       return 'Username is required';

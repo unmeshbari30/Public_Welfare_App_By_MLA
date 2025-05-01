@@ -143,7 +143,7 @@ Widget getScaffold(HomeState state){
                   
                 },
                 labelText: "फाईल निवडा / Choose File",
-                maxFiles: 2,
+                maxFiles: 10,
               ),
             ),
 
