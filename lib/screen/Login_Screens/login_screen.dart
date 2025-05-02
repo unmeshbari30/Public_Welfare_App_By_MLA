@@ -7,7 +7,6 @@ import 'package:test_app/controllers/authentication_controller.dart';
 import 'package:test_app/helpers/enum.dart';
 import 'package:test_app/helpers/validators.dart';
 import 'package:test_app/providers/shared_preferences_provider.dart';
-import 'package:test_app/screen/Login_Screens/local_pin_screen.dart';
 import 'package:test_app/screen/Login_Screens/sign_up_screen.dart';
 import 'package:test_app/screen/home_screen.dart';
 import 'package:test_app/widgets/custom_filled_text_field.dart';

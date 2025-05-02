@@ -25,6 +25,22 @@ class LoginPayloadModel {
     String? accessToken;
     @JsonKey(name:"refreshToken")
     String? refreshToken;
+    @JsonKey(name: "firstName")
+    String? firstName;
+    @JsonKey(name: "lastName")
+    String? lastName;
+    @JsonKey(name: "age")
+    int? age;
+    @JsonKey(name: "bloodGroup")
+    String? bloodGroup;
+    @JsonKey(name: "taluka")
+    String? taluka;
+    @JsonKey(name: "gender")
+    String? gender;
+    @JsonKey(name: "mailId")
+    String? mailId;
+    @JsonKey(name:"mobileNumber")
+    String? mobileNumber;
     @JsonKey(name: "deviceInfo")
     DeviceInfoModel? deviceInfo;
 
@@ -33,7 +49,14 @@ class LoginPayloadModel {
         this.password,
         this.deviceInfo,
         this.accessToken,
-        this.refreshToken
+        this.refreshToken,
+        this.age,
+        this.bloodGroup,
+        this.gender,
+        this.mailId,
+        this.message,
+        this.taluka
+
     });
 
     factory LoginPayloadModel.fromJson(Map<String, dynamic> json) => _$LoginPayloadModelFromJson(json);

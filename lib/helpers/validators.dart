@@ -2,7 +2,7 @@ abstract class Validators{
 
   static  validateEmptyField(String? value){
     if(value == "" || value == null){
-      return "Field Can't be Empty";
+      return "Mandatory field*";
     }else{
       return null;
     }

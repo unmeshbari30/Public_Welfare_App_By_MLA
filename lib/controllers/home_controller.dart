@@ -6,6 +6,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/controllers/authentication_controller.dart';
 import 'package:test_app/helpers/enum.dart';
+import 'package:test_app/models/complaint_payload_model.dart';
+import 'package:test_app/models/login_payload_model.dart';
+import 'package:test_app/providers/shared_preferences_provider.dart';
+import 'package:test_app/repository/repository.dart';
 import 'package:test_app/widgets/dropdown_value_controller.dart';
 
 part "home_controller.g.dart";
@@ -16,14 +20,11 @@ class HomeController extends _$HomeController{
 @override
 FutureOr<HomeState> build() async{
   HomeState newState = HomeState();
-
   var data = await ref.read(authenticationControllerProvider.future);
+
+
   newState.userName = data.userName.text;
-
-
-
-  
-
+  newState.loginResult = data.loginResult;
   return newState;
 
 }
@@ -38,18 +39,50 @@ void updateSelectedFile(List<File>? selectedFiles){
 }
 
 
+Future<ComplaintPayloadModel?> saveComplaint() async {
+  try {
+    var currentState = state.value;
+    var repository = await ref.read(repositoryProvider.future);
+
+    ComplaintPayloadModel payloadModel = ComplaintPayloadModel(
+      fullName: currentState?.fullNameController.text,
+      address: currentState?.addressController.text,
+      mobileNumber: currentState?.mobileNumberController.text,
+      tehsil: currentState?.talukaController.selectedItem,
+      gender: currentState?.gendersController.selectedItem,
+      yourMessage: currentState?.yourMessageController.text,
+      // files can be handled here if needed
+    );
+
+    // final result = await repository.saveComplaint(payload: payloadModel);
+    final result = await repository.saveComplaint(payload: payloadModel, attachments: currentState?.selectedFiles);
+    return result;
+  } catch (e) {
+    print("Error while saving complaint: $e");
+    return null;
+  }
+}
+
+
+
+
 }
 
 class HomeState{
 
   String? userName;
   List<File>? selectedFiles;
+  LoginPayloadModel? loginResult;
 
   //TextFields Controller
   TextEditingController fullNameController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController complaintMessageController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+
+  TextEditingController yourMessageController = TextEditingController();
+
 
 
   //Dropdown Controllers
@@ -60,9 +93,9 @@ class HomeState{
 
   //List
   Future<List<String>> gendersList =
-      Future.value(["Male", "Female", "Unknown"]);
-  Future<List<String>> TalukaList =
-      Future.value(["Shahada", "Taloda"]); //"Akkalkuva", "Dhagaon", "Navapur", "Nandurbar", 
+      Future.value(["पुरुष / Male", "स्त्री / Female", "इतर / Unknown"]); 
+  Future<List<String>> talukaList =
+      Future.value(["तळोदा / Taloda", "शहादा / Shahada"]); //"Akkalkuva", "Dhagaon", "Navapur", "Nandurbar", 
   
 
 

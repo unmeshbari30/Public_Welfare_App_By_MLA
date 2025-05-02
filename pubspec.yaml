@@ -55,6 +55,8 @@ dependencies:
   flutter_native_splash: ^2.4.6
   pdf: ^3.11.3
   printing: ^5.14.2
+  mime: ^2.0.0
+  intl: ^0.20.2
 
 
 
@@ -114,6 +116,11 @@ flutter:
   - lib/assets/Gallery/p_k_patil.jpeg
   - lib/assets/Gallery/raksha_bandhan.jpeg
   - lib/assets/Gallery/ranipur_info.jpeg
+  - lib\assets\Gallery\babasaheb_img.jpeg
+  - lib\assets\Gallery\bavankule_img.jpeg
+  - lib\assets\Gallery\kokate_img.jpeg
+  - lib\assets\Gallery\phule_img.jpeg
+  - lib\assets\Gallery\yahamogi_img.jpeg
 
 
   - lib\assets\women_empowerment\bachatgat_meeting.jpeg

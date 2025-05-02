@@ -7,7 +7,16 @@ enum PrefrencesKeyEnum{
   acessToken("accessToken"),
   rememberMe("rememberMe"),  // bool
   accessToken("accessToken"), //string
-  refreshToken("refreshToken")
+  refreshToken("refreshToken"),
+
+  firstName("firstName"),
+  lastName("LastName"),
+  mobileNumber("mobileNumber"),
+  taluka("taluka"),
+  gender("gender"),
+  age("age"),
+  mailId("mailId"),
+  bloodGroup("bloodGroup")
   ;
 
   final String key;

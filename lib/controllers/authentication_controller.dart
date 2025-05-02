@@ -12,6 +12,7 @@ import 'package:test_app/models/device_info_model.dart';
 import 'package:test_app/models/login_payload_model.dart';
 import 'package:test_app/models/registration_payload_model.dart';
 import 'package:test_app/models/registration_response_model.dart';
+import 'package:test_app/providers/shared_preferences_provider.dart';
 import 'package:test_app/repository/repository.dart';
 import 'package:test_app/widgets/dropdown_value_controller.dart';
 
@@ -215,6 +216,21 @@ class AuthenticationController extends _$AuthenticationController {
     );
 
     var loginResult = await repository.loginUser(loginPayload: loginPayload);
+    currentState.loginResult = loginResult;
+
+    if (loginResult != null) {
+      var prefs = await ref.read(sharedPreferencesProvider.future);
+
+      prefs.setString(PrefrencesKeyEnum.firstName.key, loginResult.firstName ?? "");
+      prefs.setString(PrefrencesKeyEnum.lastName.key, loginResult.lastName ?? "");
+      prefs.setString(PrefrencesKeyEnum.mobileNumber.key, loginResult.mobileNumber ?? "");
+      prefs.setString(PrefrencesKeyEnum.taluka.key, loginResult.taluka ?? "");
+      prefs.setString(PrefrencesKeyEnum.gender.key, loginResult.gender ?? "");
+      prefs.setString(PrefrencesKeyEnum.bloodGroup.key, loginResult.bloodGroup ?? "");
+      prefs.setInt(PrefrencesKeyEnum.age.key, loginResult.age ?? 0);
+      prefs.setString(PrefrencesKeyEnum.mailId.key, loginResult.mailId ?? "");
+    }
+
     return loginResult;
   }
 
@@ -269,8 +285,7 @@ class AuthenticationController extends _$AuthenticationController {
     );
 
       var temp = await repository.registerUser(loginPayload);
-
-      
+     
       return temp;
 
     }catch(e){
@@ -280,6 +295,9 @@ class AuthenticationController extends _$AuthenticationController {
 }
 
 class AuthenticationState {
+
+  LoginPayloadModel? loginResult;
+
   //Device info
   String? platform; // = 'Unknown';
   String? version; // = 'Unknown';

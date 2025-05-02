@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/controllers/authentication_controller.dart';
 import 'package:test_app/controllers/home_controller.dart';
+import 'package:test_app/helpers/enum.dart';
 import 'package:test_app/screen/Login_Screens/login_screen.dart';
 import 'package:test_app/screen/Pages/achievements_screen.dart';
 import 'package:test_app/screen/Pages/women_empowerment.dart';
@@ -13,7 +15,6 @@ import 'package:test_app/screen/Pages/gallery_screen.dart';
 import 'package:test_app/screen/Pages/grievance_screen.dart';
 import 'package:test_app/screen/Pages/helpline_screen.dart';
 import 'package:test_app/screen/Pages/rajesh_dada_info_screen.dart';
-import 'package:test_app/screen/certificate_screen/certificate_screen.dart';
 import 'package:test_app/screen/certificate_screen/temp_cert_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,25 +32,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   PageController? _pageController;
   Timer? _timer;
   int _currentPage = 0;
+  String? firstName, lastName, bloodGroup, mobileNumber, mailId, gender, taluka;
+  int? age;
 
-  // final List<String> imagePaths = [
-  //   "lib/assets/Rajesh_Dada.jpg",
-  //   "lib/assets/rajeshDada1jpg.jpg",
-  //   "lib/assets/rajeshDada2jpg.jpg",
-  //   "lib/assets/rajeshDada3jpg.jpg",
-  //   "lib/assets/rajeshDada4jpg.jpg"
-  // ];
 
   final List<String> imagePaths = [
-    "lib/assets/Gallery/birsa_munda.jpeg",
-    // "lib/assets/Rajesh_Dada.jpg",
-    "lib/assets/bhausaheb.jpeg",
-    "lib/assets/rajesh_dada_201.jpeg",
-    "lib/assets/rajesh_dada_202.jpeg",
-    "lib/assets/rajesh_dada_203.jpeg",
-    "lib/assets/rajesh_dada_204.jpeg",
-    "lib/assets/rajesh_dada_205.jpeg",
-  ];
+  "lib/assets/Gallery/birsa_munda.jpeg",
+  "lib/assets/Gallery/yahamogi_img.jpeg",
+  "lib/assets/Gallery/babasaheb_img.jpeg",
+  "lib/assets/Gallery/phule_img.jpeg",
+  // "lib/assets/Rajesh_Dada.jpg",
+  "lib/assets/bhausaheb.jpeg",
+  "lib/assets/rajesh_dada_202.jpeg", // fadanvis
+  "lib/assets/rajesh_dada_201.jpeg", //ajit dada
+  "lib/assets/rajesh_dada_203.jpeg",
+  "lib/assets/Gallery/bavankule_img.jpeg",
+  "lib/assets/Gallery/kokate_img.jpeg",
+  "lib/assets/rajesh_dada_204.jpeg",
+  "lib/assets/rajesh_dada_205.jpeg",
+];
+
 
   @override
   void initState() {
@@ -79,6 +81,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         );
       }
     });
+
+    _loadPreferences();
+
   }
 
   @override
@@ -89,8 +94,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     super.dispose();
   }
 
-//with tab bar
+  Future<void> _loadPreferences() async {
+  final prefs = await SharedPreferences.getInstance();
+
+  setState(() {
+    firstName = prefs.getString(PrefrencesKeyEnum.firstName.key);
+    lastName = prefs.getString(PrefrencesKeyEnum.lastName.key);
+    bloodGroup = prefs.getString(PrefrencesKeyEnum.bloodGroup.key);
+    age = prefs.getInt(PrefrencesKeyEnum.age.key);
+    mobileNumber = prefs.getString(PrefrencesKeyEnum.mobileNumber.key);
+    mailId = prefs.getString(PrefrencesKeyEnum.mailId.key);
+    gender = prefs.getString(PrefrencesKeyEnum.gender.key);
+    taluka = prefs.getString(PrefrencesKeyEnum.taluka.key);
+  });
+}
+
   Widget getScaffold(HomeState state) {
+
     return Stack(
       children: [
         // Background image behind everything
@@ -264,6 +284,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         child: Column(
           children: [
 
+            //Images 
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: SizedBox(
@@ -535,15 +556,19 @@ Widget tab2Screen(HomeState state) {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              profileRow("Name", "John Mathew"),
+              profileRow("Name", "$firstName $lastName" ),
+              // const Divider(),
+              // profileRow("Phone", "${state.loginResult?.}"),
               const Divider(),
-              profileRow("Phone", "XXXXXXXXXX"),
+              profileRow("Taluka", "$taluka"),
               const Divider(),
-              profileRow("Taluka", "Miami"),
+              profileRow("Gender", "$gender"),
               const Divider(),
-              profileRow("Gender", "Male"),
+              profileRow("Blood Group", "$bloodGroup"),
               const Divider(),
-              profileRow("Age", "26"),
+              profileRow("Age", "$age"),
+              const Divider(),
+              profileRow("Mail", "$mailId"),
             ],
           ),
         ),
