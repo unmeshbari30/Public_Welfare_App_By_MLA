@@ -41,6 +41,8 @@ class LoginPayloadModel {
     String? mailId;
     @JsonKey(name:"mobileNumber")
     String? mobileNumber;
+    @JsonKey(name: "isLoggedIn")
+    bool? isLoggedIn;
     @JsonKey(name: "deviceInfo")
     DeviceInfoModel? deviceInfo;
 
@@ -55,7 +57,11 @@ class LoginPayloadModel {
         this.gender,
         this.mailId,
         this.message,
-        this.taluka
+        this.taluka,
+        this.firstName,
+        this.isLoggedIn,
+        this.lastName,
+        this.mobileNumber
 
     });
 

@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/controllers/authentication_controller.dart';
 import 'package:test_app/controllers/home_controller.dart';
 import 'package:test_app/helpers/enum.dart';
+import 'package:test_app/helpers/helpers.dart';
+import 'package:test_app/screen/Admin/admin_grievance_screen.dart';
 import 'package:test_app/screen/Login_Screens/login_screen.dart';
 import 'package:test_app/screen/Pages/achievements_screen.dart';
 import 'package:test_app/screen/Pages/women_empowerment.dart';
@@ -34,11 +37,120 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   int _currentPage = 0;
   String? firstName, lastName, bloodGroup, mobileNumber, mailId, gender, taluka;
   int? age;
+  int _tapCount = 0;
+  DateTime? _lastTapTime;
+
+  void _handleImageTap(HomeState state) {
+    final now = DateTime.now();
+    if (_lastTapTime == null || now.difference(_lastTapTime!) > Duration(seconds: 2)) {
+      _tapCount = 0; // reset if too slow
+    }
+
+    _lastTapTime = now;
+    _tapCount++;
+
+    if (_tapCount == 4) {
+      _tapCount = 0; // reset counter
+      _showAdminLoginDialog(state);
+    }
+  }
+
+  void _showAdminLoginDialog(HomeState state) {
+    
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Admin Login'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: state.adminUsernameController,
+                decoration: InputDecoration(labelText: 'Username'),
+              ),
+              TextField(
+                controller: state.adminPasswordController,
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            // TextButton(
+            //   onPressed: () {
+            //     String username = state.adminUsernameController.text;
+            //     String password = state.adminPasswordController.text;
+            //     // Add your admin check logic here
+            //     if (username == 'admin' && password == '1234') {
+            //       // Admin access granted
+            //       Navigator.of(context).pop();
+            //       ScaffoldMessenger.of(context).showSnackBar(
+            //         SnackBar(content: Text('Welcome, Admin!')),
+            //       );
+            //     } else {
+            //       // Invalid login
+            //       ScaffoldMessenger.of(context).showSnackBar(
+            //         SnackBar(content: Text('Invalid credentials')),
+            //       );
+            //     }
+            //   },
+            //   child: Text('Login'),
+            // ),
+
+            TextButton(
+  onPressed: () async {
+    EasyLoading.show();
+    try {
+      final loginResponse = await ref.read(homeControllerProvider.notifier).adminSignIn();
+
+      Helpers.showSuccessSnackBar(
+        context,
+        message: loginResponse?.isLoggedIn?? false ? "Login Successful" : "Login Failed",
+        isSuccess: loginResponse?.isLoggedIn?? false,
+      );
+
+      // if (loginResponse?.isLoggedIn ?? false) {
+      if (true) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AdminGrievanceScreen()),
+        );
+      }
+
+    } catch (e) {
+      Helpers.showSuccessSnackBar(
+        context,
+        message: "Login Failed",
+        isSuccess: false,
+      );
+    } finally {
+      EasyLoading.dismiss();
+    }
+  },
+  child: Text('Login'),
+),
+
+
+
+          ],
+        );
+      },
+    );
+  }
+
 
 
   final List<String> imagePaths = [
   "lib/assets/Gallery/birsa_munda.jpeg",
   "lib/assets/Gallery/yahamogi_img.jpeg",
+  "lib/assets/Gallery/shivaji_maharaj_img.jpeg",
   "lib/assets/Gallery/babasaheb_img.jpeg",
   "lib/assets/Gallery/phule_img.jpeg",
   // "lib/assets/Rajesh_Dada.jpg",
@@ -125,29 +237,52 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            leading: SizedBox(
-              // height: 180,
-              // width: 180,
-              child: Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 2.0,
-                    ),
+            leading: 
+          //   SizedBox(
+          //     // height: 180,
+          //     // width: 180,
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(6.0),
+          //       child: Container(
+          //         decoration: BoxDecoration(
+          //           shape: BoxShape.circle,
+          //           border: Border.all(
+          //             color: Colors.black,
+          //             width: 2.0,
+          //           ),
+          //         ),
+          //         child: ClipOval(          
+          //         child: Image.asset(
+          //           "lib/assets/Rajesh_Dada.jpg",
+          //           fit: BoxFit.cover,
+          //         ),
+          //       ),
+          //                   ),
+          //     ),
+          // ),
+            SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: GestureDetector(
+              onTap: () => _handleImageTap(state),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 2.0,
                   ),
-                  child: ClipOval(
-                  
+                ),
+                child: ClipOval(
                   child: Image.asset(
                     "lib/assets/Rajesh_Dada.jpg",
                     fit: BoxFit.cover,
                   ),
                 ),
-                            ),
               ),
+            ),
           ),
+        ),
             title: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -423,19 +558,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             SizedBox(
               height: 30,
             ),
-
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context, 
-                  // MaterialPageRoute(builder: (context) => CertificateScreen(),));
-                  MaterialPageRoute(builder: (context) => CertificateScreen(),));
-                },
-                child: Text('Click Me'),
-              )
-
-              ,
               SizedBox(
-              height: 120,
+              height: 60,
             ),
 
           ],
@@ -528,52 +652,67 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   // }
 
 Widget tab2Screen(HomeState state) {
-  return Column(
-    children: [
-      SizedBox(height: 20,),
+  return SafeArea(
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 20,),
+          
+          SizedBox(
+            height: 170,
+            width: 180,
+            child: ClipOval(
+              child: Image.asset(
+                "lib/assets/Icons/dummy_profile_icon.png",
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
       
-      SizedBox(
-        height: 170,
-        width: 180,
-        child: ClipOval(
-          child: Image.asset(
-            "lib/assets/Icons/dummy_profile_icon.png",
-            fit: BoxFit.cover,
+          ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(context, 
+                      // MaterialPageRoute(builder: (context) => CertificateScreen(),));
+                      MaterialPageRoute(builder: (context) => CertificateScreen(),));
+                    },
+                    child: Text("Download Certificate"),
+                  ),
+      
+          const SizedBox(height: 10),
+      
+          // Card Section
+          Card(
+            margin: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 4,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  profileRow("Name", "$firstName $lastName" ),
+                  // const Divider(),
+                  // profileRow("Phone", "${state.loginResult?.}"),
+                  const Divider(),
+                  profileRow("Taluka", "$taluka"),
+                  const Divider(),
+                  profileRow("Gender", "$gender"),
+                  const Divider(),
+                  profileRow("Blood Group", "$bloodGroup"),
+                  const Divider(),
+                  profileRow("Age", "$age"),
+                  const Divider(),
+                  profileRow("Mail", "$mailId"),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
-      const SizedBox(height: 10),
-
-      // Card Section
-      Card(
-        margin: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        elevation: 4,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              profileRow("Name", "$firstName $lastName" ),
-              // const Divider(),
-              // profileRow("Phone", "${state.loginResult?.}"),
-              const Divider(),
-              profileRow("Taluka", "$taluka"),
-              const Divider(),
-              profileRow("Gender", "$gender"),
-              const Divider(),
-              profileRow("Blood Group", "$bloodGroup"),
-              const Divider(),
-              profileRow("Age", "$age"),
-              const Divider(),
-              profileRow("Mail", "$mailId"),
-            ],
-          ),
-        ),
-      ),
-    ],
+    ),
   );
 }
 
@@ -602,10 +741,80 @@ Widget profileRow(String title, String value) {
 }
 
   Widget tab3Screen(HomeState state) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.all(16.0),
+    return
+    //  Column(
+    //   crossAxisAlignment: CrossAxisAlignment.center,
+    //   children: [
+    //     SizedBox(
+    //       height: 180,
+    //       width: 180,
+    //       child: ClipOval(
+    //         child: Image.asset(
+    //           "lib/assets/Rajesh_Dada.jpg",
+    //           fit: BoxFit.cover,
+    //         ),
+    //       ),
+    //     ),
+    //     SizedBox(height: 10),
+    //     SizedBox(
+    //       width: 280,
+    //       child: Text(
+    //         'संपर्क\n\n'
+    //         'शहादा : आमदार कार्यालय दत्त कॉलनी शहादा.\n'
+    //         'तळोदा : आमदार कार्यालय बिरसा मुंडा चौक तळोदा\n\n'
+    //         'अ‍ॅड. दीपक जयस्वाल  : 8380911028\n'
+    //         'किरण सूर्यवंशी  : 9132352222',
+    //         textAlign: TextAlign.center,
+    //         style: TextStyle(
+    //           fontSize: 16,
+    //         ),
+    //       ),
+    //     ),
+    //     Divider(thickness: 1.4),
+    
+    //     SizedBox(height: 10), // space after divider
+    //     Padding(
+    //       padding: const EdgeInsets.symmetric(horizontal: 12.0),
+    //       child: Text(
+    //         '''Designed & Developed By
+    // Exaltasoft Solutions, Pune - 411014
+    //     ''',
+    //         textAlign: TextAlign.center,
+    //         style: TextStyle(fontSize: 14),
+    //       ),
+    //     ),
+    
+    // //           Padding(
+    // //             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+    // //             child: Text(
+    // //               '''Exaltasoft Solutions,  #15A, 4th Floor,
+    // // City Vista, Tower A, Fountain Road,
+    // // Kharadi, Pune - 411014''',
+    // //               textAlign: TextAlign.center,
+    // //               style: TextStyle(fontSize: 14),
+    // //             ),
+    // //           ),
+    
+    //     Padding(
+    //       padding: const EdgeInsets.all(0.0),
+    //       child: Text(
+    //         'contact@exaltasoft.in',
+    //         style: TextStyle(
+    //           fontSize: 15,
+    //           color: Colors.blue,
+    //           decoration: TextDecoration.underline,
+    //         ),
+    //       ),
+    //     ),
+    //   ],
+    // );
+
+    SafeArea(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+      Column(
         children: [
           SizedBox(
             height: 180,
@@ -618,18 +827,6 @@ Widget profileRow(String title, String value) {
             ),
           ),
           SizedBox(height: 10),
-
-          // SizedBox(
-          //   width: 180,
-          //   child: Text(
-          //     'Main Street, City, State\n+91 70xxxxxxx',
-          //     textAlign: TextAlign.center,
-          //     style: TextStyle(
-          //       fontSize: 13,
-          //     ),
-          //   ),
-          // ),
-
           SizedBox(
             width: 280,
             child: Text(
@@ -639,50 +836,42 @@ Widget profileRow(String title, String value) {
               'अ‍ॅड. दीपक जयस्वाल  : 8380911028\n'
               'किरण सूर्यवंशी  : 9132352222',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-              ),
+              style: TextStyle(fontSize: 16),
             ),
           ),
           Divider(thickness: 1.4),
-
-          SizedBox(height: 10), // space after divider
-//           Padding(
-//             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-//             child: Text(
-//               '''Designed & Developed By
-// Exaltasoft Solutions
-//           ''',
-//               textAlign: TextAlign.center,
-//               style: TextStyle(fontSize: 18),
-//             ),
-//           ),
-
-//           Padding(
-//             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-//             child: Text(
-//               '''Exaltasoft Solutions,  #15A, 4th Floor,
-// City Vista, Tower A, Fountain Road,
-// Kharadi, Pune - 411014''',
-//               textAlign: TextAlign.center,
-//               style: TextStyle(fontSize: 15),
-//             ),
-//           ),
-
-//           Padding(
-//             padding: const EdgeInsets.all(0.0),
-//             child: Text(
-//               'contact@exaltasoft.in',
-//               style: TextStyle(
-//                 fontSize: 15,
-//                 color: Colors.blue,
-//                 decoration: TextDecoration.underline,
-//               ),
-//             ),
-//           ),
+        ],
+      ),
+      
+      // Spacer pushes the bottom part to the bottom
+      Padding(
+        padding: const EdgeInsets.only(bottom: 20.0),
+        child: Column(
+          children: [
+            Text(
+              '''Designed & Developed By
+      Exaltasoft Solutions, Pune - 411014''',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14),
+            ),
+            SizedBox(height: 4),
+            Text(
+              'contact@exaltasoft.in',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.blue,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ],
+        ),
+      ),
         ],
       ),
     );
+
+  
+  
   }
 
   Future<void> launchURL(String url) async {

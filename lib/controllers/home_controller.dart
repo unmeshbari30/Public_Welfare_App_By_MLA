@@ -63,12 +63,35 @@ Future<ComplaintPayloadModel?> saveComplaint() async {
   }
 }
 
+Future<LoginPayloadModel?> adminSignIn() async {
+  try {
+    var currentState = state.value;
+    var repository = await ref.read(repositoryProvider.future);
+
+    LoginPayloadModel payloadModel = LoginPayloadModel(
+      userName: currentState?.adminUsernameController.text,
+      password: currentState?.adminPasswordController.text
+      // files can be handled here if needed
+    );
+
+    // final result = await repository.saveComplaint(payload: payloadModel);
+    final result = await repository.adminSignIn(loginPayload: payloadModel);
+    return result;
+  } catch (e) {
+    print("Error while saving complaint: $e");
+    return null;
+  }
+}
+
 
 
 
 }
 
 class HomeState{
+
+  TextEditingController adminUsernameController = TextEditingController();
+  TextEditingController adminPasswordController = TextEditingController();
 
   String? userName;
   List<File>? selectedFiles;

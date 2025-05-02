@@ -44,6 +44,35 @@ class Repository {
     return null;
   }
 
+  Future<LoginPayloadModel?> adminSignIn({
+    required LoginPayloadModel loginPayload,
+  }) async {
+    try {
+      var details = jsonEncode(loginPayload.toJson());
+      final response = await dio.post("/api/admin/signin", data: details);
+
+      if (response.statusCode == 200) {
+        final data = response.data;
+
+        final res = LoginPayloadModel.fromJson(data);
+        return res;
+      } else {
+        print("Server responded with status: ${response.statusCode}");
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.message}");
+      if (e.response != null) {
+        print("Response data: ${e.response?.data}");
+        print("Status code: ${e.response?.statusCode}");
+      }
+    } catch (e) {
+      print("Unexpected error: $e");
+    }
+
+    return null;
+  }
+
+
   Future<RegistrationResponseModel> registerUser(
       RegistrationPayloadModel registrationPaylaod) async {
     try {
