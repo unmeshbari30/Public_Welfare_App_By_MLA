@@ -15,19 +15,19 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:test_app/helpers/enum.dart';
-import 'package:test_app/providers/shared_preferences_provider.dart';
 
 part "dio_provider.g.dart";
 
 @riverpod
 Future<Dio> dio(Ref ref) async {
   final baseOptions = BaseOptions(
-    baseUrl: "http://localhost:8080",
-    connectTimeout: const Duration(seconds: 10),
-    receiveTimeout: const Duration(seconds: 10),
+    // baseUrl: "http://192.168.31.202:3000",
+    // baseUrl: "https://mla-app-c9r6.onrender.com/",
+    baseUrl: "https://mla-app-vuc1.onrender.com",
+    connectTimeout: const Duration(minutes: 1),
+    receiveTimeout: const Duration(minutes: 1),
     headers: {
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
       // Add more headers if needed
     },
   );

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/controllers/home_controller.dart';
-import 'package:test_app/screen/Login_Screens/local_pin_screen.dart';
+import 'package:test_app/controllers/authentication_controller.dart';
 import 'package:test_app/screen/Login_Screens/login_screen.dart';
+import 'package:test_app/screen/home_screen.dart';
 
 void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  HomeController mainController = HomeController();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  AuthenticationController mainController = AuthenticationController();
   bool isLoggedIn = await mainController.checkIsLogin();
-  // var temp = ref.read(homeControllerProvider.notifier).checkIsLogin();
   runApp( ProviderScope(child: MyApp(isLoggedIn: isLoggedIn)));
 }
 
@@ -23,11 +24,13 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+      builder: EasyLoading.init(),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  isLoggedIn ?  LocalPinScreen() : LoginScreen(),
+      // home:  isLoggedIn ?  LocalPinScreen() : LoginScreen(),
+      home:  isLoggedIn ?  HomeScreen() : LoginScreen(),
     );
   }
 }

@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.5.2
@@ -46,6 +46,22 @@ dependencies:
   riverpod_lint: ^2.6.3
   shimmer_animation: ^2.2.2
   file_picker: ^10.0.0
+  package_info_plus: ^8.3.0
+  device_info_plus: ^11.3.3
+  connectivity_plus: ^6.1.3
+  network_info_plus: ^6.1.3
+  url_launcher: ^6.3.1
+  font_awesome_flutter: ^10.8.0
+  flutter_native_splash: ^2.4.6
+  pdf: ^3.11.3
+  printing: ^5.14.2
+  mime: ^2.0.0
+  intl: ^0.20.2
+
+  # below packages are for certificates
+  path_provider: ^2.1.5
+  permission_handler: ^12.0.0+1
+  open_file: ^3.5.10
 
 
 
@@ -55,12 +71,21 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.3
   flutter_lints: ^5.0.0
   jwt_decoder: ^2.0.1
+  
 
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "lib/assets/Rajesh_Dada.jpg"
+  image_path: "lib/assets/Icons/app_icon.jpeg"
+  adaptive_icon_background: "#ffffff"
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: lib/assets/splash_screen_img.png  
+  android: true
+  ios: true
+  web: true   
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -70,13 +95,66 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
   assets:
-     - lib\assets\Rajesh_Dada.jpg
-     - lib\assets\rajeshDada1jpg.jpg
-     - lib\assets\rajeshDada2jpg.jpg
-     - lib\assets\rajeshDada3jpg.jpg
-     - lib\assets\rajeshDada4jpg.jpg
+  - lib/assets/fonts/NotoSansDevanagari-Regular.ttf
+  
+  - lib/assets/Rajesh_Dada.jpg
+  - lib/assets/rajeshDada1jpg.jpg
+  - lib/assets/rajeshDada2jpg.jpg
+  - lib/assets/rajeshDada3jpg.jpg
+  - lib/assets/rajeshDada4jpg.jpg
+  - lib/assets/dada_landing_photo.jpeg
+  - lib/assets/bg_image.jpeg
+  - lib/assets/hm_img.jpeg
+  - lib/assets/Rajesh_dada_101.jpeg
+  - lib/assets/Rajesh_dada_103.jpeg
+  - lib/assets/Rajesh_dada_104.jpeg
+  - lib/assets/Rajesh_dada_106.jpeg
+  - lib/assets/rajesh_dada_201.jpeg
+  - lib/assets/rajesh_dada_202.jpeg
+  - lib/assets/rajesh_dada_203.jpeg
+  - lib/assets/rajesh_dada_204.jpeg
+  - lib/assets/rajesh_dada_205.jpeg
+  - lib/assets/rajesh_dada_301.jpeg
+  - lib/assets/Gallery/amoni_aasharam.jpeg
+  - lib\assets\Gallery\birsa_munda.jpeg
+  - lib/assets/Gallery/p_k_patil.jpeg
+  - lib/assets/Gallery/raksha_bandhan.jpeg
+  - lib/assets/Gallery/ranipur_info.jpeg
+  - lib\assets\Gallery\babasaheb_img.jpeg
+  - lib\assets\Gallery\bavankule_img.jpeg
+  - lib\assets\Gallery\kokate_img.jpeg
+  - lib\assets\Gallery\phule_img.jpeg
+  - lib\assets\Gallery\yahamogi_img.jpeg
+  - lib\assets\Gallery\shivaji_maharaj_img.jpeg
+  - lib\assets\Gallery\dada_info_img.png
+
+
+  - lib\assets\women_empowerment\bachatgat_meeting.jpeg
+  - lib\assets\women_empowerment\bachatgat.jpeg
+  - lib\assets\women_empowerment\kalawati_foundation.jpeg
+  - lib\assets\women_empowerment\morwad_mahile_charcha.jpeg
+  - lib\assets\women_empowerment\morwad.jpeg
+  - lib\assets\women_empowerment\ranjanpur_prasad.jpeg
+  - lib\assets\women_empowerment\savitribai_phule_jayanti.jpeg
+  - lib\assets\women_empowerment\women_day.jpeg
+  - lib\assets\women_empowerment\mod_bachatgat_meeting.jpeg
+
+  - lib\assets\Icons\dummy_profile_icon.png
+  - lib/assets/splash_screen_img.png
+  - lib\assets\Icons\achievements_icon.jpeg
+  - lib\assets\Icons\gallery_icon.jpeg
+  - lib\assets\Icons\grievance_icon.jpeg
+  - lib\assets\Icons\helpline_icon.jpeg
+  - lib\assets\rajesh_dada_info_img.jpeg
+  - lib\assets\Icons\women_empowerment_icon.jpeg
+  - lib\assets\bhausaheb.jpeg
+  - lib\assets\Icons\app_icon.jpeg
+  - lib\assets\Certificates\certificate_img.jpeg
+
+
+
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

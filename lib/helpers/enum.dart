@@ -1,13 +1,22 @@
 enum PrefrencesKeyEnum{
 
   userName("user_name"),  //string
-  isLogin("isLogin"),    // bool
+  isLoggedin("isLogin"),    // bool
   localPin("loginPin"), //string 
   isfirstLocalPin("firstLoginPin"), // bool
   acessToken("accessToken"),
   rememberMe("rememberMe"),  // bool
   accessToken("accessToken"), //string
-  refreshToken("refreshToken")
+  refreshToken("refreshToken"),
+
+  firstName("firstName"),
+  lastName("LastName"),
+  mobileNumber("mobileNumber"),
+  taluka("taluka"),
+  gender("gender"),
+  age("age"),
+  mailId("mailId"),
+  bloodGroup("bloodGroup")
   ;
 
   final String key;

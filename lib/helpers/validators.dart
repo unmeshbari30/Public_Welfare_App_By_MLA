@@ -1,8 +1,18 @@
 abstract class Validators{
 
   static  validateEmptyField(String? value){
-    if(value == ""){
-      return "Can't be Empty";
+    if(value == "" || value == null){
+      return "Mandatory field*";
+    }else{
+      return null;
+    }
+
+  }
+
+
+   static  validateMobileNumber(String? value){
+    if((value?.length ?? 0) > 10){
+      return "Incorrect Mobile Number...";
     }else{
       return null;
     }

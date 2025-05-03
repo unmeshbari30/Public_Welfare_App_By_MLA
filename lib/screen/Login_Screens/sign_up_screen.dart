@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/controllers/authentication_controller.dart';
 import 'package:test_app/helpers/validators.dart';
@@ -12,7 +13,27 @@ class SignUpScreen extends ConsumerStatefulWidget {
   ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
 }
 
+
+
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
+  
+  @override
+  void dispose() {
+    final state = ref.read(authenticationControllerProvider).value;
+
+    state?.firstNameController.dispose();
+    state?.middleNameController.dispose();
+    state?.lastNameController.dispose();
+    state?.whatsappNumberController.dispose();
+    state?.mobileNumberController.dispose();
+    state?.passwordController.dispose();
+    state?.ageController.dispose();
+    state?.emailController.dispose();
+
+    super.dispose();
+  }
+
+
   var formKey = GlobalKey<FormState>();
 
   Widget getScaffold(AuthenticationState state) {
@@ -39,8 +60,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: CustomFilledTextField(
-                    controller: state.firstName,
-                    labelText: "First Name",
+                    controller: state.firstNameController,
+                    labelText: "पहिले नाव / First Name *",
+                    validator: (value) {
+                    return Validators.validateEmptyField(value);
+                    }
                   ),
                 ),
 
@@ -51,8 +75,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: CustomFilledTextField(
-                    controller: state.middleName,
-                    labelText: "Middle Name",
+                    controller: state.middleNameController,
+                    labelText: "मधले नाव / Middle Name",
                   ),
                 ),
 
@@ -63,8 +87,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: CustomFilledTextField(
-                    controller: state.lastName,
-                    labelText: "Last Name",
+                    controller: state.lastNameController,
+                    labelText: "आडनाव / Last Name *",
+                    validator: (value) {
+                      return Validators.validateEmptyField(value);
+                      
+                    },
                   ),
                 ),
 
@@ -76,8 +104,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         child: FutureFilledDropdown(
                             items: state.gendersList,
                             controller: state.gendersController,
-                            labelText: "Choose Gender",
-                            titleBuilder: (item) => item),
+                            labelText: "लिंग / Gender *",
+                            titleBuilder: (item) => item,
+                            validator: (value) {
+                              return Validators.validateEmptyField(value);
+                            },
+                            ),
+
                       ),
                     ),
                     Expanded(
@@ -86,32 +119,154 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         child: FutureFilledDropdown(
                           items: state.tehsilList,
                           controller: state.tehsilController,
-                          labelText: "Select Taluka",
+                          labelText: "तालुका  / Taluka *",
                           titleBuilder: (item) => item,
+                          validator: (value) {
+                            return Validators.validateEmptyField(value);
+                          },
                         ),
                       ),
                     ),
                   ],
                 ),
 
-                //  Padding(
-                //   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                //   child: CustomFilledTextField(
-                //     controller: state.newUserName,
-                //     labelText: "Enter new UserName",
-                //     validator: (value) {
-                //       Validators.usernameOrEmailValidator(value);
-                //     },
-                //   ),
-                //   )
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: CustomFilledTextField(
+                        controller: state.ageController,
+                        labelText: "वय / Age *",
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                      return Validators.validateEmptyField(value);
+                      
+                    },
+                  ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: FutureFilledDropdown(
+                          items: state.bloodGroup,
+                          controller: state.bloodGroupController,
+                          labelText: "रक्त गट / Blood Group *",
+                          titleBuilder: (item) => item,
+                          validator: (value) {
+                            return Validators.validateEmptyField(value);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: CustomFilledTextField(
+                    controller: state.emailController,
+                    labelText: "ईमेल / Email",
+                  ),
+                ),
+
+
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: CustomFilledTextField(
+                    controller: state.whatsappNumberController,
+                    labelText: "व्हाट्सअँप नं. / Whatsapp No.",
+                    validator: (value) {
+                      return Validators.validateMobileNumber(value);
+                      
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: CustomFilledTextField(
+                    controller: state.mobileNumberController,
+                    labelText: "मो. नंबर / Mobile Number*",
+                    validator: (value) {
+                      return Validators.validateMobileNumber(value);
+                      
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: CustomFilledTextField(
+                    controller: state.passwordController,
+                    labelText: "पासवर्ड तयार करा / Create Password *",
+                    validator: (value) {
+                      return Validators.validateEmptyField(value);
+                      
+                    },
+                  ),
+                ),
 
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: ElevatedButton(
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {}
+                      onPressed: () async{
+                        if (formKey.currentState!.validate()) {
+                          try{
+                            EasyLoading.show();
+                            var successful = await ref.read(authenticationControllerProvider.notifier).userRegistration();
+                            if(successful?.isRegistered == true){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    successful?.message ?? "",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                  backgroundColor: Colors.green.shade600,
+                                ),
+                              );
+
+                              Navigator.pop(context);
+
+
+                            }else{
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                   successful?.message ?? "Something went wrong",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                  backgroundColor: Colors.red.shade600,
+                                ),
+                              );
+                            }
+
+
+                          }catch(e){
+                             ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                  "Something went wrong",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                  backgroundColor: Colors.red.shade600,
+                                ),
+                              );
+                            
+
+                          }finally{
+                            EasyLoading.dismiss();
+                            
+                          }
+                        }
                       },
-                      child: Text("Register")),
+                      child: Text("रजिस्टर / Register")),
                 )
               ],
             ),
