@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/controllers/home_controller.dart';
 
@@ -7,41 +6,58 @@ class RajeshDadaInfoScreen extends ConsumerStatefulWidget {
   const RajeshDadaInfoScreen({super.key});
 
   @override
-  ConsumerState<RajeshDadaInfoScreen> createState() => _RajeshDadaInfoScreenState();
+  ConsumerState<RajeshDadaInfoScreen> createState() =>
+      _RajeshDadaInfoScreenState();
 }
 
 class _RajeshDadaInfoScreenState extends ConsumerState<RajeshDadaInfoScreen> {
-
-  Widget getScaffold(HomeState state){
+  Widget getScaffold(HomeState state) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text("आपले राजेश दादा"),
         backgroundColor: Colors.amber,
-
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-               Padding(
-                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                 child: Card(
-                  elevation: 2,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    // child: Image.asset('lib/assets/Rajesh_Dada.jpg'))),
-                    child: Image.asset("lib/assets/rajesh_dada_info_img.jpeg"))),
-               ),
-               const SizedBox(height: 16),
-              Padding(
-  padding: const EdgeInsets.all(8.0),
-  child: Card(
-    elevation: 2,
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-      child: Text(
-        '''
+          child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Padding(
+            //   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            //   child: Card(
+            //       elevation: 2,
+            //       child: ClipRRect(
+            //           borderRadius: BorderRadius.circular(12),
+            //           // child: Image.asset('lib/assets/Rajesh_Dada.jpg'))),
+            //           child:
+            //               Image.asset("lib/assets/rajesh_dada_info_img.jpeg"))),
+            // ),
+
+            Padding(
+              padding: const EdgeInsets.fromLTRB(5, 10, 10, 10),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                  width: 300, 
+                  height: 300,
+                  child: Image.asset(
+                    "lib/assets/Gallery/dada_info_img.png",
+                    fit: BoxFit
+                        .fill,
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                elevation: 2,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: Text(
+                    '''
       \u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0सातपुड्याच्या कुशीत सोमावल येथे 5 मे 1969 साली वातावरणाला तेजोमय करणारा अवकाशातला ताराच अवतरला. जणू काय या धरणीवर पुण्य अवतरावे. पाडवी कुटुंबात राजेश पाडवी यांचा जन्म झाला. पाडवी कुटुंबात जन्मलेला हा मुलगा पुढे जनतेच्या हृदयावर राज्य करणारा नेता होईल, याचा अंदाज तेव्हा कोणाला होता? या व्यक्तिमत्वाबद्दल बोलावं किती, लिहावं कीती याला कुठलीही सीमा नाही. असं कणखर, रुबाबदार, धाडसी तितकंच मनमिळावू, भावनिक असे हे आमचे 'दादा'. दादांचा जनतेशी असलेला संवाद अगदी सरळ, साधा असल्यामुळे प्रत्येकाला ते आपले वाटतात, आपल्या कुटुंबातील सदस्य वाटतात आणि म्हणुनच आमच्या दादांचा बोलबाला सर्वत्र सातपुड्याच्या कडेकपाऱ्यात गुंजतो.
       
       \u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0दादांचं प्राथमिक आणि माध्यमिक शिक्षण आश्रमशाळेत झालं. पुढील पदवीच्या शिक्षणासाठी त्यांनी मुंबई गाठली. मेहनत आणि चिकाटीच्या जोरावर महाराष्ट्र लोकसेवा आयोगाची परीक्षा उत्तीर्ण होत अखेर ते PSI बनले. एका लहानशा गावचं, आश्रमशाळेत शिकलेल पोरगं PSI होतं. त्या काळी पोलिसात नोकरी म्हणजे खूप मान, सन्मान! तेही मुंबई पोलिसात नोकरी म्हटली म्हणजे अख्खं गाव अदबीनं समोर यायचं. 27 वर्ष पोलिस खात्यात महाराष्ट्र राज्यासाठी सेवा देत त्यांनी उत्तम कामगिरी केली.
@@ -64,24 +80,21 @@ class _RajeshDadaInfoScreenState extends ConsumerState<RajeshDadaInfoScreen> {
       
       चला तर मग, दादांच्या सोबत उभं राहून आपल्या भागाचा नवा इतिहास घडवूया!
       ''',
-        textAlign: TextAlign.justify,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-      ),
-    ),
-  ),
-)
-
-            ],
-          ),
-        )
-      ),
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      )),
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-     var homeStateAsync = ref.watch(homeControllerProvider);
+    var homeStateAsync = ref.watch(homeControllerProvider);
     return homeStateAsync.when(
         data: (state) {
           return getScaffold(state);

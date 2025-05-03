@@ -21,7 +21,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   var formKey = GlobalKey<FormState>();
   bool rememberMe = false;
-  bool passwordVisible = false;
+  bool passwordVisible = true;
   int exitCounter = 1;
 
   Widget getScaffold(AuthenticationState state) {

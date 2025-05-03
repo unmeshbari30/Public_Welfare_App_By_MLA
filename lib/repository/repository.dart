@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:mime/mime.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:test_app/models/complaint_payload_model.dart';
+import 'package:test_app/models/complaint_response_model.dart';
 import 'package:test_app/models/login_payload_model.dart';
 import 'package:test_app/models/registration_payload_model.dart';
 import 'package:test_app/models/registration_response_model.dart';
@@ -168,7 +169,6 @@ Future<ComplaintPayloadModel?>? saveComplaint({
   //       "/api/v1/Complaints",
   //       data: jsonEncode(payload.toJson()),
   //     );
-
   //     if (response.statusCode == 200 || response.statusCode == 400) {
   //       return ComplaintPayloadModel.fromJson(response.data);
   //     } else {
@@ -188,6 +188,40 @@ Future<ComplaintPayloadModel?>? saveComplaint({
   //   }
   // }
 
+  
+  Future<ComplaintResponseModel> getComplaints() async {
+    try {
+
+      final response = await dio.get("/api/v1/GetComplaints");
+
+      if (response.statusCode == 200) {
+        final data = response.data;
+
+        final res = ComplaintResponseModel.fromJson(data);
+        return res;
+      } else {
+        print("Server responded with status: ${response.statusCode}");
+      }
+      if (response.statusCode == 400) {
+        final data = response.data;
+        final res = ComplaintResponseModel.fromJson(data);
+        return res;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.message}");
+      if (e.response != null) {
+        print("Response data: ${e.response?.data}");
+        print("Status code: ${e.response?.statusCode}");
+      }
+    } catch (e) {
+      print("Unexpected error: $e");
+    }
+    throw Exception("Failed to fetch complaints");
+  }
+  
+  
+  
+  
   Repository({
     required this.dio,
   });

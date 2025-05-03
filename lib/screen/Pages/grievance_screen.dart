@@ -52,7 +52,7 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
                     controller: state.mobileNumberController,
                     labelText: "मो. नंबर / Mobile Number *",
                     validator: (value) {
-                      return Validators.validateEmptyField(value);
+                      return Validators.validateMobileNumber(value);
                     },
                   )),
 
@@ -74,7 +74,9 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
                     items: state.gendersList,
                     controller: state.gendersController,
                     labelText: "लिंग / Gender",
-                    titleBuilder: (item) => item),
+                    titleBuilder: (item) => item,
+                    ),
+                    
               ),
 
               Padding(
@@ -129,6 +131,8 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                 child: CustomMultiFilePicker(
+                  onlyImages: true,
+
                   didChange: (files) {
                     ref
                         .read(homeControllerProvider.notifier)

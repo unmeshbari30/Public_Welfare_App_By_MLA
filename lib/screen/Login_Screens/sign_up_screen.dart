@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/controllers/authentication_controller.dart';
+import 'package:test_app/helpers/validators.dart';
 import 'package:test_app/widgets/custom_filled_text_field.dart';
 import 'package:test_app/widgets/future_filled_dropdown.dart';
 
@@ -60,7 +61,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: CustomFilledTextField(
                     controller: state.firstNameController,
-                    labelText: "पहिले नाव / First Name",
+                    labelText: "पहिले नाव / First Name *",
+                    validator: (value) {
+                    return Validators.validateEmptyField(value);
+                    }
                   ),
                 ),
 
@@ -84,7 +88,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: CustomFilledTextField(
                     controller: state.lastNameController,
-                    labelText: "आडनाव / Last Name",
+                    labelText: "आडनाव / Last Name *",
+                    validator: (value) {
+                      return Validators.validateEmptyField(value);
+                      
+                    },
                   ),
                 ),
 
@@ -96,8 +104,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         child: FutureFilledDropdown(
                             items: state.gendersList,
                             controller: state.gendersController,
-                            labelText: "लिंग / Gender",
-                            titleBuilder: (item) => item),
+                            labelText: "लिंग / Gender *",
+                            titleBuilder: (item) => item,
+                            validator: (value) {
+                              return Validators.validateEmptyField(value);
+                            },
+                            ),
+
                       ),
                     ),
                     Expanded(
@@ -106,8 +119,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         child: FutureFilledDropdown(
                           items: state.tehsilList,
                           controller: state.tehsilController,
-                          labelText: "तालुका  / Taluka",
+                          labelText: "तालुका  / Taluka *",
                           titleBuilder: (item) => item,
+                          validator: (value) {
+                            return Validators.validateEmptyField(value);
+                          },
                         ),
                       ),
                     ),
@@ -122,8 +138,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                         child: CustomFilledTextField(
                         controller: state.ageController,
-                        labelText: "वय / Age",
+                        labelText: "वय / Age *",
                         keyboardType: TextInputType.number,
+                        validator: (value) {
+                      return Validators.validateEmptyField(value);
+                      
+                    },
                   ),
                       ),
                     ),
@@ -133,8 +153,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         child: FutureFilledDropdown(
                           items: state.bloodGroup,
                           controller: state.bloodGroupController,
-                          labelText: "रक्त गट / Blood Group",
+                          labelText: "रक्त गट / Blood Group *",
                           titleBuilder: (item) => item,
+                          validator: (value) {
+                            return Validators.validateEmptyField(value);
+                          },
                         ),
                       ),
                     ),
@@ -155,6 +178,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   child: CustomFilledTextField(
                     controller: state.whatsappNumberController,
                     labelText: "व्हाट्सअँप नं. / Whatsapp No.",
+                    validator: (value) {
+                      return Validators.validateMobileNumber(value);
+                      
+                    },
                   ),
                 ),
 
@@ -162,7 +189,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: CustomFilledTextField(
                     controller: state.mobileNumberController,
-                    labelText: "मो. नंबर / Mobile Number",
+                    labelText: "मो. नंबर / Mobile Number*",
+                    validator: (value) {
+                      return Validators.validateMobileNumber(value);
+                      
+                    },
                   ),
                 ),
 
@@ -170,7 +201,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: CustomFilledTextField(
                     controller: state.passwordController,
-                    labelText: "पासवर्ड तयार करा / Create Password",
+                    labelText: "पासवर्ड तयार करा / Create Password *",
+                    validator: (value) {
+                      return Validators.validateEmptyField(value);
+                      
+                    },
                   ),
                 ),
 
@@ -202,7 +237,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    successful?.message ?? "",
+                                   successful?.message ?? "Something went wrong",
                                     style: TextStyle(color: Colors.black),
                                   ),
                                   duration: Duration(seconds: 2),
@@ -213,7 +248,17 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
 
                           }catch(e){
-                            print(e);
+                             ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                  "Something went wrong",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                  backgroundColor: Colors.red.shade600,
+                                ),
+                              );
+                            
 
                           }finally{
                             EasyLoading.dismiss();

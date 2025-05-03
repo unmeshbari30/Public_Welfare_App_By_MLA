@@ -9,8 +9,9 @@ class CustomMultiFilePicker extends StatefulWidget {
   final String? Function(String?)? validator;
   final String? labelText;
   final int? maxFiles;
+  final bool onlyImages;
 
-  const CustomMultiFilePicker({super.key, this.controller, this.validator, this.labelText, this.didChange, this.maxFiles});
+  const CustomMultiFilePicker({super.key, this.controller, this.validator, this.labelText, this.didChange, this.maxFiles,  this.onlyImages = false,});
 
   @override
   State<CustomMultiFilePicker> createState() => _CustomFilledMultiFilePickerState();
@@ -91,6 +92,7 @@ class _CustomFilledMultiFilePickerState extends State<CustomMultiFilePicker> {
 
                     FilePickerResult? result = await FilePicker.platform.pickFiles(
                       allowMultiple: true,
+                      type: widget.onlyImages ? FileType.image : FileType.any,
                     );
 
                     if (result != null && result.paths.isNotEmpty) {

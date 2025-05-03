@@ -116,8 +116,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         isSuccess: loginResponse?.isLoggedIn?? false,
       );
 
-      // if (loginResponse?.isLoggedIn ?? false) {
-      if (true) {
+      // if (true) {
+      if (loginResponse?.isLoggedIn ?? false) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => AdminGrievanceScreen()),
@@ -415,154 +415,153 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget tab1Screen(HomeState state) {
     return Container(
       color: Colors.white,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-
-            //Images 
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 280,
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: imagePaths.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        // border: Border.all(
-                        //   color: Colors.black,
-                        //   width: 2
-                        // ),
-                        // borderRadius: BorderRadius.circular(12)
-                      ),
-
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12), 
-                        child: Image.asset(
-                          imagePaths[index],
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+        
+              //Images 
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 280,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: imagePaths.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          // border: Border.all(
+                          //   color: Colors.black,
+                          //   width: 2
+                          // ),
+                          // borderRadius: BorderRadius.circular(12)
                         ),
-                      ),
-                    );
-                  },
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentPage = index;
-                    });
-                  },
+        
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12), 
+                          child: Image.asset(
+                            imagePaths[index],
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        ),
+                      );
+                    },
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                      });
+                    },
+                  ),
                 ),
               ),
-            ),
-
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-              child: Card(
-                elevation: 1.5,
-                color: Colors.white,
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: 0,
-                  crossAxisSpacing: 0,
-                  childAspectRatio: 0.8,
-                  children: [
-                    buildGridIcon("lib/assets/Rajesh_Dada.jpg", "राजेश दादा",
-                        () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RajeshDadaInfoScreen(),
-                          ));
-                    }),
-                    buildGridIcon(
-                        "lib/assets/Icons/grievance_icon.jpeg", "तक्रार / विनंती", () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GrievanceScreen(),
-                          ));
-                    }),
-                    buildGridIcon("lib/assets/Icons/achievements_icon.jpeg", "कामगिरी", () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AchievementsScreen(),
-                          ));
-                    }),
-                    buildGridIcon("lib/assets/Icons/helpline_icon.jpeg", "हेल्पलाईन",
-                        () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HelplineScreen(),
-                          ));
-                    }),
-                    buildGridIcon("lib/assets/Icons/gallery_icon.jpeg", "गॅलरी ", () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GalleryScreen(),
-                          ));
-                    }),
-                    buildGridIcon("lib/assets/Icons/women_empowerment_icon.jpeg", "महिला सशक्तीकरण",
-                        () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WomenEmpowermentScreen(),
-                          ));
-                    }),
-                  ],
+        
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                child: Card(
+                  elevation: 1.5,
+                  color: Colors.white,
+                  child: GridView.count(
+                    crossAxisCount: 3,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    mainAxisSpacing: 0,
+                    crossAxisSpacing: 0,
+                    childAspectRatio: 0.8,
+                    children: [
+                      buildGridIcon("lib/assets/Rajesh_Dada.jpg", "राजेश दादा",
+                          () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RajeshDadaInfoScreen(),
+                            ));
+                      }),
+                      buildGridIcon(
+                          "lib/assets/Icons/grievance_icon.jpeg", "तक्रार / विनंती", () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GrievanceScreen(),
+                            ));
+                      }),
+                      buildGridIcon("lib/assets/Icons/achievements_icon.jpeg", "कामगिरी", () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AchievementsScreen(),
+                            ));
+                      }),
+                      buildGridIcon("lib/assets/Icons/helpline_icon.jpeg", "हेल्पलाईन",
+                          () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HelplineScreen(),
+                            ));
+                      }),
+                      buildGridIcon("lib/assets/Icons/gallery_icon.jpeg", "गॅलरी ", () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GalleryScreen(),
+                            ));
+                      }),
+                      buildGridIcon("lib/assets/Icons/women_empowerment_icon.jpeg", "महिला सशक्तीकरण",
+                          () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WomenEmpowermentScreen(),
+                            ));
+                      }),
+                    ],
+                  ),
                 ),
               ),
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const FaIcon(FontAwesomeIcons.facebook,
-                      color: Colors.blue),
-                  onPressed: () => launchURL(
-                      "https://www.facebook.com/mlarajesh.padvi.3?mibextid=rS40aB7S9Ucbxw6v"),
-                  iconSize: 36,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                IconButton(
-                  icon: const FaIcon(FontAwesomeIcons.x, color: Colors.black),
-                  onPressed: () => launchURL(
-                      "https://x.com/MlaPadvi?t=sr656VMprkJ5qXyXIBpyvw&s=09"),
-                  iconSize: 36,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                IconButton(
-                  icon: const FaIcon(FontAwesomeIcons.instagram,
-                      color: Colors.purple),
-                  onPressed: () =>
-                      launchURL("https://www.instagram.com/rajeshpadvi001/"),
-                  iconSize: 36,
-                ),
-              ],
-            ),
-
-            SizedBox(
-              height: 30,
-            ),
+        
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.facebook,
+                        color: Colors.blue),
+                    onPressed: () => launchURL(
+                        "https://www.facebook.com/mlarajesh.padvi.3?mibextid=rS40aB7S9Ucbxw6v"),
+                    iconSize: 36,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.x, color: Colors.black),
+                    onPressed: () => launchURL(
+                        "https://x.com/MlaPadvi?t=sr656VMprkJ5qXyXIBpyvw&s=09"),
+                    iconSize: 36,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.instagram,
+                        color: Colors.purple),
+                    onPressed: () =>
+                        launchURL("https://www.instagram.com/rajeshpadvi001/"),
+                    iconSize: 36,
+                  ),
+                ],
+              ),
+        
               SizedBox(
-              height: 60,
-            ),
-
-          ],
+                height: 30,
+              ),
+        
+            ],
+          ),
         ),
       ),
     );
