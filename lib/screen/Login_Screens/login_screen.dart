@@ -82,19 +82,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   SizedBox(
                     height: 10,
                   ),
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  //   child: CustomFilledTextField(
+                  //     controller: state.userName,
+                  //     labelText: "Mob. No.",
+                  //     // keyboardType: TextInputType.number,
+                  //     // maxLength: 10,
+                  //     validator: (value) {
+                  //       return Validators.validateMobileNumber(value);
+                  //     },
+                  //     keyboardType: TextInputType.number,
+                  //   ),
+                  // ),
+
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: CustomFilledTextField(
                       controller: state.userName,
                       labelText: "Mob. No.",
-                      // keyboardType: TextInputType.number,
-                      // maxLength: 10,
-                      validator: (value) {
-                        return Validators.validateMobileNumber(value);
-                      },
                       keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Mobile number is required';
+                        }
+                        if (value.length > 10) {
+                          return 'Mobile number cannot exceed 10 digits';
+                        }
+                        return null;
+                      },
                     ),
                   ),
+
                   SizedBox(
                     height: 10,
                   ),
