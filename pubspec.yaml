@@ -77,7 +77,8 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "lib/assets/App Logos/jansevak_app icon.png"
+  # image_path: "lib/assets/App Logos/jansevak_app icon.png"
+  image_path: "lib/assets/App Logos/final_app_logo.jpeg"
   adaptive_icon_background: "#ffffff"
 
 flutter_native_splash:
