@@ -194,6 +194,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       }
     });
 
+     WidgetsBinding.instance.addPostFrameCallback((_) => _showDisclaimerDialog());
+
     _loadPreferences();
 
   }
@@ -206,6 +208,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     super.dispose();
   }
 
+   void _showDisclaimerDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // force the user to accept
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Disclaimer"),
+          content: SingleChildScrollView(
+            child: Text(
+              "This app is not affiliated with any government, political party, or official body. It is an independent initiative aimed at providing citizens a digital platform to communicate with their elected MLA.",
+              textAlign: TextAlign.justify,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Agree"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            // TextButton(
+            //   child: Text("Exit"),
+            //   onPressed: () {
+            //     // Exit the app if user disagrees
+            //     Navigator.of(context).pop();
+            //     Future.delayed(Duration(milliseconds: 300), () {
+            //       // import 'dart:io';
+            //       // exit(0); // Optional, use responsibly
+            //     });
+            //   },
+            // ),
+          ],
+        );
+      },
+    );
+  }
+
+  
   Future<void> _loadPreferences() async {
   final prefs = await SharedPreferences.getInstance();
 
