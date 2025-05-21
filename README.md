@@ -114,7 +114,7 @@ The app is tailored for local use, possibly even in a specific constituency, and
 
 Feel free to fork the repo, raise issues, and submit pull requests to improve the app!
 
-————————————————————
+————————————————————  
 
 📄 License
 
