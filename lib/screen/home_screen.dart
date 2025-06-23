@@ -578,7 +578,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     width: 10,
                   ),
                   IconButton(
-                    icon: const FaIcon(FontAwesomeIcons.x, color: Colors.black),
+                    icon: const FaIcon(FontAwesomeIcons.xTwitter, color: Colors.black),
                     onPressed: () => launchURL(
                         "https://x.com/MlaPadvi?t=sr656VMprkJ5qXyXIBpyvw&s=09"),
                     iconSize: 36,
