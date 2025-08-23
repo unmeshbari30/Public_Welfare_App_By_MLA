@@ -95,7 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       .read(homeControllerProvider.notifier)
                       .adminSignIn();
 
-                  Helpers.showSuccessSnackBar(
+                  Helpers.showSuccessOrFailureSnackBar(
                     context,
                     message: loginResponse?.isLoggedIn ?? false
                         ? "Login Successful"
@@ -113,7 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     );
                   }
                 } catch (e) {
-                  Helpers.showSuccessSnackBar(
+                  Helpers.showSuccessOrFailureSnackBar(
                     context,
                     message: "Login Failed",
                     isSuccess: false,

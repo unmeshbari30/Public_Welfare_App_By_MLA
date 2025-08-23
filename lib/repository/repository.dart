@@ -19,6 +19,8 @@ part 'repository.g.dart';
 class Repository {
   final Dio dio;
 
+  Repository({required this.dio});
+
   Future<LoginPayloadModel?> loginUser({
     required LoginPayloadModel loginPayload,
   }) async {
@@ -75,9 +77,9 @@ class Repository {
     return null;
   }
 
-
   Future<RegistrationResponseModel> registerUser(
-      RegistrationPayloadModel registrationPaylaod) async {
+    RegistrationPayloadModel registrationPaylaod,
+  ) async {
     try {
       var details = jsonEncode(registrationPaylaod.toJson());
       final response = await dio.post("/api/v1/Register", data: details);
@@ -106,93 +108,68 @@ class Repository {
     }
 
     return RegistrationResponseModel(
-        firstName: null, lastName: null, message: null, username: null);
+      firstName: null,
+      lastName: null,
+      message: null,
+      username: null,
+    );
   }
 
-Future<ComplaintPayloadModel?>? saveComplaint({
-  required ComplaintPayloadModel payload,
-  required List<File>? attachments,
-}) async {
-  try {
-    // // Prepare file attachments
-    if (attachments != null && attachments.isNotEmpty) {
-      List<FileElement> uploadAttachments = [];
-      for (var file in attachments) {
-        final bytes = await file.readAsBytes();
-        final mimeType = lookupMimeType(file.path) ?? "";
-        final lastModified = await file.lastModified();
-        uploadAttachments.add(
-          FileElement(
-            base64Data: base64Encode(bytes),
-            mimetype: mimeType,
-            name:
-                "Attachment_${DateFormat('yyyyMMdd_HHmmss').format(lastModified)}.${mimeType.split("/").last}",
-          ),
-        );
+  Future<ComplaintPayloadModel?>? saveComplaint({
+    required ComplaintPayloadModel payload,
+    required List<File>? attachments,
+  }) async {
+    try {
+      // // Prepare file attachments
+      if (attachments != null && attachments.isNotEmpty) {
+        List<FileElement> uploadAttachments = [];
+        for (var file in attachments) {
+          final bytes = await file.readAsBytes();
+          final mimeType = lookupMimeType(file.path) ?? "";
+          final lastModified = await file.lastModified();
+          uploadAttachments.add(
+            FileElement(
+              base64Data: base64Encode(bytes),
+              mimetype: mimeType,
+              name:
+                  "Attachment_${DateFormat('yyyyMMdd_HHmmss').format(lastModified)}.${mimeType.split("/").last}",
+            ),
+          );
+        }
+        // Update payload with attachments
+        payload.files = uploadAttachments;
+        var test = jsonEncode(payload.toJson());
+        print("hey");
       }
-      // Update payload with attachments
-      payload.files = uploadAttachments;
-      var test = jsonEncode(payload.toJson());
-      print("hey");
-    }
-    // Send request
-    final response = await dio.post(
-      "/api/v1/Complaints",
-      data: jsonEncode(payload.toJson()),
-    );
-    // Handle response
-    if (response.statusCode == 200 || response.statusCode == 400) {
-      return ComplaintPayloadModel.fromJson(response.data);
-    } else {
-      print("Unexpected status code: ${response.statusCode}");
+      // Send request
+      final response = await dio.post(
+        "/api/v1/Complaints",
+        data: jsonEncode(payload.toJson()),
+      );
+      // Handle response
+      if (response.statusCode == 200 || response.statusCode == 400) {
+        return ComplaintPayloadModel.fromJson(response.data);
+      } else {
+        print("Unexpected status code: ${response.statusCode}");
+        return null;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.message}");
+      if (e.response != null) {
+        print("Response data: ${e.response?.data}");
+        print("Status code: ${e.response?.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      print("Unexpected error: $e");
       return null;
     }
-  } on DioException catch (e) {
-    print("Dio error: ${e.message}");
-    if (e.response != null) {
-      print("Response data: ${e.response?.data}");
-      print("Status code: ${e.response?.statusCode}");
-      return null;
-    }
-  } catch (e) {
-    print("Unexpected error: $e");
+    // Return an empty model in case of error
     return null;
   }
-  // Return an empty model in case of error
-  return null;
-}
 
-  // Future<ComplaintPayloadModel?> saveComplaint({
-  //   required ComplaintPayloadModel payload,
-  //   // required List<File>? attachments,
-  // }) async {
-  //   try {
-  //     final response = await dio.post(
-  //       "/api/v1/Complaints",
-  //       data: jsonEncode(payload.toJson()),
-  //     );
-  //     if (response.statusCode == 200 || response.statusCode == 400) {
-  //       return ComplaintPayloadModel.fromJson(response.data);
-  //     } else {
-  //       print("Unexpected status code: ${response.statusCode}");
-  //       return null;
-  //     }
-  //   } on DioException catch (e) {
-  //     print("DioException occurred: ${e.message}");
-  //     if (e.response != null) {
-  //       print("Response data: ${e.response?.data}");
-  //       print("Status code: ${e.response?.statusCode}");
-  //     }
-  //     return null;
-  //   } catch (e) {
-  //     print("Unhandled exception: $e");
-  //     return null;
-  //   }
-  // }
-  
   Future<ComplaintResponseModel> getComplaints() async {
     try {
-
       final response = await dio.get("/api/v1/GetComplaints");
 
       if (response.statusCode == 200) {
@@ -221,214 +198,202 @@ Future<ComplaintPayloadModel?>? saveComplaint({
   }
 
   Future<FileResponseModel?> getAchievements() async {
-  try {
-    final response = await dio.get("/api/v1/achievements");
+    try {
+      final response = await dio.get("/api/v1/achievements");
 
-    if (response.statusCode == 200) {
-      final data = response.data;
-      final result = FileResponseModel.fromJson(data);
-      return result;
-    } else {
-      print("Server responded with status: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        final data = response.data;
+        final result = FileResponseModel.fromJson(data);
+        return result;
+      } else {
+        print("Server responded with status: ${response.statusCode}");
+      }
+
+      if (response.statusCode == 400) {
+        final data = response.data;
+        final result = FileResponseModel.fromJson(data);
+        return result;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.message}");
+      if (e.response != null) {
+        print("Response data: ${e.response?.data}");
+        print("Status code: ${e.response?.statusCode}");
+      }
+    } catch (e) {
+      print("Unexpected error: $e");
     }
 
-    if (response.statusCode == 400) {
-      final data = response.data;
-      final result = FileResponseModel.fromJson(data);
-      return result;
-    }
-
-  } on DioException catch (e) {
-    print("Dio error: ${e.message}");
-    if (e.response != null) {
-      print("Response data: ${e.response?.data}");
-      print("Status code: ${e.response?.statusCode}");
-    }
-  } catch (e) {
-    print("Unexpected error: $e");
+    // If everything fails, return null instead of throwing exception
+    return null;
   }
-
-  // If everything fails, return null instead of throwing exception
-  return null;
-}
 
   Future<FileResponseModel?> getGalleryData() async {
-  try {
-    final response = await dio.get("/api/v1/gallery");
+    try {
+      final response = await dio.get("/api/v1/gallery");
 
-    if (response.statusCode == 200) {
-      final data = response.data;
-      final result = FileResponseModel.fromJson(data);
-      return result;
-    } else {
-      print("Server responded with status: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        final data = response.data;
+        final result = FileResponseModel.fromJson(data);
+        return result;
+      } else {
+        print("Server responded with status: ${response.statusCode}");
+      }
+
+      if (response.statusCode == 400) {
+        final data = response.data;
+        final result = FileResponseModel.fromJson(data);
+        return result;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.message}");
+      if (e.response != null) {
+        print("Response data: ${e.response?.data}");
+        print("Status code: ${e.response?.statusCode}");
+      }
+    } catch (e) {
+      print("Unexpected error: $e");
     }
 
-    if (response.statusCode == 400) {
-      final data = response.data;
-      final result = FileResponseModel.fromJson(data);
-      return result;
-    }
-
-  } on DioException catch (e) {
-    print("Dio error: ${e.message}");
-    if (e.response != null) {
-      print("Response data: ${e.response?.data}");
-      print("Status code: ${e.response?.statusCode}");
-    }
-  } catch (e) {
-    print("Unexpected error: $e");
+    // If everything fails, return null instead of throwing exception
+    return null;
   }
 
-  // If everything fails, return null instead of throwing exception
-  return null;
-}
-  
   Future<FileResponseModel?> getWomenEmpowermentData() async {
-  try {
-    final response = await dio.get("/api/v1/womens");
+    try {
+      final response = await dio.get("/api/v1/womens");
 
-    if (response.statusCode == 200) {
-      final data = response.data;
-      final result = FileResponseModel.fromJson(data);
-      return result;
-    } else {
-      print("Server responded with status: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        final data = response.data;
+        final result = FileResponseModel.fromJson(data);
+        return result;
+      } else {
+        print("Server responded with status: ${response.statusCode}");
+      }
+
+      if (response.statusCode == 400) {
+        final data = response.data;
+        final result = FileResponseModel.fromJson(data);
+        return result;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.message}");
+      if (e.response != null) {
+        print("Response data: ${e.response?.data}");
+        print("Status code: ${e.response?.statusCode}");
+      }
+    } catch (e) {
+      print("Unexpected error: $e");
     }
 
-    if (response.statusCode == 400) {
-      final data = response.data;
-      final result = FileResponseModel.fromJson(data);
-      return result;
-    }
-
-  } on DioException catch (e) {
-    print("Dio error: ${e.message}");
-    if (e.response != null) {
-      print("Response data: ${e.response?.data}");
-      print("Status code: ${e.response?.statusCode}");
-    }
-  } catch (e) {
-    print("Unexpected error: $e");
+    // If everything fails, return null instead of throwing exception
+    return null;
   }
 
-  // If everything fails, return null instead of throwing exception
-  return null;
-}
-  
   Future<FileResponseModel?> getHomePageData() async {
-  try {
-    final response = await dio.get("/api/v1/home");
+    try {
+      final response = await dio.get("/api/v1/home");
 
-    if (response.statusCode == 200) {
-      final data = response.data;
-      final result = FileResponseModel.fromJson(data);
-      return result;
-    } else {
-      print("Server responded with status: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        final data = response.data;
+        final result = FileResponseModel.fromJson(data);
+        return result;
+      } else {
+        print("Server responded with status: ${response.statusCode}");
+      }
+
+      if (response.statusCode == 400) {
+        final data = response.data;
+        final result = FileResponseModel.fromJson(data);
+        return result;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.message}");
+      if (e.response != null) {
+        print("Response data: ${e.response?.data}");
+        print("Status code: ${e.response?.statusCode}");
+      }
+    } catch (e) {
+      print("Unexpected error: $e");
     }
 
-    if (response.statusCode == 400) {
-      final data = response.data;
-      final result = FileResponseModel.fromJson(data);
-      return result;
-    }
-
-  } on DioException catch (e) {
-    print("Dio error: ${e.message}");
-    if (e.response != null) {
-      print("Response data: ${e.response?.data}");
-      print("Status code: ${e.response?.statusCode}");
-    }
-  } catch (e) {
-    print("Unexpected error: $e");
+    // If everything fails, return null instead of throwing exception
+    return null;
   }
 
-  // If everything fails, return null instead of throwing exception
-  return null;
-}
-  
   Future<MlaInfoModel?> getMlaInfo() async {
-  try {
-    final response = await dio.get("/api/v1/mla-info");
+    try {
+      final response = await dio.get("/api/v1/mla-info");
 
-    if (response.statusCode == 200) {
-      final data = response.data;
-      final result = MlaInfoModel.fromJson(data);
-      return result;
-    } else {
-      print("Server responded with status: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        final data = response.data;
+        final result = MlaInfoModel.fromJson(data);
+        return result;
+      } else {
+        print("Server responded with status: ${response.statusCode}");
+      }
+
+      if (response.statusCode == 400) {
+        final data = response.data;
+        final result = MlaInfoModel.fromJson(data);
+        return result;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.message}");
+      if (e.response != null) {
+        print("Response data: ${e.response?.data}");
+        print("Status code: ${e.response?.statusCode}");
+      }
+    } catch (e) {
+      print("Unexpected error: $e");
     }
 
-    if (response.statusCode == 400) {
-      final data = response.data;
-      final result = MlaInfoModel.fromJson(data);
-      return result;
-    }
-
-  } on DioException catch (e) {
-    print("Dio error: ${e.message}");
-    if (e.response != null) {
-      print("Response data: ${e.response?.data}");
-      print("Status code: ${e.response?.statusCode}");
-    }
-  } catch (e) {
-    print("Unexpected error: $e");
+    // If everything fails, return null instead of throwing exception
+    return null;
   }
 
-  // If everything fails, return null instead of throwing exception
-  return null;
-}
-  
-  Future<bool> deleteComplaintById(String id) async{
-    try{
-      
+  Future<bool> deleteComplaintById(String id) async {
+    try {
       final response = await dio.delete("/api/v1/Complaints/$id");
-      if(response.statusCode == 200){
-      return true;
+      if (response.statusCode == 200) {
+        return true;
       }
       return false;
-
-    }catch(e){
+    } catch (e) {
       return false;
     }
   }
 
-  Repository({
-    required this.dio,
-  });
-
   Future<FileResponseModel?> getCertificateData() async {
-  try {
-    final response = await dio.get("/api/v1/certificate");
+    try {
+      final response = await dio.get("/api/v1/certificate");
 
-    if (response.statusCode == 200) {
-      final data = response.data;
-      final result = FileResponseModel.fromJson(data);
-      return result;
-    } else {
-      print("Server responded with status: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        final data = response.data;
+        final result = FileResponseModel.fromJson(data);
+        return result;
+      } else {
+        print("Server responded with status: ${response.statusCode}");
+      }
+
+      if (response.statusCode == 400) {
+        final data = response.data;
+        final result = FileResponseModel.fromJson(data);
+        return result;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.message}");
+      if (e.response != null) {
+        print("Response data: ${e.response?.data}");
+        print("Status code: ${e.response?.statusCode}");
+      }
+    } catch (e) {
+      print("Unexpected error: $e");
     }
 
-    if (response.statusCode == 400) {
-      final data = response.data;
-      final result = FileResponseModel.fromJson(data);
-      return result;
-    }
-
-  } on DioException catch (e) {
-    print("Dio error: ${e.message}");
-    if (e.response != null) {
-      print("Response data: ${e.response?.data}");
-      print("Status code: ${e.response?.statusCode}");
-    }
-  } catch (e) {
-    print("Unexpected error: $e");
+    // If everything fails, return null instead of throwing exception
+    return null;
   }
-
-  // If everything fails, return null instead of throwing exception
-  return null;
-}
 }
 
 @riverpod
