@@ -54,49 +54,62 @@ class _FutureFilledDropdownState<T> extends State<FutureFilledDropdown<T>> {
   Widget _buildDropdownCard(BuildContext context, List<T> items) {
     final theme = Theme.of(context);
 
-    return Card(
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      margin: const EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: DropdownButtonFormField<T>(
-          onChanged: widget.isReadOnly ?? false
-              ? null
-              : (value) {
-                  widget.controller.selectedItem = value;
-                  widget.onChange?.call(value);
-                },
-          items: items
-              .map(
-                (e) => DropdownMenuItem<T>(
-                  value: e,
-                  child: Text(
-                    widget.titleBuilder.call(e) ?? "",
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: theme.colorScheme.onSurface,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+    return DropdownButtonFormField<T>(
+      onChanged: widget.isReadOnly ?? false
+          ? null
+          : (value) {
+              widget.controller.selectedItem = value;
+              widget.onChange?.call(value);
+            },
+      items: items
+          .map(
+            (e) => DropdownMenuItem<T>(
+              value: e,
+              child: Text(
+                widget.titleBuilder.call(e) ?? "",
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.w500,
                 ),
-              )
-              .toList(),
-          initialValue: widget.controller.selectedItem,
-          isExpanded: true,
-          validator: widget.validator,
-          decoration:
-              widget.decoration ??
-              InputDecoration(
-                labelText: widget.labelText,
-                border: InputBorder.none,
               ),
-          style: widget.style ?? const TextStyle(fontSize: 16),
-          dropdownColor: theme.colorScheme.surface,
-          icon: const Icon(Icons.keyboard_arrow_down_rounded),
-        ),
-      ),
+            ),
+          )
+          .toList(),
+      initialValue: widget.controller.selectedItem,
+      isExpanded: true,
+      validator: widget.validator,
+      decoration:
+          widget.decoration ??
+          InputDecoration(
+            labelText: widget.labelText,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 22,
+              vertical: 20,
+            ),
+          ),
+      style: widget.style ?? const TextStyle(fontSize: 16),
+      dropdownColor: theme.colorScheme.surface,
+      icon: const Icon(Icons.keyboard_arrow_down_rounded),
+      borderRadius: BorderRadius.circular(20),
+      menuMaxHeight: 320,
+      selectedItemBuilder: (context) => items
+          .map(
+            (e) => Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.titleBuilder.call(e) ?? "",
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 }

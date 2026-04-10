@@ -160,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 const SizedBox(height: 20),
                                 SizedBox(
                                   width: double.infinity,
-                                  height: 54,
+                                  height: 44,
                                   child: FilledButton(
                                     style: FilledButton.styleFrom(
                                       shape: const StadiumBorder(),
@@ -231,7 +231,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 const SizedBox(height: 12),
                                 SizedBox(
                                   width: double.infinity,
-                                  height: 54,
+                                  height: 44,
                                   child: OutlinedButton(
                                     style: OutlinedButton.styleFrom(
                                       shape: const StadiumBorder(),
