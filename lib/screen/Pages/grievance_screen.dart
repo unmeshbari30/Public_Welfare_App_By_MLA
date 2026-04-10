@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rajesh_dada_padvi/controllers/home_controller.dart';
 import 'package:rajesh_dada_padvi/helpers/validators.dart';
+import 'package:rajesh_dada_padvi/widgets/app_page_frame.dart';
 import 'package:rajesh_dada_padvi/widgets/custom_filled_text_field.dart';
 import 'package:rajesh_dada_padvi/widgets/custom_multi_file_picker.dart';
 import 'package:rajesh_dada_padvi/widgets/future_filled_dropdown.dart';
@@ -15,269 +16,137 @@ class GrievanceScreen extends ConsumerStatefulWidget {
 }
 
 class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
-  var formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   Widget getScaffold(HomeState state) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFFBA800),
-        automaticallyImplyLeading: true,
-        centerTitle: true,
-        title: Text("तक्रार / विनंती"),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            key: formKey,
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: CustomFilledTextField(
-                    controller: state.fullNameController,
-                    labelText: "पूर्ण नाव / Full Name *",
-                    validator: (value) {
-                      return Validators.validateEmptyField(value);
-                    },
-                  ),
-                ),
+    return AppPageFrame(
+      title: 'तक्रार / विनंती',
+      subtitle: 'Submit your request with all required details.',
+      icon: Icons.edit_note_rounded,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+        child: Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          key: formKey,
+          child: Column(
+            children: [
+              CustomFilledTextField(
+                controller: state.fullNameController,
+                labelText: 'पूर्ण नाव / Full Name *',
+                validator: Validators.validateEmptyField,
+              ),
+              const SizedBox(height: 14),
+              CustomFilledTextField(
+                controller: state.mobileNumberController,
+                labelText: 'मो. नंबर / Mobile Number *',
+                validator: Validators.validateMobileNumber,
+              ),
+              const SizedBox(height: 14),
+              FutureFilledDropdown(
+                items: state.talukaList,
+                controller: state.talukaController,
+                titleBuilder: (item) => item,
+                labelText: 'तालुका / Tehsil',
+                validator: Validators.validateEmptyField,
+              ),
+              const SizedBox(height: 14),
+              FutureFilledDropdown(
+                items: state.gendersList,
+                controller: state.gendersController,
+                labelText: 'लिंग / Gender',
+                titleBuilder: (item) => item,
+              ),
+              const SizedBox(height: 14),
+              CustomFilledTextField(
+                controller: state.addressController,
+                labelText: 'पत्ता / Address',
+                hintText: 'येथे पूर्ण पत्ता टाका...',
+                maxLines: 3,
+                validator: Validators.validateEmptyField,
+              ),
+              const SizedBox(height: 14),
+              CustomFilledTextField(
+                controller: state.yourMessageController,
+                labelText: 'तुमचा मेसेज / Your Message',
+                hintText: 'तक्रार नोंदवा...',
+                maxLines: 5,
+                validator: Validators.validateEmptyField,
+              ),
+              const SizedBox(height: 14),
+              CustomMultiFilePicker(
+                onlyImages: true,
+                didChange: (files) {
+                  ref
+                      .read(homeControllerProvider.notifier)
+                      .updateSelectedFile(files);
+                },
+                labelText: 'फाईल निवडा / Choose File',
+                maxFiles: 2,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () async {
+                        if (formKey.currentState?.validate() ?? false) {
+                          EasyLoading.show(status: 'Saving...');
+                          try {
+                            final temp = await ref
+                                .read(homeControllerProvider.notifier)
+                                .saveComplaint();
 
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: CustomFilledTextField(
-                    controller: state.mobileNumberController,
-                    labelText: "मो. नंबर / Mobile Number *",
-                    validator: (value) {
-                      return Validators.validateMobileNumber(value);
-                    },
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: FutureFilledDropdown(
-                    items: state.talukaList,
-                    controller: state.talukaController,
-                    titleBuilder: (item) => item,
-                    labelText: "तालुका / Tehsil",
-                    validator: (value) {
-                      return Validators.validateEmptyField(value);
-                    },
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: FutureFilledDropdown(
-                    items: state.gendersList,
-                    controller: state.gendersController,
-                    labelText: "लिंग / Gender",
-                    titleBuilder: (item) => item,
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: TextFormField(
-                    maxLines: null,
-                    minLines: 3,
-                    controller: state.addressController,
-                    keyboardType: TextInputType.multiline,
-                    decoration: InputDecoration(
-                      labelText: "पत्ता / Address",
-                      hintText: "येथे पूर्ण पत्ता टाकावा...",
-                      border: OutlineInputBorder(),
-                      alignLabelWithHint: true,
-                    ),
-                    validator: (value) {
-                      return Validators.validateEmptyField(value);
-                    },
-                  ),
-                ),
-
-                // Padding(
-                // padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                // child: CustomFilledTextField(
-                //   maxLines: 5,
-                //   controller: state.complaintMessageController,
-                //   labelText: "Your Message...",
-                //   hintText: "Type your grievance here....",
-                //   keyboardType: TextInputType.multiline,
-                //   )
-                // ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: TextFormField(
-                    maxLines: null,
-                    minLines: 5,
-                    keyboardType: TextInputType.multiline,
-                    controller: state.yourMessageController,
-                    decoration: InputDecoration(
-                      labelText: 'तुमचा मेसेज / Your Message...',
-                      hintText: 'तक्रार नोंदवा...',
-                      border: OutlineInputBorder(),
-                      alignLabelWithHint: true,
-                    ),
-                    validator: (value) {
-                      return Validators.validateEmptyField(value);
-                    },
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: CustomMultiFilePicker(
-                    onlyImages: true,
-
-                    didChange: (files) {
-                      ref
-                          .read(homeControllerProvider.notifier)
-                          .updateSelectedFile(files);
-                      if (files != null && files.isNotEmpty) {
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Selected Files:",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            ...files.map((file) => Text(file.path)).toList(),
-                          ],
-                        );
-                      } else {
-                        const Text(
-                          "No files selected.",
-                          style: TextStyle(color: Colors.grey),
-                        );
-                      }
-                    },
-                    labelText: "फाईल निवडा / Choose File",
-                    maxFiles: 2,
-                  ),
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            // Validate form first
-                            if (formKey.currentState?.validate() ?? false) {
-                              EasyLoading.show(status: "Saving...");
-
-                              print("Save pressed");
-
-                              try {
-                                final temp = await ref
-                                    .read(homeControllerProvider.notifier)
-                                    .saveComplaint();
-
-                                if (temp != null) {
-                                  EasyLoading.dismiss();
-
-                                  await showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text(
-                                        "Success",
-                                        style: TextStyle(color: Colors.green),
-                                      ),
-                                      content: const Text(
-                                        "तुमची तक्रार नोंदवण्यात आली आहे. पुढील ४८ तासांत तुमची तक्रार आमच्या निदर्शनास घेतली जाईल.",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text("OK"),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: const Text(
-                                        "Failed To Save",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                      duration: const Duration(seconds: 2),
-                                      backgroundColor: Colors.red.shade600,
-                                    ),
-                                  );
-                                }
-                              } catch (e) {
-                                print("Unexpected error during save: $e");
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: const Text(
-                                      "Something went wrong",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    duration: const Duration(seconds: 2),
-                                    backgroundColor: Colors.red.shade600,
-                                  ),
-                                );
-                              } finally {
-                                EasyLoading.dismiss();
-                              }
-                            } else {
-                              // Show validation error message
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                            if (temp != null) {
+                              if (!mounted) return;
+                              await showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Success'),
                                   content: const Text(
-                                    "Please fill all required fields",
-                                    style: TextStyle(color: Colors.black),
+                                    'तुमची तक्रार नोंदवण्यात आली आहे. पुढील 48 तासांत ती आमच्या निदर्शनास घेतली जाईल.',
                                   ),
-                                  duration: const Duration(seconds: 2),
-                                  backgroundColor: Colors.orange.shade600,
+                                  actions: [
+                                    FilledButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
                                 ),
                               );
+                            } else {
+                              if (!mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Failed to save')),
+                              );
                             }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                          ),
-                          child: const Text(
-                            "Submit",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ),
+                          } finally {
+                            EasyLoading.dismiss();
+                          }
+                        } else {
+                          if (!mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please fill all required fields'),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('Submit'),
                     ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 10, 10),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                          ),
-                          child: const Text(
-                            "Cancel",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -286,11 +155,11 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var homeStateAsync = ref.watch(homeControllerProvider);
+    final homeStateAsync = ref.watch(homeControllerProvider);
     return homeStateAsync.when(
       data: (state) => getScaffold(state),
       error: (error, stackTrace) =>
-          const Scaffold(body: Text("Something Went Wrong")),
+          const Scaffold(body: Center(child: Text('Something Went Wrong'))),
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
     );

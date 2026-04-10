@@ -5,6 +5,7 @@ import 'package:rajesh_dada_padvi/controllers/authentication_controller.dart';
 import 'package:rajesh_dada_padvi/helpers/validators.dart';
 import 'package:rajesh_dada_padvi/widgets/custom_filled_text_field.dart';
 import 'package:rajesh_dada_padvi/widgets/future_filled_dropdown.dart';
+import 'package:rajesh_dada_padvi/widgets/theme_toggle_button.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -14,235 +15,175 @@ class SignUpScreen extends ConsumerStatefulWidget {
 }
 
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
-  @override
-  void dispose() {
-    final state = ref.read(authenticationControllerProvider).value;
-
-    state?.firstNameController.dispose();
-    state?.middleNameController.dispose();
-    state?.lastNameController.dispose();
-    state?.whatsappNumberController.dispose();
-    state?.mobileNumberController.dispose();
-    state?.passwordController.dispose();
-    state?.ageController.dispose();
-    state?.emailController.dispose();
-
-    super.dispose();
-  }
-
-  var formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   Widget getScaffold(AuthenticationState state) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF1F5F9), // Light bluish background
       appBar: AppBar(
-        title: const Text("Register", style: TextStyle(color: Colors.black)),
-        centerTitle: true,
-        backgroundColor: Colors.amber,
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text('Register'),
+        actions: const [ThemeToggleButton()],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(8),
-          child: Form(
-            // autovalidateMode: AutovalidateMode.onUserInteraction,
-            key: formKey,
-            child: Card(
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text(
-                      "Create an Account",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 560),
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: theme.colorScheme.outlineVariant),
+                ),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Create an account',
+                        style: theme.textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: CustomFilledTextField(
+                      const SizedBox(height: 8),
+                      Text(
+                        'Register once to access public services, certificates, and grievance support.',
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      CustomFilledTextField(
                         controller: state.firstNameController,
-                        labelText: "पहिले नाव / First Name *",
+                        labelText: 'पहिले नाव / First Name *',
                         validator: Validators.validateEmptyField,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: CustomFilledTextField(
+                      const SizedBox(height: 14),
+                      CustomFilledTextField(
                         controller: state.middleNameController,
-                        labelText: "मधले नाव / Middle Name",
+                        labelText: 'मधले नाव / Middle Name',
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: CustomFilledTextField(
+                      const SizedBox(height: 14),
+                      CustomFilledTextField(
                         controller: state.lastNameController,
-                        labelText: "आडनाव / Last Name *",
+                        labelText: 'आडनाव / Last Name *',
                         validator: Validators.validateEmptyField,
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      const SizedBox(height: 14),
+                      Row(
+                        children: [
+                          Expanded(
                             child: FutureFilledDropdown(
                               items: state.gendersList,
                               controller: state.gendersController,
-                              labelText: "लिंग / Gender *",
+                              labelText: 'लिंग / Gender *',
                               titleBuilder: (item) => item,
                               validator: Validators.validateEmptyField,
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          const SizedBox(width: 12),
+                          Expanded(
                             child: FutureFilledDropdown(
                               items: state.tehsilList,
                               controller: state.tehsilController,
-                              labelText: "तालुका / Taluka *",
+                              labelText: 'तालुका / Taluka *',
                               titleBuilder: (item) => item,
                               validator: Validators.validateEmptyField,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      Row(
+                        children: [
+                          Expanded(
                             child: CustomFilledTextField(
                               controller: state.ageController,
-                              labelText: "वय / Age *",
+                              labelText: '?? / Age *',
                               keyboardType: TextInputType.number,
                               validator: Validators.validateEmptyField,
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          const SizedBox(width: 12),
+                          Expanded(
                             child: FutureFilledDropdown(
                               items: state.bloodGroup,
                               controller: state.bloodGroupController,
-                              labelText: "रक्त गट / Blood Group *",
+                              labelText: 'रक्त गट / Blood Group *',
                               titleBuilder: (item) => item,
                               validator: Validators.validateEmptyField,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: CustomFilledTextField(
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      CustomFilledTextField(
                         controller: state.emailController,
-                        labelText: "ईमेल / Email",
+                        labelText: 'ईमेल / Email',
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: CustomFilledTextField(
+                      const SizedBox(height: 14),
+                      CustomFilledTextField(
                         controller: state.whatsappNumberController,
-                        labelText: "व्हाट्सअँप नं. / Whatsapp No.",
+                        labelText: 'व्हॉट्सअॅप नं. / Whatsapp No.',
                         validator: Validators.validateMobileNumber,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: CustomFilledTextField(
+                      const SizedBox(height: 14),
+                      CustomFilledTextField(
                         controller: state.mobileNumberController,
-                        labelText: "मो. नंबर / Mobile Number*",
+                        labelText: 'मो. नंबर / Mobile Number *',
                         validator: Validators.validateMobileNumber,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: CustomFilledTextField(
+                      const SizedBox(height: 14),
+                      CustomFilledTextField(
                         controller: state.passwordController,
-                        labelText: "पासवर्ड तयार करा / Create Password *",
+                        labelText: 'पासवर्ड तयार करा / Create Password *',
                         validator: Validators.validateEmptyField,
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () async { 
-                        if (formKey.currentState!.validate()) {
-                          try {
-                            EasyLoading.show();
-                            var successful = await ref
-                                .read(authenticationControllerProvider.notifier)
-                                .userRegistration();
-                            if (successful?.isRegistered == true) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    successful?.message ?? "",
-                                    style: const TextStyle(color: Colors.black),
+                      const SizedBox(height: 24),
+                      FilledButton(
+                        onPressed: () async {
+                          if (formKey.currentState!.validate()) {
+                            try {
+                              EasyLoading.show();
+                              final successful = await ref
+                                  .read(
+                                    authenticationControllerProvider.notifier,
+                                  )
+                                  .userRegistration();
+                              if (successful?.isRegistered == true) {
+                                if (!mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      successful?.message ?? 'Registered',
+                                    ),
                                   ),
-                                  duration: const Duration(seconds: 2),
-                                  backgroundColor: Colors.green.shade600,
-                                ),
-                              );
-                              Navigator.pop(context);
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    successful?.message ??
-                                        "Something went wrong",
-                                    style: const TextStyle(color: Colors.black),
+                                );
+                                Navigator.pop(context);
+                              } else {
+                                if (!mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      successful?.message ??
+                                          'Something went wrong',
+                                    ),
                                   ),
-                                  duration: const Duration(seconds: 2),
-                                  backgroundColor: Colors.red.shade600,
-                                ),
-                              );
+                                );
+                              }
+                            } finally {
+                              EasyLoading.dismiss();
                             }
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text(
-                                  "Something went wrong",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                duration: const Duration(seconds: 2),
-                                backgroundColor: Colors.red.shade600,
-                              ),
-                            );
-                          } finally {
-                            EasyLoading.dismiss();
                           }
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.amber,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        textStyle: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                        },
+                        child: const Text('रजिस्टर / Register'),
                       ),
-                      child: const Text("रजिस्टर / Register", style: TextStyle(color: Colors.black),),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -254,24 +195,21 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var asyncSignUpState = ref.watch(authenticationControllerProvider);
+    final asyncSignUpState = ref.watch(authenticationControllerProvider);
     return asyncSignUpState.when(
-      data: (state) {
-        return getScaffold(state);
-      },
+      data: (state) => getScaffold(state),
       error: (error, stackTrace) {
         return Scaffold(
           body: Center(
             child: AlertDialog(
-              title: const Text("Something went wrong"),
+              title: const Text('Something went wrong'),
               content: Text(error.toString()),
             ),
           ),
         );
       },
-      loading: () {
-        return Scaffold(body: Center(child: CircularProgressIndicator()));
-      },
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
     );
   }
 }

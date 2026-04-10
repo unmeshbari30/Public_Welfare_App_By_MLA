@@ -11,15 +11,23 @@ class CustomMultiFilePicker extends StatefulWidget {
   final int? maxFiles;
   final bool onlyImages;
 
-  const CustomMultiFilePicker({super.key, this.controller, this.validator, this.labelText, this.didChange, this.maxFiles,  this.onlyImages = false,});
+  const CustomMultiFilePicker({
+    super.key,
+    this.controller,
+    this.validator,
+    this.labelText,
+    this.didChange,
+    this.maxFiles,
+    this.onlyImages = false,
+  });
 
   @override
-  State<CustomMultiFilePicker> createState() => _CustomFilledMultiFilePickerState();
+  State<CustomMultiFilePicker> createState() =>
+      _CustomFilledMultiFilePickerState();
 }
 
 class _CustomFilledMultiFilePickerState extends State<CustomMultiFilePicker> {
-  final String initMsg = "No File Chosen";
-  final FocusNode focusNode = FocusNode();
+  final String initMsg = "No file chosen";
   List<File> selectedFiles = [];
 
   void updateFiles(List<File>? files) {
@@ -38,62 +46,55 @@ class _CustomFilledMultiFilePickerState extends State<CustomMultiFilePicker> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       margin: const EdgeInsets.all(0),
-      elevation: 2,
-      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(25)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: TextEditingController(
-                      text: 
-                          selectedFiles.isNotEmpty
-                              ? "Selected Files:" //selectedFiles.map((f) => f.path.split('/').last).join(', ')
-                              : initMsg,
+                      text: selectedFiles.isNotEmpty
+                          ? "Selected files"
+                          : initMsg,
                     ),
                     decoration: InputDecoration(
                       labelText: widget.labelText,
-                      // filled: true,
-                      // border: InputBorder.,
+                      border: InputBorder.none,
                       enabled: false,
                     ),
                   ),
                 ),
-
-                // InkWell(
-                //   onTap: () async {
-                //     FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true, );
-
-                //     if (result != null && result.paths.isNotEmpty) {
-                //       List<File> files = result.paths.whereType<String>().map((path) => File(path)).toList();
-                //       updateFiles(files);
-                //     }
-                //   },
-                //   child: const Padding(padding: EdgeInsets.all(8.0), child: Icon(Icons.attach_file_rounded)),
-                // ),
-
-                 InkWell(
+                InkWell(
                   onTap: () async {
                     final int? max = widget.maxFiles;
                     final int currentCount = selectedFiles.length;
 
                     if (max != null && currentCount >= max) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("You can only select up to $max files.")),
+                        SnackBar(
+                          content: Text(
+                            "You can only select up to $max files.",
+                          ),
+                        ),
                       );
                       return;
                     }
 
-                    FilePickerResult? result = await FilePicker.platform.pickFiles(
-                      allowMultiple: true,
-                      type: widget.onlyImages ? FileType.image : FileType.any,
-                    );
+                    FilePickerResult? result = await FilePicker.platform
+                        .pickFiles(
+                          allowMultiple: true,
+                          type: widget.onlyImages
+                              ? FileType.image
+                              : FileType.any,
+                        );
 
                     if (result != null && result.paths.isNotEmpty) {
                       List<File> newFiles = result.paths
@@ -102,7 +103,7 @@ class _CustomFilledMultiFilePickerState extends State<CustomMultiFilePicker> {
                           .toList();
 
                       if (max != null) {
-                        int remaining = max - currentCount;
+                        final remaining = max - currentCount;
                         if (newFiles.length > remaining) {
                           newFiles = newFiles.sublist(0, remaining);
                         }
@@ -112,7 +113,7 @@ class _CustomFilledMultiFilePickerState extends State<CustomMultiFilePicker> {
                     }
                   },
                   child: const Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8),
                     child: Icon(Icons.attach_file_rounded),
                   ),
                 ),
@@ -121,23 +122,34 @@ class _CustomFilledMultiFilePickerState extends State<CustomMultiFilePicker> {
           ),
           if (selectedFiles.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                    selectedFiles
-                        .map(
-                          (file) => Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(file.path.split('/').last),
+                children: selectedFiles
+                    .map(
+                      (file) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              file.path.split('/').last,
+                              style: TextStyle(
+                                color: theme.colorScheme.onSurface,
+                                fontWeight: FontWeight.w500,
                               ),
-                              IconButton(onPressed: () => removeFile(file), icon: const Icon(Icons.close)),
-                            ],
+                            ),
                           ),
-                        )
-                        .toList(),
+                          IconButton(
+                            onPressed: () => removeFile(file),
+                            icon: Icon(
+                              Icons.close_rounded,
+                              color: theme.colorScheme.error,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList(),
               ),
             ),
         ],

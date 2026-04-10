@@ -1,11 +1,10 @@
-enum PrefrencesKeyEnum{
-
-  userName("user_name"),  //string
-  isLoggedin("isLogin"),    // bool
-  localPin("loginPin"), //string 
+enum PrefrencesKeyEnum {
+  userName("user_name"), //string
+  isLoggedin("isLogin"), // bool
+  localPin("loginPin"), //string
   isfirstLocalPin("firstLoginPin"), // bool
   acessToken("accessToken"),
-  rememberMe("rememberMe"),  // bool
+  rememberMe("rememberMe"), // bool
   accessToken("accessToken"), //string
   refreshToken("refreshToken"),
 
@@ -16,9 +15,9 @@ enum PrefrencesKeyEnum{
   gender("gender"),
   age("age"),
   mailId("mailId"),
-  bloodGroup("bloodGroup")
-  ;
+  bloodGroup("bloodGroup"),
+  themeMode("themeMode");
 
   final String key;
-  const PrefrencesKeyEnum(this.key,);
+  const PrefrencesKeyEnum(this.key);
 }

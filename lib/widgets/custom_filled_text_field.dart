@@ -15,23 +15,24 @@ class CustomFilledTextField extends StatefulWidget {
   final int? maxLines;
   final String? hintText;
   final int? maxLength;
-  const CustomFilledTextField(
-      {super.key,
-      this.onChanged,
-      this.controller,
-      this.style,
-      this.isReadOnly = false,
-      this.labelText,
-      this.validator,
-      this.enabled = true,
-      this.obscureText = false,
-      this.suffixIcon,
-      this.textCapitalization = TextCapitalization.none,
-      this.keyboardType,
-      this.maxLines,
-      this.hintText,
-      this.maxLength
-      });
+
+  const CustomFilledTextField({
+    super.key,
+    this.onChanged,
+    this.controller,
+    this.style,
+    this.isReadOnly = false,
+    this.labelText,
+    this.validator,
+    this.enabled = true,
+    this.obscureText = false,
+    this.suffixIcon,
+    this.textCapitalization = TextCapitalization.none,
+    this.keyboardType,
+    this.maxLines,
+    this.hintText,
+    this.maxLength,
+  });
 
   @override
   State<CustomFilledTextField> createState() => _CustomFilledTextFieldState();
@@ -42,39 +43,27 @@ class _CustomFilledTextFieldState extends State<CustomFilledTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      margin: const EdgeInsets.all(0),
-      color: Colors.red,
-      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Transform.scale(
-        scale: 1.01,
-        child: TextFormField(
-          onChanged: (value) {
-            return widget.onChanged?.call(value);
-          },
-          maxLength: widget.maxLength,
-          obscureText: widget.obscureText ?? false,
-          controller: widget.controller,
-          enabled: widget.enabled,
-          // maxLines: widget.maxLines,
-          keyboardType: widget.keyboardType,
-          textCapitalization: widget.textCapitalization,
-          readOnly: widget.isReadOnly ?? false,
-          decoration: InputDecoration(
-            labelText: widget.labelText,
-            hintText: widget.hintText,
-            suffixIcon: widget.suffixIcon,
-            filled: true,
-            border: InputBorder.none,
-            errorStyle: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
-          ),
-          style: widget.style ?? const TextStyle(fontSize: 17),
-          focusNode: focusNode,
-          onTapOutside: (event) => focusNode.unfocus(),
-          validator: widget.validator,
-        ),
+    return TextFormField(
+      onChanged: widget.onChanged,
+      maxLength: widget.maxLength,
+      obscureText: widget.obscureText ?? false,
+      controller: widget.controller,
+      enabled: widget.enabled,
+      maxLines: widget.obscureText == true ? 1 : widget.maxLines ?? 1,
+      keyboardType: widget.keyboardType,
+      textCapitalization: widget.textCapitalization,
+      readOnly: widget.isReadOnly ?? false,
+      decoration: InputDecoration(
+        labelText: widget.labelText,
+        hintText: widget.hintText,
+        suffixIcon: widget.suffixIcon,
       ),
+      style:
+          widget.style ??
+          const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      focusNode: focusNode,
+      onTapOutside: (event) => focusNode.unfocus(),
+      validator: widget.validator,
     );
   }
 }
