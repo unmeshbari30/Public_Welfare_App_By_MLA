@@ -78,9 +78,18 @@ class _AdminGrievanceScreenState extends ConsumerState<AdminGrievanceScreen> {
                                       ),
                                     ),
                                   );
+                                } else {
+                                  if (!mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Failed to delete complaint',
+                                      ),
+                                    ),
+                                  );
                                 }
                               } finally {
-                                EasyLoading.dismiss();
+                                await EasyLoading.dismiss();
                               }
                             },
                           ),

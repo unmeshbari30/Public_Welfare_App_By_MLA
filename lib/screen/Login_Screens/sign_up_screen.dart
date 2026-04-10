@@ -31,10 +31,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 560),
-              child: Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(color: theme.colorScheme.outlineVariant),
                 ),
@@ -74,51 +74,74 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         validator: Validators.validateEmptyField,
                       ),
                       const SizedBox(height: 14),
-                      Row(
+                      Column(
                         children: [
-                          Expanded(
-                            child: FutureFilledDropdown(
-                              items: state.gendersList,
-                              controller: state.gendersController,
-                              labelText: 'लिंग / Gender *',
-                              titleBuilder: (item) => item,
-                              validator: Validators.validateEmptyField,
-                            ),
+                          FutureFilledDropdown(
+                            items: state.gendersList,
+                            controller: state.gendersController,
+                            labelText: 'लिंग / Gender *',
+                            titleBuilder: (item) => item,
+                            validator: Validators.validateEmptyField,
                           ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: FutureFilledDropdown(
-                              items: state.tehsilList,
-                              controller: state.tehsilController,
-                              labelText: 'तालुका / Taluka *',
-                              titleBuilder: (item) => item,
-                              validator: Validators.validateEmptyField,
-                            ),
+                          const SizedBox(height: 14),
+                          FutureFilledDropdown(
+                            items: state.tehsilList,
+                            controller: state.tehsilController,
+                            labelText: 'तालुका / Taluka *',
+                            titleBuilder: (item) => item,
+                            validator: Validators.validateEmptyField,
                           ),
                         ],
                       ),
                       const SizedBox(height: 14),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomFilledTextField(
-                              controller: state.ageController,
-                              labelText: 'वय / Age *',
-                              keyboardType: TextInputType.number,
-                              validator: Validators.validateEmptyField,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: FutureFilledDropdown(
-                              items: state.bloodGroup,
-                              controller: state.bloodGroupController,
-                              labelText: 'रक्त गट / Blood Group *',
-                              titleBuilder: (item) => item,
-                              validator: Validators.validateEmptyField,
-                            ),
-                          ),
-                        ],
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final useTwoColumns = constraints.maxWidth >= 420;
+
+                          if (!useTwoColumns) {
+                            return Column(
+                              children: [
+                                CustomFilledTextField(
+                                  controller: state.ageController,
+                                  labelText: 'वय / Age *',
+                                  keyboardType: TextInputType.number,
+                                  validator: Validators.validateEmptyField,
+                                ),
+                                const SizedBox(height: 14),
+                                FutureFilledDropdown(
+                                  items: state.bloodGroup,
+                                  controller: state.bloodGroupController,
+                                  labelText: 'रक्त गट / Blood Group *',
+                                  titleBuilder: (item) => item,
+                                  validator: Validators.validateEmptyField,
+                                ),
+                              ],
+                            );
+                          }
+
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: CustomFilledTextField(
+                                  controller: state.ageController,
+                                  labelText: 'वय / Age *',
+                                  keyboardType: TextInputType.number,
+                                  validator: Validators.validateEmptyField,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: FutureFilledDropdown(
+                                  items: state.bloodGroup,
+                                  controller: state.bloodGroupController,
+                                  labelText: 'रक्त गट / Blood Group *',
+                                  titleBuilder: (item) => item,
+                                  validator: Validators.validateEmptyField,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                       const SizedBox(height: 14),
                       CustomFilledTextField(

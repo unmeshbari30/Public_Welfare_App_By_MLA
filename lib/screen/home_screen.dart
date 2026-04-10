@@ -136,15 +136,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   );
                   if (loginResponse?.isLoggedIn ?? false) {
                     if (!mounted) return;
+                    await EasyLoading.dismiss();
                     Navigator.of(context).pop();
-                    await Navigator.of(context).push(
+                    Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const AdminGrievanceScreen(),
                       ),
                     );
                   }
                 } finally {
-                  EasyLoading.dismiss();
+                  await EasyLoading.dismiss();
                 }
               },
               child: const Text('Login'),
@@ -660,12 +661,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ),
               const SizedBox(height: 6),
               InkWell(
-                onTap: () => launchURL('mailto:contact@exaltasoft.in'),
+                borderRadius: BorderRadius.circular(12),
+                onTap: _openSupportEmail,
                 child: Text(
                   'contact@exaltasoft.in',
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: theme.colorScheme.primary,
                     fontWeight: FontWeight.w700,
+                    decoration: TextDecoration.underline,
+                    decorationColor: theme.colorScheme.primary,
                   ),
                 ),
               )],
@@ -920,6 +924,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final uri = Uri.tryParse(url);
     if (uri != null && await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> _openSupportEmail() async {
+    final uri = Uri(
+      scheme: 'mailto',
+      path: 'contact@exaltasoft.in',
+    );
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     }
   }
 
