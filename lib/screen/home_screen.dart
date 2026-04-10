@@ -931,10 +931,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final uri = Uri(
       scheme: 'mailto',
       path: 'contact@exaltasoft.in',
+      queryParameters: const {
+        'subject': 'Support Request',
+      },
     );
 
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+    final launched = await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!launched && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No email app found to open this address'),
+        ),
+      );
     }
   }
 
