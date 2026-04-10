@@ -44,17 +44,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 480),
+                constraints: const BoxConstraints(maxWidth: 460),
                 child: Column(
                   children: [
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surface,
-                        borderRadius: BorderRadius.circular(32),
+                        borderRadius: BorderRadius.circular(30),
                         border: Border.all(
                           color: theme.colorScheme.outlineVariant,
                         ),
@@ -62,22 +62,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.primary.withValues(
-                                alpha: 0.1,
-                              ),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Icon(
-                              Icons.account_balance_rounded,
+                          Text(
+                            'नमस्कार',
+                            style: theme.textTheme.labelLarge?.copyWith(
                               color: theme.colorScheme.primary,
-                              size: 30,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.3,
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 10),
                           Text(
                             'Welcome back',
                             style: theme.textTheme.headlineMedium?.copyWith(
@@ -86,12 +79,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Login to access citizen services, grievance support, and local updates.',
+                            'Login to continue with public services, grievance support, and local updates.',
                             style: theme.textTheme.bodyLarge?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
+                              height: 1.5,
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 28),
                           Form(
                             autovalidateMode: submitted
                                 ? AutovalidateMode.always
@@ -138,92 +132,121 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                CheckboxListTile(
-                                  value: rememberMe,
-                                  contentPadding: EdgeInsets.zero,
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  title: const Text('Remember me'),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      rememberMe = value ?? false;
-                                    });
-                                  },
-                                ),
-                                const SizedBox(height: 12),
-                                FilledButton(
-                                  onPressed: () async {
-                                    setState(() {
-                                      submitted = true;
-                                    });
-
-                                    if (formKey.currentState!.validate()) {
-                                      EasyLoading.show();
-                                      try {
-                                        final loginResult = await ref
-                                            .read(
-                                              authenticationControllerProvider
-                                                  .notifier,
-                                            )
-                                            .loginUser();
-
-                                        if (loginResult != null) {
-                                          final prefs = await ref.watch(
-                                            sharedPreferencesProvider.future,
-                                          );
-                                          await prefs.setBool(
-                                            PrefrencesKeyEnum.rememberMe.key,
-                                            rememberMe,
-                                          );
-                                          await prefs.setBool(
-                                            PrefrencesKeyEnum.isLoggedin.key,
-                                            true,
-                                          );
-
-                                          if (!mounted) return;
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text('Login successful'),
-                                            ),
-                                          );
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const HomeScreen(),
-                                            ),
-                                          );
-                                        } else {
-                                          if (!mounted) return;
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text('Login failed'),
-                                            ),
-                                          );
-                                        }
-                                      } finally {
-                                        EasyLoading.dismiss();
-                                      }
-                                    }
-                                  },
-                                  child: const Text('Login'),
-                                ),
-                                const SizedBox(height: 12),
-                                OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SignUpScreen(),
+                                Theme(
+                                  data: theme.copyWith(
+                                    checkboxTheme: CheckboxThemeData(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(6),
                                       ),
-                                    );
-                                  },
-                                  child: const Text('Create New Account'),
+                                    ),
+                                  ),
+                                  child: CheckboxListTile(
+                                    value: rememberMe,
+                                    contentPadding: EdgeInsets.zero,
+                                    dense: true,
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    title: Text(
+                                      'Remember me',
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        rememberMe = value ?? false;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 54,
+                                  child: FilledButton(
+                                    style: FilledButton.styleFrom(
+                                      shape: const StadiumBorder(),
+                                    ),
+                                    onPressed: () async {
+                                      setState(() {
+                                        submitted = true;
+                                      });
+
+                                      if (formKey.currentState!.validate()) {
+                                        EasyLoading.show();
+                                        try {
+                                          final loginResult = await ref
+                                              .read(
+                                                authenticationControllerProvider
+                                                    .notifier,
+                                              )
+                                              .loginUser();
+
+                                          if (loginResult != null) {
+                                            final prefs = await ref.watch(
+                                              sharedPreferencesProvider.future,
+                                            );
+                                            await prefs.setBool(
+                                              PrefrencesKeyEnum.rememberMe.key,
+                                              rememberMe,
+                                            );
+                                            await prefs.setBool(
+                                              PrefrencesKeyEnum.isLoggedin.key,
+                                              true,
+                                            );
+
+                                            if (!mounted) return;
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Login successful',
+                                                ),
+                                              ),
+                                            );
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const HomeScreen(),
+                                              ),
+                                            );
+                                          } else {
+                                            if (!mounted) return;
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text('Login failed'),
+                                              ),
+                                            );
+                                          }
+                                        } finally {
+                                          EasyLoading.dismiss();
+                                        }
+                                      }
+                                    },
+                                    child: const Text('Login'),
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 54,
+                                  child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      shape: const StadiumBorder(),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SignUpScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text('Create Account'),
+                                  ),
                                 ),
                               ],
                             ),

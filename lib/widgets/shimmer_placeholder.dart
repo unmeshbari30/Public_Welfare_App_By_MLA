@@ -9,26 +9,25 @@ class ShimmerPlaceholderFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  return Card(
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-    elevation: 2,
-    margin: const EdgeInsets.all(0),
-    color: backgroundColor,
-    shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(25)),
-    child: Shimmer(
-      color: shimmerColor ?? Colors.white,
-      colorOpacity: 1.0,
-      duration: const Duration(milliseconds: 1500),
-      interval: const Duration(milliseconds: 100),
-      child: Transform.scale(
-        scale: 1.01,
-        child: const SizedBox(
-          height: 57,
-          width: double.maxFinite,
+    return Card(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      elevation: 2,
+      margin: const EdgeInsets.all(0),
+      color: backgroundColor,
+      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(25)),
+      child: Shimmer(
+        color: shimmerColor ?? Colors.grey.shade500,
+        colorOpacity: 0.8,
+        duration: const Duration(milliseconds: 1500),
+        interval: const Duration(milliseconds: 100),
+        child: Transform.scale(
+          scale: 1.01,
+          child: const SizedBox(
+            height: 57,
+            width: double.maxFinite,
+          ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }

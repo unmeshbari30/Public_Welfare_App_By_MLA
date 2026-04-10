@@ -41,6 +41,8 @@ class _AchievementsScreenState extends ConsumerState<AchievementsScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(26),
                         child: Shimmer(
+                          color: Colors.grey.shade500,
+                          colorOpacity: 0.8,
                           child: Container(
                             height: 240,
                             color: Colors.grey.shade300,

@@ -87,61 +87,74 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: FilledButton(
-                      onPressed: () async {
-                        if (formKey.currentState?.validate() ?? false) {
-                          EasyLoading.show(status: 'Saving...');
-                          try {
-                            final temp = await ref
-                                .read(homeControllerProvider.notifier)
-                                .saveComplaint();
+                    child: SizedBox(
+                      height: 44,
+                      child: FilledButton(
+                        onPressed: () async {
+                          if (formKey.currentState?.validate() ?? false) {
+                            EasyLoading.show(status: 'Saving...');
+                            try {
+                              final temp = await ref
+                                  .read(homeControllerProvider.notifier)
+                                  .saveComplaint();
 
-                            if (temp != null) {
-                              if (!mounted) return;
-                              await showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text('Success'),
-                                  content: const Text(
-                                    'तुमची तक्रार नोंदवण्यात आली आहे. पुढील 48 तासांत ती आमच्या निदर्शनास घेतली जाईल.',
-                                  ),
-                                  actions: [
-                                    FilledButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('OK'),
+                              if (temp != null) {
+                                if (!mounted) return;
+                                await showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Success'),
+                                    content: const Text(
+                                      'तुमची तक्रार नोंदवण्यात आली आहे. पुढील 48 तासांत ती आमच्या निदर्शनास घेतली जाईल.',
                                     ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              if (!mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Failed to save')),
-                              );
+                                    actions: [
+                                      FilledButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                if (!mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Failed to save'),
+                                  ),
+                                );
+                              }
+                            } finally {
+                              EasyLoading.dismiss();
                             }
-                          } finally {
-                            EasyLoading.dismiss();
+                          } else {
+                            if (!mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Please fill all required fields',
+                                ),
+                              ),
+                            );
                           }
-                        } else {
-                          if (!mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill all required fields'),
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text('Submit'),
+                        },
+                        child: const Text('Submit'),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
+                    child: SizedBox(
+                      height: 44,
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: OutlinedButton.styleFrom(
+                          shape: const StadiumBorder(),
+                        ),
+                        child: const Text('Cancel'),
+                      ),
                     ),
                   ),
                 ],

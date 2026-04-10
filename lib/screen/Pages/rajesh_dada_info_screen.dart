@@ -39,6 +39,8 @@ class _RajeshDadaInfoScreenState extends ConsumerState<RajeshDadaInfoScreen> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(28),
                       child: Shimmer(
+                        color: Colors.grey.shade500,
+                        colorOpacity: 0.8,
                         child: Container(
                           height: 280,
                           color: Colors.grey.shade300,
@@ -49,6 +51,8 @@ class _RajeshDadaInfoScreenState extends ConsumerState<RajeshDadaInfoScreen> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(26),
                       child: Shimmer(
+                        color: Colors.grey.shade500,
+                        colorOpacity: 0.8,
                         child: Container(
                           height: 320,
                           color: Colors.grey.shade300,

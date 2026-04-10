@@ -413,6 +413,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               return ClipRRect(
                 borderRadius: BorderRadius.circular(24),
                 child: Shimmer(
+                  color: Colors.grey.shade500,
+                  colorOpacity: 0.8,
                   child: Container(color: Colors.grey.shade400),
                 ),
               );

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rajesh_dada_padvi/controllers/authentication_controller.dart';
@@ -85,7 +85,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               validator: Validators.validateEmptyField,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 6),
                           Expanded(
                             child: FutureFilledDropdown(
                               items: state.tehsilList,
@@ -103,12 +103,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           Expanded(
                             child: CustomFilledTextField(
                               controller: state.ageController,
-                              labelText: '?? / Age *',
+                              labelText: 'वय / Age *',
                               keyboardType: TextInputType.number,
                               validator: Validators.validateEmptyField,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 6),
                           Expanded(
                             child: FutureFilledDropdown(
                               items: state.bloodGroup,
@@ -128,7 +128,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       const SizedBox(height: 14),
                       CustomFilledTextField(
                         controller: state.whatsappNumberController,
-                        labelText: 'व्हॉट्सअॅप नं. / Whatsapp No.',
+                        labelText: 'व्हॉट्सॲप नं. / Whatsapp No.',
                         validator: Validators.validateMobileNumber,
                       ),
                       const SizedBox(height: 14),
@@ -140,7 +140,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       const SizedBox(height: 14),
                       CustomFilledTextField(
                         controller: state.passwordController,
-                        labelText: 'पासवर्ड तयार करा / Create Password *',
+                        labelText: 'नवीन पासवर्ड/ New Password *',
                         validator: Validators.validateEmptyField,
                       ),
                       const SizedBox(height: 24),
