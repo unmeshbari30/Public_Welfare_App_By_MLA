@@ -199,7 +199,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 border: Border.all(color: theme.colorScheme.outlineVariant),
               ),
               child: Icon(
-                Icons.admin_panel_settings_rounded,
+                Icons.verified_user_rounded,
                 color: theme.colorScheme.primary,
               ),
             ),
