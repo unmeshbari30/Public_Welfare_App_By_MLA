@@ -70,7 +70,7 @@ class _CertificateScreenState extends ConsumerState<CertificateScreen> {
         build: (pw.Context context) {
           return pw.Stack(
             children: [
-              pw.Positioned.fill(child: pw.Image(image, fit: pw.BoxFit.cover)),
+              pw.Positioned.fill(child: pw.Image(image, fit: pw.BoxFit.contain)),
               pw.Positioned(
                 left: 200,
                 top: 180,
