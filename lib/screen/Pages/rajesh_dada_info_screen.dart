@@ -85,13 +85,13 @@ class _RajeshDadaInfoScreenState extends ConsumerState<RajeshDadaInfoScreen> {
                             'lib/assets/Icons/broken_image.png',
                             height: 280,
                             width: double.infinity,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                           )
                         : Image.memory(
                             imageBytes,
                             height: 280,
                             width: double.infinity,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                           ),
                   ),
                   const SizedBox(height: 16),

@@ -82,19 +82,21 @@ class _AchievementsScreenState extends ConsumerState<AchievementsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(26),
-                          ),
+                          borderRadius: (file.description ?? '').trim().isEmpty
+                              ? BorderRadius.circular(26)
+                              : const BorderRadius.vertical(
+                                  top: Radius.circular(26),
+                                ),
                           child: imageBytes == null
                               ? Image.asset(
                                   'lib/assets/Icons/broken_image.png',
-                                  height: 220,
-                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  fit: BoxFit.contain,
                                 )
                               : Image.memory(
                                   imageBytes,
-                                  height: 220,
-                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  fit: BoxFit.contain,
                                 ),
                         ),
                         if ((file.description ?? '').trim().isNotEmpty)
