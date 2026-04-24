@@ -63,8 +63,12 @@ class _RajeshDadaInfoScreenState extends ConsumerState<RajeshDadaInfoScreen> {
                 );
               }
               if (!snapshot.hasData || snapshot.data == null) {
-                return const Center(
-                  child: Text('Failed to load data. Pull down to refresh.'),
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.55,
+                  child: const Center(
+                    child: Text('Failed to load data.\nPull down to retry.',
+                        textAlign: TextAlign.center),
+                  ),
                 );
               }
               final model = snapshot.data!;
@@ -128,13 +132,38 @@ class _RajeshDadaInfoScreenState extends ConsumerState<RajeshDadaInfoScreen> {
     return text.split('\n').map((paragraph) => '$indent$paragraph').join('\n');
   }
 
+  Widget _errorScreen() {
+    return AppPageFrame(
+      title: 'आपले राजेश दादा',
+      subtitle: 'Profile and background information.',
+      icon: Icons.account_box_rounded,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(rajeshInfoControllerProvider);
+          await ref.read(rajeshInfoControllerProvider.future);
+        },
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.55,
+              child: const Center(
+                child: Text('Failed to load data.\nPull down to retry.',
+                    textAlign: TextAlign.center),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final rajeshInfoStateAsync = ref.watch(rajeshInfoControllerProvider);
     return rajeshInfoStateAsync.when(
       data: (state) => getScaffold(state),
-      error: (error, stackTrace) =>
-          const Scaffold(body: Text('Something Went Wrong')),
+      error: (error, stackTrace) => _errorScreen(),
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
     );

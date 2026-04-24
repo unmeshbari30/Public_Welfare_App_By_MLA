@@ -56,7 +56,13 @@ class _AchievementsScreenState extends ConsumerState<AchievementsScreen> {
 
               final files = snapshot.data?.files ?? [];
               if (files.isEmpty) {
-                return const Center(child: Text('No data found'));
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.55,
+                  child: const Center(
+                    child: Text('Failed to load data.\nPull down to retry.',
+                        textAlign: TextAlign.center),
+                  ),
+                );
               }
 
               return Column(
@@ -119,13 +125,38 @@ class _AchievementsScreenState extends ConsumerState<AchievementsScreen> {
     );
   }
 
+  Widget _errorScreen() {
+    return AppPageFrame(
+      title: 'कामगिरी',
+      subtitle: 'Highlights and development work.',
+      icon: Icons.workspace_premium_rounded,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(achievementsControllerProvider);
+          await ref.read(achievementsControllerProvider.future);
+        },
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.55,
+              child: const Center(
+                child: Text('Failed to load data.\nPull down to retry.',
+                    textAlign: TextAlign.center),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final achievementStateAsync = ref.watch(achievementsControllerProvider);
     return achievementStateAsync.when(
       data: (state) => getScaffold(state),
-      error: (error, stackTrace) =>
-          const Scaffold(body: Text('Something Went Wrong')),
+      error: (error, stackTrace) => _errorScreen(),
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
     );

@@ -57,7 +57,13 @@ class _WomenEmpowermentScreenState
               }
               final items = snapshot.data?.files ?? [];
               if (items.isEmpty) {
-                return const Center(child: Text('Failed to load data.'));
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.55,
+                  child: const Center(
+                    child: Text('Failed to load data.\nPull down to retry.',
+                        textAlign: TextAlign.center),
+                  ),
+                );
               }
               return Column(
                 children: items.map((item) {
@@ -119,13 +125,38 @@ class _WomenEmpowermentScreenState
     );
   }
 
+  Widget _errorScreen() {
+    return AppPageFrame(
+      title: 'महिला सशक्तीकरण',
+      subtitle: 'Programs, initiatives, and updates.',
+      icon: Icons.groups_2_rounded,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(womenEmpowermentControllerProvider);
+          await ref.read(womenEmpowermentControllerProvider.future);
+        },
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.55,
+              child: const Center(
+                child: Text('Failed to load data.\nPull down to retry.',
+                    textAlign: TextAlign.center),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final womenStateAsync = ref.watch(womenEmpowermentControllerProvider);
     return womenStateAsync.when(
       data: (state) => getScaffold(state),
-      error: (error, stackTrace) =>
-          const Scaffold(body: Text('Something Went Wrong')),
+      error: (error, stackTrace) => _errorScreen(),
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
     );

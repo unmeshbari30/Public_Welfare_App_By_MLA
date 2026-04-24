@@ -138,13 +138,38 @@ class _HelplineScreenState extends ConsumerState<HelplineScreen> {
     {'name': 'Taloda Fire Brigade', 'number': '8484028386', 'icon': 'fire'},
   ];
 
+  Widget _errorScreen() {
+    return AppPageFrame(
+      title: 'हेल्पलाइन',
+      subtitle: 'Important local support and emergency contacts.',
+      icon: Icons.support_agent_rounded,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(homeControllerProvider);
+          await ref.read(homeControllerProvider.future);
+        },
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.55,
+              child: const Center(
+                child: Text('Failed to load data.\nPull down to retry.',
+                    textAlign: TextAlign.center),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final homeStateAsync = ref.watch(homeControllerProvider);
     return homeStateAsync.when(
       data: (state) => getScaffold(state),
-      error: (error, stackTrace) =>
-          const Scaffold(body: Center(child: Text('Something Went Wrong'))),
+      error: (error, stackTrace) => _errorScreen(),
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
     );
