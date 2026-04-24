@@ -22,6 +22,7 @@ class CertificateScreen extends ConsumerStatefulWidget {
 class _CertificateScreenState extends ConsumerState<CertificateScreen> {
   String? firstName;
   String? lastName;
+  Uint8List? _cachedPdfBytes;
 
   @override
   void initState() {
@@ -38,6 +39,8 @@ class _CertificateScreenState extends ConsumerState<CertificateScreen> {
   }
 
   Future<Uint8List> _generatePdf(PdfPageFormat format) async {
+    if (_cachedPdfBytes != null) return _cachedPdfBytes!;
+
     bool useFallbackImage = false;
     final homeState = await ref.read(homeControllerProvider.future);
     final certificate = await homeState.certificateDataResponse;
@@ -70,13 +73,20 @@ class _CertificateScreenState extends ConsumerState<CertificateScreen> {
         build: (pw.Context context) {
           return pw.Stack(
             children: [
-              pw.Positioned.fill(child: pw.Image(image, fit: pw.BoxFit.contain)),
+              pw.Positioned.fill(child: pw.Image(image, fit: pw.BoxFit.fitWidth)),
               pw.Positioned(
-                left: 200,
-                top: 180,
-                child: pw.Text(
-                  '$firstName $lastName',
-                  style: pw.TextStyle(font: pw.Font.timesBold(), fontSize: 24),
+                top: 400,
+                left: 0,
+                right: 0,
+                child: pw.Center(
+                  child: pw.Text(
+                    '${firstName ?? ''} ${lastName ?? ''}'.trim(),
+                    style: pw.TextStyle(
+                      font: pw.Font.timesBold(),
+                      fontSize: 20,
+                      color: PdfColors.black,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -85,11 +95,13 @@ class _CertificateScreenState extends ConsumerState<CertificateScreen> {
       ),
     );
 
-    return pdf.save();
+    _cachedPdfBytes = await pdf.save();
+    return _cachedPdfBytes!;
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return AppPageFrame(
       title: 'Certificate',
       subtitle: 'Preview and download your certificate.',
@@ -100,32 +112,44 @@ class _CertificateScreenState extends ConsumerState<CertificateScreen> {
           children: [
             Expanded(
               child: Container(
+                clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Theme.of(context).colorScheme.outlineVariant,
+                    color: colorScheme.outlineVariant,
                   ),
+                  color: colorScheme.surfaceContainerLow,
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(28),
-                  child: PdfPreview(
-                    build: _generatePdf,
-                    allowPrinting: false,
-                    allowSharing: true,
-                    canChangePageFormat: false,
-                    canChangeOrientation: false,
-                    padding: const EdgeInsets.all(8),
+                child: PdfPreview(
+                  build: _generatePdf,
+                  allowPrinting: false,
+                  allowSharing: false,
+                  canChangePageFormat: false,
+                  canChangeOrientation: false,
+                  padding: EdgeInsets.zero,
+                  pdfPreviewPageDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.15),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            FilledButton.icon(
-              onPressed: () {
-                Printing.layoutPdf(onLayout: _generatePdf);
-              },
-              icon: const Icon(Icons.download_rounded),
-              label: const Text('Download Certificate'),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () {
+                  Printing.layoutPdf(onLayout: _generatePdf);
+                },
+                icon: const Icon(Icons.download_rounded),
+                label: const Text('Download Certificate'),
+              ),
             ),
           ],
         ),
