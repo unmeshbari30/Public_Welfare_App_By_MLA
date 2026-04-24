@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rajesh_dada_padvi/controllers/Screens/rajesh_info_controller.dart';
 import 'package:rajesh_dada_padvi/models/Files/mla_info_model.dart';
+import 'package:rajesh_dada_padvi/l10n/app_localizations.dart';
 import 'package:rajesh_dada_padvi/widgets/app_page_frame.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -19,8 +20,8 @@ class RajeshDadaInfoScreen extends ConsumerStatefulWidget {
 class _RajeshDadaInfoScreenState extends ConsumerState<RajeshDadaInfoScreen> {
   Widget getScaffold(RajeshInfoState state) {
     return AppPageFrame(
-      title: 'आपले राजेश दादा',
-      subtitle: 'Profile and background information.',
+      title: context.l10n.rajeshDadaTitle,
+      subtitle: context.l10n.rajeshDadaSubtitle,
       icon: Icons.account_box_rounded,
       child: RefreshIndicator(
         onRefresh: () async {
@@ -134,8 +135,8 @@ class _RajeshDadaInfoScreenState extends ConsumerState<RajeshDadaInfoScreen> {
 
   Widget _errorScreen() {
     return AppPageFrame(
-      title: 'आपले राजेश दादा',
-      subtitle: 'Profile and background information.',
+      title: context.l10n.rajeshDadaTitle,
+      subtitle: context.l10n.rajeshDadaSubtitle,
       icon: Icons.account_box_rounded,
       child: RefreshIndicator(
         onRefresh: () async {

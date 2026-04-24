@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rajesh_dada_padvi/controllers/Screens/gallery_controller.dart';
 import 'package:rajesh_dada_padvi/models/Files/files_response_model.dart';
+import 'package:rajesh_dada_padvi/l10n/app_localizations.dart';
 import 'package:rajesh_dada_padvi/widgets/app_page_frame.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -18,8 +19,8 @@ class GalleryScreen extends ConsumerStatefulWidget {
 class _GalleryScreenState extends ConsumerState<GalleryScreen> {
   Widget getScaffold(GalleryState state) {
     return AppPageFrame(
-      title: 'गॅलरी',
-      subtitle: 'Photos and moments from public programs.',
+      title: context.l10n.galleryTitle,
+      subtitle: context.l10n.gallerySubtitle,
       icon: Icons.photo_library_rounded,
       child: RefreshIndicator(
         onRefresh: () async {
@@ -127,8 +128,8 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
 
   Widget _errorScreen() {
     return AppPageFrame(
-      title: 'गॅलरी',
-      subtitle: 'Photos and moments from public programs.',
+      title: context.l10n.galleryTitle,
+      subtitle: context.l10n.gallerySubtitle,
       icon: Icons.photo_library_rounded,
       child: RefreshIndicator(
         onRefresh: () async {

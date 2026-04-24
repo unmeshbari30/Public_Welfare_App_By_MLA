@@ -2,8 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rajesh_dada_padvi/controllers/authentication_controller.dart';
+import 'package:rajesh_dada_padvi/l10n/app_localizations.dart';
+import 'package:rajesh_dada_padvi/providers/locale_provider.dart';
 import 'package:rajesh_dada_padvi/providers/theme_provider.dart';
 import 'package:rajesh_dada_padvi/screen/Login_Screens/login_screen.dart';
 import 'package:rajesh_dada_padvi/screen/Notification/notification_handler.dart';
@@ -51,6 +54,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final locale = ref.watch(localeProvider);
 
     return FCMHandler(
       child: MaterialApp(
@@ -60,7 +64,14 @@ class MyApp extends ConsumerWidget {
         theme: AppTheme.lightTheme(),
         darkTheme: AppTheme.darkTheme(),
         themeMode: themeMode,
-        // home:  isLoggedIn ?  LocalPinScreen() : LoginScreen(),
+        locale: locale,
+        supportedLocales: const [Locale('mr'), Locale('en')],
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
         home: isLoggedIn ? HomeScreen() : LoginScreen(),
       ),
     );

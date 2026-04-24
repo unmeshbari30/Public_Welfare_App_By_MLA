@@ -1,10 +1,12 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rajesh_dada_padvi/controllers/authentication_controller.dart';
 import 'package:rajesh_dada_padvi/helpers/validators.dart';
+import 'package:rajesh_dada_padvi/l10n/app_localizations.dart';
 import 'package:rajesh_dada_padvi/widgets/custom_filled_text_field.dart';
 import 'package:rajesh_dada_padvi/widgets/future_filled_dropdown.dart';
+import 'package:rajesh_dada_padvi/widgets/language_toggle_button.dart';
 import 'package:rajesh_dada_padvi/widgets/theme_toggle_button.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
@@ -19,11 +21,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   Widget getScaffold(AuthenticationState state) {
     final theme = Theme.of(context);
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
-        actions: const [ThemeToggleButton()],
+        title: Text(l10n.registerTitle),
+        actions: const [ThemeToggleButton(), LanguageToggleButton()],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -31,12 +34,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 560),
-                child: Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surface,
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: theme.colorScheme.outlineVariant),
+                  border: Border.all(
+                    color: theme.colorScheme.outlineVariant,
+                  ),
                 ),
                 child: Form(
                   key: formKey,
@@ -44,14 +49,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        'Create an account',
+                        l10n.registerHeading,
                         style: theme.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Register once to access public services, certificates, and grievance support.',
+                        l10n.registerSubtitle,
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
@@ -74,30 +79,25 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         validator: Validators.validateEmptyField,
                       ),
                       const SizedBox(height: 14),
-                      Column(
-                        children: [
-                          FutureFilledDropdown(
-                            items: state.gendersList,
-                            controller: state.gendersController,
-                            labelText: 'लिंग / Gender *',
-                            titleBuilder: (item) => item,
-                            validator: Validators.validateEmptyField,
-                          ),
-                          const SizedBox(height: 14),
-                          FutureFilledDropdown(
-                            items: state.tehsilList,
-                            controller: state.tehsilController,
-                            labelText: 'तालुका / Taluka *',
-                            titleBuilder: (item) => item,
-                            validator: Validators.validateEmptyField,
-                          ),
-                        ],
+                      FutureFilledDropdown(
+                        items: state.gendersList,
+                        controller: state.gendersController,
+                        labelText: 'लिंग / Gender *',
+                        titleBuilder: (item) => item,
+                        validator: Validators.validateEmptyField,
+                      ),
+                      const SizedBox(height: 14),
+                      FutureFilledDropdown(
+                        items: state.tehsilList,
+                        controller: state.tehsilController,
+                        labelText: 'तालुका / Taluka *',
+                        titleBuilder: (item) => item,
+                        validator: Validators.validateEmptyField,
                       ),
                       const SizedBox(height: 14),
                       LayoutBuilder(
                         builder: (context, constraints) {
                           final useTwoColumns = constraints.maxWidth >= 420;
-
                           if (!useTwoColumns) {
                             return Column(
                               children: [
@@ -118,7 +118,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               ],
                             );
                           }
-
                           return Row(
                             children: [
                               Expanded(
@@ -163,47 +162,53 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       const SizedBox(height: 14),
                       CustomFilledTextField(
                         controller: state.passwordController,
-                        labelText: 'नवीन पासवर्ड/ New Password *',
+                        labelText: 'नवीन पासवर्ड / New Password *',
                         validator: Validators.validateEmptyField,
                       ),
                       const SizedBox(height: 24),
-                      FilledButton(
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
+                      SizedBox(
+                        height: 52,
+                        child: FilledButton(
+                          style: FilledButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed: () async {
+                            if (!formKey.currentState!.validate()) return;
                             try {
                               EasyLoading.show();
-                              final successful = await ref
+                              final result = await ref
                                   .read(
                                     authenticationControllerProvider.notifier,
                                   )
                                   .userRegistration();
-                              if (successful?.isRegistered == true) {
-                                if (!mounted) return;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      successful?.message ?? 'Registered',
-                                    ),
+                              if (!mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    result?.message ??
+                                        (result?.isRegistered == true
+                                            ? l10n.loginSuccess
+                                            : l10n.somethingWentWrong),
                                   ),
-                                );
+                                ),
+                              );
+                              if (result?.isRegistered == true) {
                                 Navigator.pop(context);
-                              } else {
-                                if (!mounted) return;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      successful?.message ??
-                                          'Something went wrong',
-                                    ),
-                                  ),
-                                );
                               }
                             } finally {
                               EasyLoading.dismiss();
                             }
-                          }
-                        },
-                        child: const Text('रजिस्टर / Register'),
+                          },
+                          child: Text(
+                            l10n.registerButton,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -221,16 +226,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final asyncSignUpState = ref.watch(authenticationControllerProvider);
     return asyncSignUpState.when(
       data: (state) => getScaffold(state),
-      error: (error, stackTrace) {
-        return Scaffold(
-          body: Center(
-            child: AlertDialog(
-              title: const Text('Something went wrong'),
-              content: Text(error.toString()),
-            ),
+      error: (error, stackTrace) => Scaffold(
+        body: Center(
+          child: AlertDialog(
+            title: Text(context.l10n.somethingWentWrongTitle),
+            content: Text(error.toString()),
           ),
-        );
-      },
+        ),
+      ),
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
     );

@@ -9,6 +9,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:rajesh_dada_padvi/controllers/home_controller.dart';
 import 'package:rajesh_dada_padvi/helpers/enum.dart';
+import 'package:rajesh_dada_padvi/l10n/app_localizations.dart';
 import 'package:rajesh_dada_padvi/widgets/app_page_frame.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -102,9 +103,10 @@ class _CertificateScreenState extends ConsumerState<CertificateScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = context.l10n;
     return AppPageFrame(
-      title: 'Certificate',
-      subtitle: 'Preview and download your certificate.',
+      title: l10n.certificate,
+      subtitle: l10n.certificateSubtitle,
       icon: Icons.verified_rounded,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
@@ -148,7 +150,7 @@ class _CertificateScreenState extends ConsumerState<CertificateScreen> {
                   Printing.layoutPdf(onLayout: _generatePdf);
                 },
                 icon: const Icon(Icons.download_rounded),
-                label: const Text('Download Certificate'),
+                label: Text(l10n.downloadCertificate),
               ),
             ),
           ],

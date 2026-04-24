@@ -11,8 +11,10 @@ import 'package:rajesh_dada_padvi/controllers/authentication_controller.dart';
 import 'package:rajesh_dada_padvi/controllers/home_controller.dart';
 import 'package:rajesh_dada_padvi/helpers/enum.dart';
 import 'package:rajesh_dada_padvi/helpers/helpers.dart';
+import 'package:rajesh_dada_padvi/l10n/app_localizations.dart';
 import 'package:rajesh_dada_padvi/models/Files/files_response_model.dart';
 import 'package:rajesh_dada_padvi/models/Files/image_response_model.dart';
+import 'package:rajesh_dada_padvi/providers/locale_provider.dart';
 import 'package:rajesh_dada_padvi/providers/theme_provider.dart';
 import 'package:rajesh_dada_padvi/screen/Admin/admin_grievance_screen.dart';
 import 'package:rajesh_dada_padvi/screen/Login_Screens/login_screen.dart';
@@ -94,19 +96,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     showDialog(
       context: context,
       builder: (context) {
+        final l10n = context.l10n;
         return AlertDialog(
-          title: const Text('Admin Login'),
+          title: Text(l10n.adminLogin),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: state.adminUsernameController,
-                decoration: const InputDecoration(labelText: 'Username'),
+                decoration: InputDecoration(labelText: l10n.username),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: state.adminPasswordController,
-                decoration: const InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(labelText: l10n.password),
                 obscureText: true,
               ),
             ],
@@ -114,7 +117,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(l10n.cancel),
             ),
             FilledButton(
               onPressed: () async {
@@ -126,8 +129,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   Helpers.showSuccessOrFailureSnackBar(
                     context,
                     message: loginResponse?.isLoggedIn ?? false
-                        ? 'Login Successful'
-                        : 'Login Failed',
+                        ? l10n.loginSuccessful
+                        : l10n.loginFailed,
                     isSuccess: loginResponse?.isLoggedIn ?? false,
                   );
                   if (loginResponse?.isLoggedIn ?? false) {
@@ -144,7 +147,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   await EasyLoading.dismiss();
                 }
               },
-              child: const Text('Login'),
+              child: Text(l10n.login),
             ),
           ],
         );
@@ -155,27 +158,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Future<void> _showLogoutDialog() async {
     await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirm Logout'),
-        content: const Text('Are you sure you want to log out?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              ref.read(authenticationControllerProvider.notifier).loggedOut();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
-            },
-            child: const Text('Logout'),
-          ),
-        ],
-      ),
+      builder: (context) {
+        final l10n = context.l10n;
+        return AlertDialog(
+          title: Text(l10n.confirmLogout),
+          content: Text(l10n.logoutMessage),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                ref.read(authenticationControllerProvider.notifier).loggedOut();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+              child: Text(l10n.logout),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -201,20 +207,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ),
           ),
         ),
-        title: const Column(
+        title: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'आपले आमदार श्री. राजेश दादा',
+              context.l10n.appBarTitle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
             ),
             Text(
-              'जनसेवेचे नवे पाऊल',
+              context.l10n.appBarSubtitle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -227,7 +233,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           }
           exitCounter++;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Press back again to exit')),
+            SnackBar(content: Text(context.l10n.backToExit)),
           );
         },
         child: SafeArea(
@@ -246,21 +252,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     controller: _tabController,
                     splashBorderRadius: BorderRadius.circular(16),
                     labelPadding: EdgeInsets.zero,
-                    tabs: const [
+                    tabs: [
                       Tab(
                         height: 50,
-                        icon: Icon(Icons.home_rounded, size: 20),
-                        text: 'Home',
+                        icon: const Icon(Icons.home_rounded, size: 20),
+                        text: context.l10n.tabHome,
                       ),
                       Tab(
                         height: 50,
-                        icon: Icon(Icons.person_rounded, size: 20),
-                        text: 'Profile',
+                        icon: const Icon(Icons.person_rounded, size: 20),
+                        text: context.l10n.tabProfile,
                       ),
                       Tab(
                         height: 50,
-                        icon: Icon(Icons.settings_rounded, size: 20),
-                        text: 'Settings',
+                        icon: const Icon(Icons.settings_rounded, size: 20),
+                        text: context.l10n.tabSettings,
                       ),
                     ],
                   ),
@@ -309,37 +315,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               children: [
                 _buildGridIcon(
                   'lib/assets/Icons/rajesh_dada_icon.png',
-                  'राजेश दादा',
+                  context.l10n.gridRajeshDada,
                   Icons.account_box_rounded,
                   () => _openScreen(const RajeshDadaInfoScreen()),
                 ),
                 _buildGridIcon(
                   'lib/assets/Icons/grievance_icon.jpeg',
-                  'तक्रार / विनंती',
+                  context.l10n.gridGrievance,
                   Icons.campaign_rounded,
                   () => _openScreen(const GrievanceScreen()),
                 ),
                 _buildGridIcon(
                   'lib/assets/Icons/achievements_icon.jpeg',
-                  'कामगिरी',
+                  context.l10n.gridAchievements,
                   Icons.workspace_premium_rounded,
                   () => _openScreen(const AchievementsScreen()),
                 ),
                 _buildGridIcon(
                   'lib/assets/Icons/helpline_icon.jpeg',
-                  'हेल्पलाइन',
+                  context.l10n.gridHelpline,
                   Icons.support_agent_rounded,
                   () => _openScreen(const HelplineScreen()),
                 ),
                 _buildGridIcon(
                   'lib/assets/Icons/gallery_icon.jpeg',
-                  'गॅलरी',
+                  context.l10n.gridGallery,
                   Icons.photo_library_rounded,
                   () => _openScreen(const GalleryScreen()),
                 ),
                 _buildGridIcon(
                   'lib/assets/Icons/women_empowerment_icon.jpeg',
-                  'महिला सशक्तीकरण',
+                  context.l10n.gridWomenEmpowerment,
                   Icons.groups_2_rounded,
                   () => _openScreen(const WomenEmpowermentScreen()),
                 ),
@@ -352,7 +358,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Social Media',
+                  context.l10n.socialMedia,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -417,7 +423,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 !snapshot.hasData ||
                 snapshot.data == null ||
                 (snapshot.data?.files?.isEmpty ?? true)) {
-              return const Center(child: Text('Failed to load images.'));
+              return Center(child: Text(context.l10n.failedToLoadImages));
             }
             return _HeroCarousel(items: snapshot.data!.files!);
           },
@@ -463,7 +469,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ),
               const SizedBox(height: 16),
               Text(
-                fullName.isEmpty ? 'Citizen profile' : fullName,
+                fullName.isEmpty ? context.l10n.citizenProfile : fullName,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
@@ -471,7 +477,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ),
               const SizedBox(height: 6),
               Text(
-                taluka ?? 'Your registered details appear here',
+                taluka ?? context.l10n.registeredDetails,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -481,25 +487,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               FilledButton.icon(
                 onPressed: () => _openScreen(const CertificateScreen()),
                 icon: const Icon(Icons.download_rounded),
-                label: const Text('Download Certificate'),
+                label: Text(context.l10n.downloadCertificate),
               ),
             ],
           ),
         ),
         const SizedBox(height: 18),
-        _profileCard('Name', fullName),
+        _profileCard(context.l10n.fieldName, fullName),
         const SizedBox(height: 12),
-        _profileCard('Taluka', taluka),
+        _profileCard(context.l10n.fieldTaluka, taluka),
         const SizedBox(height: 12),
-        _profileCard('Gender', gender),
+        _profileCard(context.l10n.fieldGender, gender),
         const SizedBox(height: 12),
-        _profileCard('Blood Group', bloodGroup),
+        _profileCard(context.l10n.fieldBloodGroup, bloodGroup),
         const SizedBox(height: 12),
-        _profileCard('Age', age?.toString()),
+        _profileCard(context.l10n.fieldAge, age?.toString()),
         const SizedBox(height: 12),
-        _profileCard('Mail', mailId),
+        _profileCard(context.l10n.fieldMail, mailId),
         const SizedBox(height: 12),
-        _profileCard('Mobile', mobileNumber),
+        _profileCard(context.l10n.fieldMobile, mobileNumber),
       ],
     );
   }
@@ -508,40 +514,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final theme = Theme.of(context);
     final themeMode = ref.watch(themeModeProvider);
     final isDarkMode = themeMode == ThemeMode.dark;
+    final currentLocale = ref.watch(localeProvider);
+    final l10n = context.l10n;
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
       children: [
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: theme.colorScheme.outlineVariant),
-          ),
-          child: Column(
-            children: [
-              Text(
-                'Settings',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Manage app theme and account actions.',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
+        // Container(
+        //   padding: const EdgeInsets.all(20),
+        //   decoration: BoxDecoration(
+        //     color: theme.colorScheme.surface,
+        //     borderRadius: BorderRadius.circular(30),
+        //     border: Border.all(color: theme.colorScheme.outlineVariant),
+        //   ),
+        //   child: Column(
+        //     children: [
+        //       Text(
+        //         l10n.settings,
+        //         style: theme.textTheme.headlineSmall?.copyWith(
+        //           fontWeight: FontWeight.w800,
+        //         ),
+        //       ),
+        //       const SizedBox(height: 8),
+        //       Text(
+        //         l10n.settingsSubtitle,
+        //         style: theme.textTheme.bodyMedium?.copyWith(
+        //           color: theme.colorScheme.onSurfaceVariant,
+        //         ),
+        //         textAlign: TextAlign.center,
+        //       ),
+        //     ],
+        //   ),
+        // ),
         const SizedBox(height: 18),
         _settingsTile(
           icon: isDarkMode ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
-          title: 'Dark Mode',
+          title: l10n.darkMode,
           trailing: Switch(
             value: isDarkMode,
             onChanged: (_) {
@@ -551,11 +559,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ),
         const SizedBox(height: 12),
         _settingsTile(
+          icon: Icons.language_rounded,
+          title: l10n.language,
+          bottom: SizedBox(
+            width: double.infinity,
+            child: SegmentedButton<String>(
+              showSelectedIcon: false,
+              style: SegmentedButton.styleFrom(
+                textStyle: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              segments: const [
+                ButtonSegment(value: 'mr', label: Text('मराठी')),
+                ButtonSegment(value: 'en', label: Text('English')),
+              ],
+              selected: {currentLocale.languageCode},
+              onSelectionChanged: (Set<String> selection) {
+                ref
+                    .read(localeProvider.notifier)
+                    .setLocale(Locale(selection.first));
+              },
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        _settingsTile(
           icon: Icons.logout_rounded,
-          title: 'Logout',
+          title: l10n.logout,
           trailing: FilledButton(
             onPressed: _showLogoutDialog,
-            child: const Text('Logout'),
+            child: Text(l10n.logout),
           ),
         ),
         const SizedBox(height: 18),
@@ -563,7 +597,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           child: Column(
             children: [
               Text(
-                'Designed & Developed By',
+                l10n.designedBy,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
@@ -588,7 +622,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     decorationColor: theme.colorScheme.primary,
                   ),
                 ),
-              )],
+              ),
+            ],
           ),
         ),
       ],
@@ -695,7 +730,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget _settingsTile({
     required IconData icon,
     required String title,
-    required Widget trailing,
+    Widget? trailing,
+    Widget? bottom,
   }) {
     final theme = Theme.of(context);
     return Container(
@@ -705,28 +741,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: theme.colorScheme.outlineVariant),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Icon(icon, color: theme.colorScheme.primary),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              title,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w800,
+          Row(
+            children: [
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: Icon(icon, color: theme.colorScheme.primary),
               ),
-            ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  title,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              if (trailing != null) ...[const SizedBox(width: 12), trailing],
+            ],
           ),
-          const SizedBox(width: 12),
-          trailing,
+          if (bottom != null) ...[const SizedBox(height: 14), bottom],
         ],
       ),
     );
@@ -859,9 +901,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
     if (!launched && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No email app found to open this address'),
-        ),
+        SnackBar(content: Text(context.l10n.noEmailApp)),
       );
     }
   }
@@ -872,7 +912,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     return asyncHomeState.when(
       data: (homeState) => getScaffold(homeState),
       error: (error, stackTrace) =>
-          const Scaffold(body: Center(child: Text('Something went wrong'))),
+          Scaffold(body: Center(child: Text(context.l10n.somethingWentWrong))),
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
     );

@@ -16,7 +16,8 @@ enum PrefrencesKeyEnum {
   age("age"),
   mailId("mailId"),
   bloodGroup("bloodGroup"),
-  themeMode("themeMode");
+  themeMode("themeMode"),
+  language("language");
 
   final String key;
   const PrefrencesKeyEnum(this.key);

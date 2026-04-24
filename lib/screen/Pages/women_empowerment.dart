@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rajesh_dada_padvi/controllers/Screens/women_empowerment_controller.dart';
 import 'package:rajesh_dada_padvi/models/Files/files_response_model.dart';
+import 'package:rajesh_dada_padvi/l10n/app_localizations.dart';
 import 'package:rajesh_dada_padvi/widgets/app_page_frame.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -20,8 +21,8 @@ class _WomenEmpowermentScreenState
     extends ConsumerState<WomenEmpowermentScreen> {
   Widget getScaffold(WomenEmpowermentState state) {
     return AppPageFrame(
-      title: 'महिला सशक्तीकरण',
-      subtitle: 'Programs, initiatives, and updates.',
+      title: context.l10n.womenEmpowermentTitle,
+      subtitle: context.l10n.womenEmpowermentSubtitle,
       icon: Icons.groups_2_rounded,
       child: RefreshIndicator(
         onRefresh: () async {
@@ -127,8 +128,8 @@ class _WomenEmpowermentScreenState
 
   Widget _errorScreen() {
     return AppPageFrame(
-      title: 'महिला सशक्तीकरण',
-      subtitle: 'Programs, initiatives, and updates.',
+      title: context.l10n.womenEmpowermentTitle,
+      subtitle: context.l10n.womenEmpowermentSubtitle,
       icon: Icons.groups_2_rounded,
       child: RefreshIndicator(
         onRefresh: () async {

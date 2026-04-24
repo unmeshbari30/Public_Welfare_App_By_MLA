@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rajesh_dada_padvi/controllers/home_controller.dart';
+import 'package:rajesh_dada_padvi/l10n/app_localizations.dart';
 import 'package:rajesh_dada_padvi/widgets/app_page_frame.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,8 +17,8 @@ class _HelplineScreenState extends ConsumerState<HelplineScreen> {
     final theme = Theme.of(context);
 
     return AppPageFrame(
-      title: 'हेल्पलाइन',
-      subtitle: 'Important local support and emergency contacts.',
+      title: context.l10n.helplineTitle,
+      subtitle: context.l10n.helplineSubtitle,
       icon: Icons.support_agent_rounded,
       child: ListView.builder(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
@@ -140,8 +141,8 @@ class _HelplineScreenState extends ConsumerState<HelplineScreen> {
 
   Widget _errorScreen() {
     return AppPageFrame(
-      title: 'हेल्पलाइन',
-      subtitle: 'Important local support and emergency contacts.',
+      title: context.l10n.helplineTitle,
+      subtitle: context.l10n.helplineSubtitle,
       icon: Icons.support_agent_rounded,
       child: RefreshIndicator(
         onRefresh: () async {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rajesh_dada_padvi/controllers/Screens/achievements_controller.dart';
 import 'package:rajesh_dada_padvi/models/Files/files_response_model.dart';
+import 'package:rajesh_dada_padvi/l10n/app_localizations.dart';
 import 'package:rajesh_dada_padvi/widgets/app_page_frame.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -18,8 +19,8 @@ class AchievementsScreen extends ConsumerStatefulWidget {
 class _AchievementsScreenState extends ConsumerState<AchievementsScreen> {
   Widget getScaffold(AchievementsState state) {
     return AppPageFrame(
-      title: 'कामगिरी',
-      subtitle: 'Highlights and development work.',
+      title: context.l10n.achievementsTitle,
+      subtitle: context.l10n.achievementsSubtitle,
       icon: Icons.workspace_premium_rounded,
       child: RefreshIndicator(
         onRefresh: () async {
@@ -127,8 +128,8 @@ class _AchievementsScreenState extends ConsumerState<AchievementsScreen> {
 
   Widget _errorScreen() {
     return AppPageFrame(
-      title: 'कामगिरी',
-      subtitle: 'Highlights and development work.',
+      title: context.l10n.achievementsTitle,
+      subtitle: context.l10n.achievementsSubtitle,
       icon: Icons.workspace_premium_rounded,
       child: RefreshIndicator(
         onRefresh: () async {

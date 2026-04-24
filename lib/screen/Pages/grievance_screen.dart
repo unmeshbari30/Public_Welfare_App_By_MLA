@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rajesh_dada_padvi/controllers/home_controller.dart';
 import 'package:rajesh_dada_padvi/helpers/validators.dart';
+import 'package:rajesh_dada_padvi/l10n/app_localizations.dart';
 import 'package:rajesh_dada_padvi/widgets/app_page_frame.dart';
 import 'package:rajesh_dada_padvi/widgets/custom_filled_text_field.dart';
 import 'package:rajesh_dada_padvi/widgets/custom_multi_file_picker.dart';
@@ -20,8 +21,8 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
 
   Widget getScaffold(HomeState state) {
     return AppPageFrame(
-      title: 'तक्रार / विनंती',
-      subtitle: 'Submit your request with all required details.',
+      title: context.l10n.grievanceTitle,
+      subtitle: context.l10n.grievanceSubtitle,
       icon: Icons.edit_note_rounded,
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
