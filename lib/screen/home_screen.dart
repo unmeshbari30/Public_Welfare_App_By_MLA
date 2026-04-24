@@ -12,6 +12,7 @@ import 'package:rajesh_dada_padvi/controllers/home_controller.dart';
 import 'package:rajesh_dada_padvi/helpers/enum.dart';
 import 'package:rajesh_dada_padvi/helpers/helpers.dart';
 import 'package:rajesh_dada_padvi/models/Files/files_response_model.dart';
+import 'package:rajesh_dada_padvi/models/Files/image_response_model.dart';
 import 'package:rajesh_dada_padvi/providers/theme_provider.dart';
 import 'package:rajesh_dada_padvi/screen/Admin/admin_grievance_screen.dart';
 import 'package:rajesh_dada_padvi/screen/Login_Screens/login_screen.dart';
@@ -37,9 +38,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     with SingleTickerProviderStateMixin {
   int exitCounter = 1;
   late TabController _tabController;
-  PageController? _pageController;
-  Timer? _timer;
-  int _currentPage = 0;
   int _tapCount = 0;
   DateTime? _lastTapTime;
   String? firstName;
@@ -61,8 +59,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   @override
   void dispose() {
     _tabController.dispose();
-    _pageController?.dispose();
-    _timer?.cancel();
     super.dispose();
   }
 
@@ -396,13 +392,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   Widget _buildHeroSection(HomeState state) {
     return Container(
-      padding: const EdgeInsets.all(0),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outlineVariant,
-        ),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
       ),
       child: SizedBox(
         width: double.infinity,
@@ -420,94 +413,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ),
               );
             }
-
             if (snapshot.hasError ||
                 !snapshot.hasData ||
                 snapshot.data == null ||
                 (snapshot.data?.files?.isEmpty ?? true)) {
               return const Center(child: Text('Failed to load images.'));
             }
-
-            final imageItems = snapshot.data!.files!;
-            _setupAutoScroll(imageItems.length);
-
-            return Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(24),
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: imageItems.length,
-                    itemBuilder: (context, index) {
-                      final bytes = _decodeImage(imageItems[index].base64Data);
-                      return bytes == null
-                          ? Image.asset(
-                              'lib/assets/Icons/broken_image.png',
-                              fit: BoxFit.cover,
-                            )
-                          : Image.memory(bytes, fit: BoxFit.cover);
-                    },
-                    onPageChanged: (index) {
-                      setState(() {
-                        _currentPage = index;
-                      });
-                    },
-                  ),
-                ),
-                Positioned(
-                  left: 14,
-                  right: 14,
-                  bottom: 14,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      imageItems.length,
-                      (index) => AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        width: _currentPage == index ? 22 : 8,
-                        height: 8,
-                        margin: const EdgeInsets.symmetric(horizontal: 3),
-                        decoration: BoxDecoration(
-                          color: _currentPage == index
-                              ? Colors.white
-                              : Colors.white.withValues(alpha: 0.45),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
+            return _HeroCarousel(items: snapshot.data!.files!);
           },
         ),
       ),
     );
-  }
-
-  void _setupAutoScroll(int length) {
-    if (_pageController != null || length == 0) return;
-    _pageController = PageController(initialPage: 0);
-    _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (_pageController?.hasClients ?? false) {
-        _currentPage = _currentPage < length - 1 ? _currentPage + 1 : 0;
-        _pageController?.animateToPage(
-          _currentPage,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
-  }
-
-  Uint8List? _decodeImage(String? base64String) {
-    if (base64String == null || base64String.trim().isEmpty) return null;
-    try {
-      return base64Decode(base64String);
-    } catch (_) {
-      return null;
-    }
   }
 
   Widget tab2Screen() {
@@ -959,6 +875,123 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           const Scaffold(body: Center(child: Text('Something went wrong'))),
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
+    );
+  }
+}
+
+class _HeroCarousel extends StatefulWidget {
+  final List<ImageResponseModel> items;
+  const _HeroCarousel({required this.items});
+
+  @override
+  State<_HeroCarousel> createState() => _HeroCarouselState();
+}
+
+class _HeroCarouselState extends State<_HeroCarousel> {
+  late final PageController _pageController;
+  Timer? _timer;
+  int _currentPage = 0;
+  late final List<Uint8List?> _imageCache;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _imageCache = widget.items.map((item) => _decode(item.base64Data)).toList();
+    _startAutoScroll();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  Uint8List? _decode(String? b64) {
+    if (b64 == null || b64.trim().isEmpty) return null;
+    try {
+      return base64Decode(b64);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  void _startAutoScroll() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
+      if (!mounted || !_pageController.hasClients) return;
+      final next =
+          _currentPage < widget.items.length - 1 ? _currentPage + 1 : 0;
+      _pageController.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: NotificationListener<ScrollStartNotification>(
+            onNotification: (n) {
+              if (n.dragDetails != null) {
+                _timer?.cancel();
+                _timer = null;
+              }
+              return false;
+            },
+            child: NotificationListener<ScrollEndNotification>(
+              onNotification: (n) {
+                _startAutoScroll();
+                return false;
+              },
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: widget.items.length,
+                onPageChanged: (index) => setState(() => _currentPage = index),
+                itemBuilder: (context, index) {
+                  final bytes = _imageCache[index];
+                  return bytes == null
+                      ? Image.asset(
+                          'lib/assets/Icons/broken_image.png',
+                          fit: BoxFit.cover,
+                        )
+                      : Image.memory(bytes, fit: BoxFit.cover,
+                          gaplessPlayback: true);
+                },
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 14,
+          right: 14,
+          bottom: 14,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              widget.items.length,
+              (index) => AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                width: _currentPage == index ? 22 : 8,
+                height: 8,
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                decoration: BoxDecoration(
+                  color: _currentPage == index
+                      ? Colors.white
+                      : Colors.white.withValues(alpha: 0.45),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
